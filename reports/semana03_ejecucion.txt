@@ -1,0 +1,89 @@
+EVIDENCIA DE EJECUCIÓN - SEMANA 03
+Fecha: 2026-08-22
+Python: 3.14.5
+Casos procesados: 20
+Coincidencias con referencia manual: 20/20
+Discrepancias: 0
+
+Caso 01: Clasificar el texto de los tickets en hardware, software, red o accesos.
+  Principal: Procesamiento de lenguaje natural
+  Secundarias: Ninguna
+  Técnica: clasificador de texto con TF-IDF y regresión logística
+Caso 02: Analizar una captura de pantalla o un pantallazo para reconocer codigos de error de una aplicacion.
+  Principal: Visión por computador
+  Secundarias: Ninguna
+  Técnica: red convolucional o modelo de visión preentrenado
+Caso 03: Predecir si un caso recurrente volvera a presentarse durante la siguiente semana.
+  Principal: Aprendizaje predictivo
+  Secundarias: Ninguna
+  Técnica: clasificación o regresión supervisada con datos históricos
+Caso 04: Recomendar una solucion similar consultando casos resueltos en la base de conocimiento.
+  Principal: Sistemas de recomendación
+  Secundarias: Ninguna
+  Técnica: recuperación por similitud semántica de casos resueltos
+Caso 05: Priorizar tickets de soporte segun impacto, urgencia y cumplimiento del SLA.
+  Principal: Sistemas expertos
+  Secundarias: Procesamiento de lenguaje natural
+  Técnica: motor de reglas con criterios de impacto, urgencia y SLA
+Caso 06: Generar y redactar una respuesta clara para el usuario a partir del diagnostico tecnico.
+  Principal: IA generativa
+  Secundarias: Ninguna
+  Técnica: modelo generativo con recuperación de conocimiento y revisión humana
+Caso 07: Detectar la intencion y las entidades mencionadas en la descripcion textual de una solicitud.
+  Principal: Procesamiento de lenguaje natural
+  Secundarias: Ninguna
+  Técnica: clasificador de texto con TF-IDF y regresión logística
+Caso 08: Pronosticar el tiempo de resolucion y la probabilidad de incumplir el SLA de un incidente.
+  Principal: Aprendizaje predictivo
+  Secundarias: Procesamiento de lenguaje natural, Sistemas expertos
+  Técnica: clasificación o regresión supervisada con datos históricos
+Caso 09: Inspeccionar una imagen del equipo para identificar puertos, cables o luces de estado.
+  Principal: Visión por computador
+  Secundarias: Ninguna
+  Técnica: red convolucional o modelo de visión preentrenado
+Caso 10: Recomendar el tecnico adecuado y una ruta de escalamiento usando soluciones similares.
+  Principal: Sistemas de recomendación
+  Secundarias: Ninguna
+  Técnica: recuperación por similitud semántica de casos resueltos
+Caso 11: Aplicar reglas de diagnostico para decidir si una falla de acceso requiere restablecer la contrasena.
+  Principal: Sistemas expertos
+  Secundarias: Ninguna
+  Técnica: motor de reglas con criterios de impacto, urgencia y SLA
+Caso 12: Usar un asistente generativo para crear pasos de solucion adaptados al usuario.
+  Principal: IA generativa
+  Secundarias: Ninguna
+  Técnica: modelo generativo con recuperación de conocimiento y revisión humana
+Caso 13: Extraer del texto del ticket el equipo, el programa y el mensaje de error reportado.
+  Principal: Procesamiento de lenguaje natural
+  Secundarias: Ninguna
+  Técnica: clasificador de texto con TF-IDF y regresión logística
+Caso 14: Anticipar la demanda de tickets y predecir cuantos tecnicos seran necesarios.
+  Principal: Aprendizaje predictivo
+  Secundarias: Procesamiento de lenguaje natural
+  Técnica: clasificación o regresión supervisada con datos históricos
+Caso 15: Reconocer en una captura de pantalla una anomalia visual de la interfaz.
+  Principal: Visión por computador
+  Secundarias: Ninguna
+  Técnica: red convolucional o modelo de visión preentrenado
+Caso 16: Sugerir un articulo de la base de conocimiento y recomendar la solucion de casos resueltos.
+  Principal: Sistemas de recomendación
+  Secundarias: Ninguna
+  Técnica: recuperación por similitud semántica de casos resueltos
+Caso 17: Clasificar el texto y las imagenes de un ticket enviado por un robot de soporte remoto y recomendar la siguiente accion.
+  Principal: Procesamiento de lenguaje natural
+  Secundarias: Visión por computador, Sistemas de recomendación, Robótica
+  Técnica: clasificador de texto con TF-IDF y regresión logística
+Caso 18: Diagnosticar mediante reglas y asignar prioridad con base en impacto, urgencia y SLA.
+  Principal: Sistemas expertos
+  Secundarias: Ninguna
+  Técnica: motor de reglas con criterios de impacto, urgencia y SLA
+Caso 19: Generar un resumen tecnico y redactar la respuesta final de cierre del caso.
+  Principal: IA generativa
+  Secundarias: Procesamiento de lenguaje natural
+  Técnica: modelo generativo con recuperación de conocimiento y revisión humana
+Caso 20: Combinar el texto y la imagen de un ticket para clasificarlo y recomendar una solucion.
+  Principal: Procesamiento de lenguaje natural
+  Secundarias: Visión por computador, Sistemas de recomendación
+  Técnica: clasificador de texto con TF-IDF y regresión logística
+
+Resultado: ejecución correcta, sin errores.
