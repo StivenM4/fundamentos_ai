@@ -4,7 +4,22 @@ Proyecto acumulativo de la asignatura Inteligencia Artificial.
 
 ## Semana 02
 
-Configuración del entorno de trabajo y creación del primer modelo de clasificación supervisada.
+Primer modelo de clasificación supervisada aplicado al proyecto acumulativo
+**Asistente de soporte TI**. El modelo deja de usar Iris: recibe el texto de un
+ticket y predice su categoría, prioridad y si es un incidente o una solicitud.
+
+La práctica incluye 128 tickets sintéticos etiquetados, una separación
+reproducible de entrenamiento (75 %) y prueba (25 %), y métricas de accuracy,
+precisión, recall, F1 macro y matrices de confusión.
+
+
+### Archivos
+
+```text
+data/tickets_soporte.csv
+reports/semana02.md
+src/semana02_fundamentos.py
+```
 
 ### Tecnologías
 
@@ -23,7 +38,8 @@ aplicado al proyecto acumulativo **Asistente de soporte TI**.
 El motor procesa 20 casos del dominio, identifica una categoría principal y
 áreas secundarias, explica las palabras o frases que activaron cada regla y
 recomienda una técnica inicial. Esta versión basada en reglas funciona como
-línea base para futuros modelos propios de texto e imágenes.
+complemento explicable del modelo supervisado de texto de la Semana 02 y como
+línea base para futuros modelos de imágenes.
 
 ### Estructura añadida
 
