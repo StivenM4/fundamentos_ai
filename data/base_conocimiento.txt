@@ -1,0 +1,75 @@
+Para un equipo caliente con ventilador ruidoso o alarma de temperatura, limpiar disipadores, verificar pasta termica y revisar flujo de ventilacion.
+En caidas de red, internet o fallas de resolucion DNS, verificar cable ethernet, renovar IP con ipconfig /renew y probar ping al gateway o servidor DNS.
+Para cuentas bloqueadas o problemas de inicio de sesion, verificar intentos fallidos en Active Directory, desbloquear usuario y restablecer credenciales temporales.
+Si el token o codigo MFA no llega al dispositivo movil, validar sincronizacion horaria de Microsoft Authenticator o generar codigo de paso temporal de contingencia.
+Cuando una aplicacion como Excel o el ERP se cierra con error inesperado o memoria violada, revisar complementos conflictivos, actualizar version y consultar visor de eventos.
+Para impresoras con atascos frecuentes de papel o impresion manchada, retirar residuos del rodillo de alimentacion, revisar nivel de toner y reiniciar cola de impresion.
+Si el monitor parpadea, no enciende o emite pantalla negra, verificar cables HDMI o DisplayPort, actualizar controlador de video y probar conexion directa sin dock.
+Ante lentitud extrema del sistema operativo o congelamiento, inspeccionar consumo de CPU, memoria y disco en el administrador de tareas y deshabilitar servicios innecesarios.
+Si el cliente VPN falla al negociar el tunel o se desconecta intermitentemente, validar certificado digital de seguridad, probar protocolo alternativo y verificar enlace del proveedor.
+Para errores de acceso denegado en recursos compartidos de red, verificar membresia en grupos de seguridad NTFS y corroborar la ruta de red SMB asignada.
+Si la bateria de la laptop no carga o se descarga rapidamente, calibrar ciclos de carga en BIOS, verificar cargador con multimetro y actualizar controlador ACPI.
+Ante teclado o touchpad que no responde o tras derrame accidental de liquidos, desconectar bateria de inmediato, secar componentes y probar con periferico USB externo.
+Si la pantalla azul BSOD muestra error de memoria o volcado de memoria fisica, ejecutar diagnostico de memoria de Windows mdsched y comprobar modulos RAM con MemTest86.
+Para fallas en discos duros con ruidos mecanicos o sectores defectuosos, ejecutar analisis SMART con CrystalDiskInfo, realizar chkdsk /f /r y programar respaldo prioritario.
+Si la estacion de acoplamiento dock USB-C o Thunderbolt no reconoce perifericos, actualizar firmware del dock, reinstalar drivers Thunderbolt y verificar suministro de energia.
+Ante escaner o camara web no detectada en videollamadas, verificar permisos de privacidad en Windows, reinstalar driver de imagen y probar en puerto USB directo.
+Si el equipo emite pitidos al encender y no da video en el arranque POST, verificar codigos de beep del fabricante, limpiar contactos dorados de RAM y tarjeta grafica.
+Para fuentes de poder o cargadores con olor a quemado, zumbido electrico o chispas, retirar de la corriente electrica de inmediato y sustituir unidad de potencia.
+Si la bisagra del portatil esta rota o la carcasa abierta, desarmar con precaucion para evitar tension sobre el cable flex de pantalla y solicitar repuesto mecanico.
+Ante fallas en audifonos o microfono con distorsion de audio en llamadas, reiniciar servicio de audio de Windows, configurar dispositivo predeterminado y actualizar Realtek.
+En caidas de conexion WiFi por senal debil o cortes intermitentes, cambiar canal de transmision en el router, deshabilitar ahorro de energia del adaptador y olvidar red.
+Si no es posible obtener direccion IP por fallo de DHCP, reiniciar servicio cliente DHCP, comprobar rango de concesiones en el servidor y asignar IP estatica provisional.
+Para perdidas de paquetes y alta latencia o jitter en llamadas de Teams o Zoom, verificar saturacion de ancho de banda, probar cable de red directo y priorizar trafico con QoS.
+Si el enlace troncal de fibra optica o conexion WAN principal se cae, verificar luces de estado en el modem ONT, conmutar a enlace de contingencia 4G y reportar al ISP.
+Ante conflictos de direccion IP duplicada en la red local, rastrear MAC address conflictiva con arp -a, liberar direccion en DHCP y reiniciar tarjeta de red.
+Si el firewall corporativo bloquea puertos requeridos como 443 80 o 3389, validar reglas de trafico saliente en Windows Defender Firewall y consultar politicas de perimetro.
+Para errores de proxy que impiden navegar en navegadores web, verificar configuracion automatica PAC, desmarcar servidor proxy manual y reiniciar winsock con netsh.
+Si la conexion remota por Escritorio Remoto RDP no responde, validar que el servicio TermService este activo, revisar puerto 3389 y verificar acceso en lista de usuarios remotos.
+En fallas de resolucion de nombres NetBIOS o recursos compartidos por nombre de host, vaciar cache DNS con ipconfig /flushdns y corroborar archivo hosts de Windows.
+Si la sesion VPN muestra error de certificado revocado o vencido, regenerar certificado de usuario en la entidad CA corporativa y reinstalar perfil de conexion.
+Para contrasenas corporativas caducadas en Active Directory o Entra ID, validar identidad del usuario por canal seguro, restablecer credencial y forzar cambio en proximo inicio.
+Si el usuario requiere permisos de lectura o modificacion en carpeta compartida, solicitar aprobacion del dueno de datos y agregarlo al grupo de seguridad AD correspondiente.
+Ante bloqueo de BitLocker solicitando clave de recuperacion de 48 digitos, consultar consola de Microsoft Entra o Active Directory, validar GUID y aplicar desbloqueo.
+Si el token de hardware o aplicacion de seguridad de doble factor se desincronizo tras cambio de celular, revocar metodo anterior y guiar nuevo enrolamiento mediante codigo QR.
+Para errores de autenticacion Single Sign-On SSO en portales corporativos, limpiar cookies de sesion del navegador, sincronizar hora del equipo con NTP y probar modo incognito.
+Si el usuario recibe error de acceso prohibido HTTP 403 en aplicaciones web internas, verificar roles de usuario asignados en la base de datos y corroborar claims del token JWT.
+Para solicitudes de privilegios de administrador local temporal para instalar software autorizado, generar aprobacion en mesa de ayuda y elevar credenciales con LAPS.
+Si una cuenta de servicio de aplicacion queda deshabilitada o bloqueada, verificar tareas programadas con credenciales antiguas y actualizar clave en servicios de Windows.
+Ante sospecha de cuenta comprometida o actividad inusual de inicio de sesion, revocar todas las sesiones activas en Azure AD, bloquear inicio de sesion y auditar logs de acceso.
+Para llaves de seguridad FIDO2 o tarjetas inteligentes no leidas por el lector, reiniciar servicio de tarjeta inteligente SCardSvr y reinstalar controlador del lector.
+Cuando Microsoft Outlook se congela o no abre la bandeja de entrada, iniciar en modo seguro outlook /safe, deshabilitar complementos conflictivos y reparar archivo OST o PST.
+Si Microsoft Excel se bloquea al ejecutar macros VBA o tablas dinamicas pesadas, verificar calculo manual, auditar bucles infinitos en el codigo VBA y limpiar hojas ocultas.
+Para sincronizacion fallida de OneDrive con archivos bloqueados en bucle, pausar y reanudar sincronizacion, reiniciar proceso onedrive.exe /reset y verificar espacio en cuota.
+Si una aplicacion corporativa o ERP no conecta con la base de datos SQL, verificar cadena de conexion, comprobar ping al servidor de base de datos y validar puerto 1433.
+Ante errores de activacion de licencia en Microsoft 365 o Windows, ejecutar script ospp.vbs para limpiar llaves previas, validar conectividad con servidor KMS y reautenticar.
+Si el programa Word u Office no abre, no deja ingresar o se congela mientras Excel o PowerPoint si abren, iniciar en modo seguro con winword /safe, eliminar plantilla Normal.dotm corrupta, deshabilitar complementos COM o ejecutar reparacion rapida de Office.
+Para presentaciones de PowerPoint que se bloquean, se congelan o no reproducen videos incrustados, deshabilitar aceleracion grafica por hardware en opciones avanzadas y comprimir elementos multimedia.
+Si Microsoft Teams presenta pantalla negra en videollamadas o no reconoce camara ni microfono, borrar cache en AppData Microsoft Teams, reiniciar proceso y verificar permisos de dispositivo.
+Cuando archivos PDF no abren o Adobe Acrobat Reader se cuelga al imprimir o firmar, desactivar modo protegido al iniciar en preferencias de seguridad y reparar instalacion de Acrobat.
+Si el navegador Google Chrome o Microsoft Edge se cierra solo, muestra error Oh no o no carga paginas web, borrar cookies y cache, desactivar extensiones y restablecer configuracion predeterminada.
+Para un computador o torre que no prende, no sube ni arranca al presionar el boton, revisar switch de encendido del panel frontal, puentear pines de la tarjeta madre y probar fuente de poder con clip.
+Si el computador o portatil se apago repentinamente por sobrecalentamiento o se tosto por exceso de calor, destapar disipador, limpiar motas de polvo en ventilador y aplicar pasta termica fresca.
+Ante pantalla negra tras encender la maquina sin mostrar imagen ni logotipo, realizar drenado de energia estatica o hard reset manteniendo pulsado el boton de encendido treinta segundos sin corriente.
+Si los puertos USB no leen memorias, mouse ni perifericos, deshabilitar suspension selectiva de USB en opciones del plan de energia de Windows y reinstalar controladores del concentrador raiz USB.
+Para laptops o equipos con bateria inflada o abombada que deforma la carcasa, desconectar inmediatamente el cargador por riesgo de fuga de litio, apagar el equipo y reemplazar bateria.
+En impresoras termicas de etiquetas Zebra o POS que imprimen en blanco o desalineado, calibrar sensor de gap o marca negra, limpiar cabezal termico con alcohol isopropilico y verificar puerto USB.
+Si el lector de codigo de barras USB no transmite lecturas o no presiona enter automaticamente, escanear codigos de programacion de fabrica del manual y configurar sufijo Carriage Return.
+Ante lector biometrico de huella digital que no reconoce accesos o muestra sensor no disponible, reiniciar servicio de biometria de Windows WbioSrvc y reinstalar driver del lector dactilar.
+Si la conexion WiFi se cae a cada rato, presenta desconexiones intermitentes o dice sin internet segura, ejecutar netsh winsock reset, reiniciar pila TCP IP y desmarcar ahorro de energia del adaptador.
+Para errores de conexion VPN 800 u 809 al trabajar remoto desde casa, configurar valor AssumeUDPEncapsulationContextOnSendRule en el registro de Windows y abrir puertos IPsec en el router casero.
+Ante lentitud extrema y caida de velocidad en teletrabajo durante llamadas y escritorio remoto, realizar prueba de ping y latencia hacia el servidor, conectar cable UTP directo y cambiar DNS a publicos.
+Si el acceso a carpetas compartidas de red muestra credenciales invalidas o error de protocolo SMB, habilitar cliente SMB2 o SMB3 y eliminar claves obsoletas en el Administrador de Credenciales cmdkey.
+Cuando herramientas de soporte remoto como AnyDesk o TeamViewer no conectan o rechazan sesion remota, autorizar puertos en el firewall corporativo, comprobar ID de cliente y solicitar elevacion UAC.
+Si Windows Update entra en bucle infinito de instalacion o muestra deshaciendo cambios, detener servicios wuauserv y bits, vaciar carpeta SoftwareDistribution y ejecutar comando sfc /scannow.
+Para uso de disco duro al 100 por ciento continuo que ralentiza la maquina, deshabilitar servicio SysMain SuperFetch en servicios de Windows, ejecutar liberador de espacio cleanmgr y comprobar disco.
+Ante infeccion por virus, ventanas emergentes pop-ups o sospecha de ransomware, aislar el computador de la red corporativa, ejecutar examen con Windows Defender Offline y purgar tareas programadas.
+Para problemas al firmar documentos tributarios o ingresar a portales de la DIAN con certificado digital, importar archivo p12 o pfx en el almacen personal de certificados y validar vigencia.
+Si el token fisico o tarjeta criptografica SafeNet o ePass no es detectada para firma electronica, reiniciar servicio de tarjeta inteligente SCardSvr e instalar el middleware criptografico del proveedor.
+Cuando el software contable o ERP como Siigo, World Office, Helisa o Novasoft se bloquea o pierde conexion con el servidor, validar conectividad al puerto de SQL Server y permisos en la carpeta compartida.
+Si el aplicativo SAP GUI se cierra con error de conexion o timeout de red, verificar servidor de mensajes en archivo saplogon.ini, comprobar puerto TCP 3200 y probar enlace VPN con la sede central.
+Para fallos de envio en facturacion electronica hacia la DIAN con error de timeout o token vencido, verificar vigencia del certificado digital de facturacion y sincronizacion con el webservice DIAN.
+Si portales web bancarios o estatales no cargan por bloqueo de Java o Applets antiguos, anadir la URL a la lista de excepciones en el panel de control de Java y habilitar TLS 1.2.
+Cuando la pantalla se congela repentinamente, se pega o se cuelga la imagen pero el audio sigue activo, reiniciar controlador de pantalla con el atajo Windows mas Ctrl mas Shift mas B.
+Para proyectores o monitores externos en salas de reuniones que no proyectan imagen, presionar Windows mas P para cambiar a modo extender y verificar resolucion de video compatible con el cable HDMI.
+Si la bandeja de entrada de correo corporativo muestra buzon lleno y no permite enviar correos, archivar elementos antiguos a un archivo PST local o solicitar ampliacion de cuota a administracion.

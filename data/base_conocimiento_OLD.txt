@@ -1,0 +1,10 @@
+Para un equipo caliente con ventilador ruidoso o alarma de temperatura, limpiar disipadores, verificar pasta termica y revisar flujo de ventilacion.
+En caidas de red, internet o fallas de resolucion DNS, verificar cable ethernet, renovar IP con ipconfig /renew y probar ping al gateway o servidor DNS.
+Para cuentas bloqueadas o problemas de inicio de sesion, verificar intentos fallidos en Active Directory, desbloquear usuario y restablecer credenciales temporales.
+Si el token o codigo MFA no llega al dispositivo movil, validar sincronizacion horaria de Microsoft Authenticator o generar codigo de paso temporal de contingencia.
+Cuando una aplicacion como Excel o el ERP se cierra con error inesperado o memoria violada, revisar complementos conflictivos, actualizar version y consultar visor de eventos.
+Para impresoras con atascos frecuentes de papel o impresion manchada, retirar residuos del rodillo de alimentacion, revisar nivel de toner y reiniciar cola de impresion.
+Si el monitor parpadea, no enciende o emite pantalla negra, verificar cables HDMI o DisplayPort, actualizar controlador de video y probar conexion directa sin dock.
+Ante lentitud extrema del sistema operativo o congelamiento, inspeccionar consumo de CPU, memoria y disco en el administrador de tareas y deshabilitar servicios innecesarios.
+Si el cliente VPN falla al negociar el tunel o se desconecta intermitentemente, validar certificado digital de seguridad, probar protocolo alternativo y verificar enlace del proveedor.
+Para errores de acceso denegado en recursos compartidos de red, verificar membresia en grupos de seguridad NTFS y corroborar la ruta de red SMB asignada.
