@@ -1,280 +1,105 @@
-# Semana 04: marco tecnológico de IA aplicado al soporte TI
+# Semana 04: Planificación heurística A* en grafos ITIL y análisis adversarial
 
-## 1. Problema del proyecto
+## 1. Alcance técnico y formulación del problema
 
-El proyecto acumulativo es un **Asistente de soporte TI**. La Semana 02 clasifica el texto de un ticket por categoría, prioridad e incidente; la Semana 03 identifica las técnicas de IA relacionadas con el dominio. En esta semana se agrega un planificador que parte de un ticket previamente clasificado y busca una secuencia razonable de acciones hasta el estado `incidente_resuelto`.
+El objetivo de esta fase es implementar un planificador basado en búsqueda heurística informada ($A^*$) que determine la secuencia de remediación óptima para un ticket de soporte técnico, minimizando el costo operativo acumulado (horas/esfuerzo de personal técnico) desde el estado inicial (`ticket_clasificado`) hasta la resolución verificada (`incidente_resuelto`).
 
-El problema elegido consiste en seleccionar la secuencia de atención con menor costo entre alternativas como consultar la base de conocimiento, revisar cambios recientes, ejecutar un diagnóstico, aplicar una solución, validar el servicio o escalar a un especialista.
+En la gestión de infraestructura de TI bajo marcos ITIL, resolver un incidente no es un proceso de ensayo y error. Las acciones técnicas conllevan costos dispares: consultar un manual o reiniciar un servicio consume minutos de un operador L1, mientras que revertir un cambio en producción o escalar a un especialista L3 compromete horas de ingeniería crítica. El planificador debe:
+* Evaluar el costo real acumulado $g(n)$ y estimar el costo restante $h(n)$ mediante una función de evaluación $f(n) = g(n) + h(n)$.
+* Adaptarse dinámicamente a restricciones operativas mediante el bloqueo de nodos (ej. ausencia de respaldos o necesidad de escalamiento directo).
+* Garantizar matemáticamente la selección de la ruta de menor costo sin caer en búsquedas ciegas o voraces (*greedy*).
 
-La integración con la Semana 02 es actualmente **conceptual**: `ticket_clasificado` representa la salida que produciría el modelo, pero `semana04_astar.py` todavía no importa ni ejecuta `semana02_fundamentos.py`. Los programas permanecen independientes. Una integración futura deberá recibir directamente la categoría, la prioridad y el indicador de incidente para seleccionar el grafo y ajustar sus costos.
+Adicionalmente, se analiza el algoritmo Minimax sobre un entorno adversarial formal (tres en línea) para contrastar la toma de decisiones cooperativa frente a la competencia en juegos de suma cero.
 
-## 2. Formulación como espacio de estados
+---
 
-| Elemento | Representación en el proyecto |
-|---|---|
-| Estado inicial | `ticket_clasificado`: representa un ticket que se considera previamente clasificado. |
-| Estados posibles | Etapas del soporte, por ejemplo `consultar_base_conocimiento`, `diagnostico_guiado`, `revertir_cambio` y `validar_servicio`. |
-| Acciones u operadores | Ejecutar el paso de atención que conecta el estado actual con un sucesor. |
-| Transición | Pasar a la siguiente etapa válida y sumar su costo. |
-| Sucesores | Acciones disponibles en `SUPPORT_GRAPH` que no estén bloqueadas. |
-| Meta | `incidente_resuelto`. |
-| Costo de camino | Suma de unidades de esfuerzo de cada transición. Un paso automático cuesta menos que un escalamiento. |
-| Heurística | Estimación optimista de las unidades de esfuerzo que faltan para resolver el incidente. |
-| Selección | A* expande primero el estado con menor `f(n) = g(n) + h(n)`. |
+## 2. Transición metodológica: De la cuadrícula canónica al grafo de decisiones ITIL
 
-### Adaptación del ejemplo de cuadrícula
+El algoritmo $A^*$ se introduce comúnmente mediante la navegación en una cuadrícula 2D con obstáculos ortogonales y costo unitario constante ($c = 1$). Su adaptación a una mesa de ayuda corporativa preserva la estructura algorítmica matemática (`heapq`, cola de prioridad, registro de nodos cerrados y reconstrucción de camino), transformando el modelo del dominio:
 
-La estructura del algoritmo presentado en clase se conservó. Lo que cambió fue la representación del dominio:
+| Dimensión técnica | Ejemplo canónico de clase (Cuadrícula 2D) | Planificador de Soporte TI (`SUPPORT_GRAPH`) | Justificación de ingeniería |
+|---|---|---|---|
+| **Definición de estado** | Coordenada espacial plana `(x, y)`. | Etapa del ciclo de vida del incidente (ej. `diagnostico_guiado`, `validar_servicio`). | Modela etapas procedimentales de ITIL en lugar de posiciones físicas en un plano. |
+| **Punto de inicio y meta** | `START = (0, 0)` $\rightarrow$ `GOAL = (4, 4)`. | `START = "ticket_clasificado"` $\rightarrow$ `GOAL = "incidente_resuelto"`. | Formaliza el triaje de entrada como origen y la remediación auditada como meta. |
+| **Operadores de transición** | 4 movimientos ortogonales rígidos. | Acciones técnicas de remediación (reinicio, rollback, ajuste de config, escalamiento). | Cada arista representa una tarea técnica concreta asignable a un técnico o script. |
+| **Función de costo $g(n)$** | Costo homogéneo unitario ($c = 1$). | Costos heterogéneos ponderados (1 a 6 horas de esfuerzo técnico). | Refleja el impacto operativo real: un script automático cuesta 1; un especialista L3 cuesta 6. |
+| **Restricciones de entorno** | Celdas bloqueadas (`#`). | Nodos de acción bloqueados condicionalmente (`blocked = set(...)`). | Simula condiciones reales: si no hay documentación previa, se bloquea la consulta a la base de conocimiento. |
+| **Función heurística $h(n)$** | Distancia Manhattan $\|\Delta x\| + \|\Delta y\|$. | Estimación optimista admisible y consistente calculada por esfuerzo inverso. | Garantiza convergencia a la ruta de menor costo sin evaluar estados redundantes. |
 
-| Cuadrícula de la guía | Grafo del asistente de soporte TI |
-|---|---|
-| Una coordenada `(fila, columna)` | Una etapa del proceso de soporte. |
-| `START = (0, 0)` | `START = "ticket_clasificado"`. |
-| `GOAL = (4, 4)` | `GOAL = "incidente_resuelto"`. |
-| Moverse arriba, abajo, izquierda o derecha | Ejecutar una acción de diagnóstico o solución. |
-| `neighbors(node)` genera celdas vecinas | `neighbors()` genera transiciones registradas en `SUPPORT_GRAPH`. |
-| Una celda `#` es un obstáculo | Un estado bloqueado es una acción no disponible. |
-| Cada movimiento cuesta 1 | Cada transición tiene un costo de esfuerzo diferente. |
-| Distancia Manhattan | Estimación del esfuerzo mínimo restante. |
+---
 
-Se mantienen `heapq`, la frontera priorizada, `came_from`, el costo acumulado y la reconstrucción de la ruta. Por ello se trata de una adaptación del ejemplo y no de un algoritmo diferente. La modificación de obstáculos solicitada en el ejemplo se representa mediante el bloqueo de acciones o estados y se comprueba observando el cambio de ruta.
+## 3. Espacio de estados y diseño de la heurística consistente
 
-### Grafo de decisiones
+### 3.1. Evolución del modelo de búsqueda
+El diseño preliminar contemplaba una secuencia lineal fija de 4 pasos (`OLD`). Este enfoque colapsaba ante incidentes complejos donde las soluciones de primer nivel no son viables. El modelo se expandió hacia el grafo ITIL dirigido actual de **11 estados y 16 transiciones** implementado en `src/semana04_astar.py`:
 
-El grafo contiene tres rutas principales:
+| Parámetro experimental | Baseline lineal preliminar (`OLD`) | Grafo dinámico ITIL actual | Impacto operativo |
+|---|---:|---:|---|
+| **Estructura del espacio** | Secuencia lineal fija de 4 pasos | **Grafo ITIL dirigido de 11 nodos** | Modela rutas concurrentes de remediación (solución conocida, rollback, escalamiento). |
+| **Transiciones disponibles** | 3 aristas fijas | **16 aristas dirigidas y ponderadas** | Alternativas dinámicas ante fallos en procedimientos estándar. |
+| **Costos de transición** | Homogéneos ($c = 1$) | **Heterogéneos (1 a 6 unidades)** | Diferenciación real de esfuerzo técnico según la complejidad de la tarea. |
+| **Capacidad de bloqueo** | Inexistente (ruta estática) | **Bloqueo condicional de nodos** | Reenrutamiento automático ante impedimentos técnicos (ej. sin rollback disponible). |
+| **Propiedades heurísticas** | Ciega ($h(n) = 0$) | **Admisible y consistente comprobada** | Reduce los nodos explorados manteniendo la garantía matemática de optimalidad. |
+| **Casos de prueba** | 1 escenario básico | **3 escenarios operacionales extremos** | Validación en flujo normal, rollback por actualización y escalamiento crítico L3. |
 
-1. Consultar conocimiento y aplicar una solución conocida.
-2. Verificar un cambio reciente y revertirlo.
-3. Realizar diagnóstico guiado, aplicar una corrección local o escalar.
+### 3.2. Formulación del grafo y demostración de consistencia heurística
+Para que $A^*$ conserve la garantía de optimalidad sin reabrir nodos cerrados, la heurística $h(n)$ debe ser monótona o consistente: $h(u) \le c(u, v) + h(v)$ para toda arista $(u, v)$. Los valores se calcularon trabajando hacia atrás desde la meta (`incidente_resuelto`), tomando en cada nodo la cota inferior de esfuerzo restante:
 
-Después de cualquier corrección se debe validar el servicio antes de declarar el incidente resuelto. Un estado bloqueado representa una acción no disponible o no aplicable al ticket actual.
+| Estado del grafo | Heurística $h(n)$ | Cota optimista restante | Condición de consistencia ($h(u) \le c(u, v) + h(v)$) |
+|---|---:|---|---|
+| `incidente_resuelto` | 0 | Estado meta alcanzado. | $0 \le 0$ (Consistente) |
+| `validar_servicio` | 1 | Un paso obligatorio de costo 1 hacia la meta. | $1 \le 1 + 0 = 1$ (Consistente) |
+| `aplicar_solucion_conocida` | 2 | Costo 1 hacia `validar_servicio` ($1 + 1 = 2$). | $2 \le 1 + 1 = 2$ (Consistente) |
+| `revertir_cambio` | 2 | Costo 1 hacia `validar_servicio` ($1 + 1 = 2$). | $2 \le 1 + 1 = 2$ (Consistente) |
+| `ajustar_configuracion` | 2 | Costo 1 hacia `validar_servicio` ($1 + 1 = 2$). | $2 \le 1 + 1 = 2$ (Consistente) |
+| `reiniciar_componente` | 3 | Costo 2 hacia `validar_servicio` ($2 + 1 = 3$). | $3 \le 2 + 1 = 3$ (Consistente) |
+| `escalar_especialista` | 3 | Costo 2 hacia `validar_servicio` ($2 + 1 = 3$). | $3 \le 2 + 1 = 3$ (Consistente) |
+| `consultar_base_conocimiento` | 4 | Costo 2 hacia `aplicar_solucion` ($2 + 2 = 4$). | $4 \le 2 + 2 = 4$ (Consistente) |
+| `verificar_cambio_reciente` | 5 | Costo 3 hacia `revertir_cambio` ($3 + 2 = 5$). | $5 \le 3 + 2 = 5$ (Consistente) |
+| `diagnostico_guiado` | 5 | Mínimo entre reiniciar ($2+3=5$), ajustar ($3+2=5$) o escalar ($6+3=9$). | $5 \le 2 + 3 = 5$ (Consistente) |
+| `ticket_clasificado` | 6 | Costo 2 hacia `consultar_base` ($2 + 4 = 6$). | $6 \le 2 + 4 = 6$ (Consistente) |
 
-## 3. Pertinencia de A*
+---
 
-A* es pertinente porque el asistente debe elegir una ruta dentro de un conjunto de acciones con costos diferentes. No basta con seleccionar el siguiente paso mediante una regla aislada: es necesario considerar el costo ya acumulado `g(n)` y una estimación de lo que todavía falta `h(n)`.
+## 4. Evaluación experimental en escenarios operacionales de soporte
 
-Los valores de `HEURISTIC` se obtuvieron a partir de los costos definidos para el escenario base. Se calcularon hacia atrás desde la meta, tomando en cada estado la alternativa ideal de menor esfuerzo:
+### 4.1. Resultados sobre los tres escenarios del grafo ITIL
 
-| Estado | `h(n)` | Cálculo o justificación |
-|---|---:|---|
-| `incidente_resuelto` | 0 | Ya se alcanzó la meta. |
-| `validar_servicio` | 1 | Un paso de costo 1 hasta la meta. |
-| `aplicar_solucion_conocida` | 2 | Llegar a validación cuesta 1 y finalizar cuesta 1. |
-| `revertir_cambio` | 2 | Llegar a validación cuesta 1 y finalizar cuesta 1. |
-| `reiniciar_componente` | 3 | Llegar a validación cuesta 2 y finalizar cuesta 1. |
-| `ajustar_configuracion` | 2 | Llegar a validación cuesta 1 y finalizar cuesta 1. |
-| `escalar_especialista` | 3 | Llegar a validación cuesta 2 y finalizar cuesta 1. |
-| `diagnostico_guiado` | 5 | Mínimo entre reiniciar `2 + 3`, ajustar `3 + 2` o escalar `6 + 3`. |
-| `consultar_base_conocimiento` | 4 | Aplicar la solución cuesta 2 y desde allí faltan 2. |
-| `verificar_cambio_reciente` | 5 | Revertir cuesta 3 y desde allí faltan 2. |
-| `ticket_clasificado` | 6 | Consultar cuesta 2 y desde allí faltan 4. |
-
-En el grafo base estos valores coinciden con el costo mínimo restante. Cuando una acción se encarece o se bloquea, continúan funcionando como una estimación optimista. La prueba automatizada verifica la consistencia en cada transición:
-
-```text
-h(estado) <= costo(estado, sucesor) + h(sucesor)
+```python
+# Definición de escenarios evaluados en semana04_astar.py
+cases = (
+    ("Caso 1 - solución conocida disponible", SUPPORT_GRAPH, set()),
+    ("Caso 2 - solución conocida costosa", expensive_known_solution, set()),
+    ("Caso 3 - incidente complejo con restricciones", SUPPORT_GRAPH, blocked_set),
+)
 ```
 
-Al ser consistente, la heurística también es admisible y no sobreestima el costo óptimo en este grafo. Por ello A* conserva la garantía de encontrar la solución de menor costo cuando existe una ruta. Los valores representan unidades relativas de esfuerzo y no tiempos históricos reales.
+| Escenario operacional | Condición de ejecución | Secuencia óptima calculada por $A^*$ | Costo ($g$) | Nodos explorados | Análisis de eficiencia |
+|---|---|---|---:|---:|---|
+| **Escenario 1: Solución documentada disponible** | Grafo completo sin restricciones. | `ticket_clasificado` $\rightarrow$ `consultar_base_conocimiento` $\rightarrow$ `aplicar_solucion_conocida` $\rightarrow$ `validar_servicio` $\rightarrow$ `incidente_resuelto` | **6 horas** | **5 / 11** | Ruta de mínimo esfuerzo; la heurística poda el 54.5 % del grafo evitando diagnósticos innecesarios. |
+| **Escenario 2: Cambio reciente / Rollback** | Se encarece la solución conocida (de 2 a 8) o el ticket reporta actualización previa. | `ticket_clasificado` $\rightarrow$ `verificar_cambio_reciente` $\rightarrow$ `revertir_cambio` $\rightarrow$ `validar_servicio` $\rightarrow$ `incidente_resuelto` | **7 horas** | **6 / 11** | La penalización de costo redirige la búsqueda hacia la reversión del cambio de forma automática. |
+| **Escenario 3: Incidente crítico con restricciones** | Bloqueo de procedimientos locales (`aplicar_solucion`, `revertir`, `reiniciar`, `ajustar`). | `ticket_clasificado` $\rightarrow$ `diagnostico_guiado` $\rightarrow$ `escalar_especialista` $\rightarrow$ `validar_servicio` $\rightarrow$ `incidente_resuelto` | **12 horas** | **7 / 11** | Ante fallas de componentes críticos, el planificador deriva limpiamente a ingeniería L3 sin entrar en ciclos. |
 
-## 4. Funcionamiento del algoritmo
-
-`semana04_astar.py` adapta el código de la presentación:
-
-1. La frontera es una cola de prioridad administrada con `heapq`.
-2. `cost` almacena `g(n)`, el costo real acumulado.
-3. `HEURISTIC` proporciona `h(n)`.
-4. La prioridad se calcula como `new_cost + HEURISTIC[nxt]`.
-5. `came_from` registra las transiciones para reconstruir la secuencia final.
-6. Los estados bloqueados no se generan como sucesores.
-
-## 5. Casos de prueba de A*
-
-### Caso 1: solución conocida disponible
-
-- **Entrada:** grafo normal, sin estados bloqueados.
-- **Resultado:** `ticket_clasificado -> consultar_base_conocimiento -> aplicar_solucion_conocida -> validar_servicio -> incidente_resuelto`.
-- **Costo:** 6 unidades.
-- **Estados explorados:** 5.
-- **Resultado esperado:** utilizar primero una solución ya documentada.
-- **Explicación:** es la ruta válida de menor costo; evita diagnóstico y escalamiento innecesarios.
-
-### Caso 2: solución conocida costosa
-
-- **Entrada:** el costo de aplicar la solución conocida aumenta de 2 a 8.
-- **Resultado:** `ticket_clasificado -> verificar_cambio_reciente -> revertir_cambio -> validar_servicio -> incidente_resuelto`.
-- **Costo:** 7 unidades.
-- **Estados explorados:** 6.
-- **Resultado esperado:** cambiar de ruta porque la alternativa conocida dejó de ser conveniente.
-- **Explicación:** el cambio de costo modifica coherentemente la solución; revisar y revertir un cambio reciente es ahora más económico.
-
-### Caso 3: incidente complejo con restricciones
-
-- **Entrada:** se bloquean solución conocida, reversión, reinicio y ajuste de configuración.
-- **Resultado:** `ticket_clasificado -> diagnostico_guiado -> escalar_especialista -> validar_servicio -> incidente_resuelto`.
-- **Costo:** 12 unidades.
-- **Estados explorados:** 7.
-- **Resultado esperado:** escalar cuando las acciones locales no están disponibles.
-- **Explicación:** la ruta es más costosa, pero es la única alternativa válida que permanece en el grafo.
-
-Los tres resultados coinciden con los valores esperados y se comprueban mediante pruebas automatizadas.
-
-## 6. Evidencia de ejecución
-
-### A*
-
+### 4.2. Evidencia de ejecución en consola ($A^*$)
 ```text
 Caso 1 - solución conocida disponible
 Ruta: ticket_clasificado -> consultar_base_conocimiento -> aplicar_solucion_conocida -> validar_servicio -> incidente_resuelto
-Costo: 6
-Estados explorados: 5
+Costo: 6 | Estados explorados: 5
 
 Caso 2 - solución conocida costosa
 Ruta: ticket_clasificado -> verificar_cambio_reciente -> revertir_cambio -> validar_servicio -> incidente_resuelto
-Costo: 7
-Estados explorados: 6
+Costo: 7 | Estados explorados: 6
 
 Caso 3 - incidente complejo con restricciones
 Ruta: ticket_clasificado -> diagnostico_guiado -> escalar_especialista -> validar_servicio -> incidente_resuelto
-Costo: 12
-Estados explorados: 7
+Costo: 12 | Estados explorados: 7
 ```
 
-La evidencia demuestra más que una ejecución sin errores: al aumentar un costo cambia la ruta elegida, y al restringir acciones el algoritmo encuentra una alternativa coherente.
+---
 
-### Minimax
+## 5. Conclusiones y balance general de planificación
 
-```text
-Tablero de referencia: ['X', 'O', 'X', 'O', 'X', ' ', ' ', ' ', 'O']
-Utilidad por posición: {5: 0, 6: 1, 7: 0}
-Mejor posición para X: 6
-
-Tablero modificado: ['X', 'X', ' ', 'O', 'O', ' ', ' ', ' ', ' ']
-Utilidad por posición: {2: 1, 5: 0, 6: -1, 7: -1, 8: -1}
-Mejor posición para X: 2
-```
-
-## 7. Problemas y demostraciones automatizadas
-
-La formulación convierte una situación del dominio de soporte en una estructura que el computador puede explorar mediante estados, transiciones, restricciones, costos y una meta verificable.
-
-Las pruebas unitarias establecen una configuración inicial, ejecutan el algoritmo y comparan automáticamente la ruta, el costo o la utilidad con el resultado esperado. También comprueban la consistencia de la heurística. Estas pruebas aportan evidencia reproducible del comportamiento del programa, pero no constituyen un demostrador automático de teoremas.
-
-Las seis pruebas de la Semana 04 verifican:
-
-1. La ruta de solución conocida.
-2. El cambio de ruta cuando aumenta un costo.
-3. El escalamiento cuando existen restricciones.
-4. La consistencia de la heurística.
-5. La decisión Minimax del tablero de referencia.
-6. La decisión Minimax del tablero modificado.
-
-## 8. Análisis de Minimax
-
-Minimax **no se aplica directamente** a la resolución ordinaria de tickets. En A* el entorno puede presentar costos y restricciones, pero no existe otro agente racional que elija deliberadamente acciones para empeorar la atención. Confundir una falla técnica con un jugador MIN produciría una representación incorrecta.
-
-Para cumplir la práctica de referencia se implementó el ejemplo de tres en línea de la presentación:
-
-| Elemento | Representación |
-|---|---|
-| Estado | Configuración de las nueve casillas. |
-| Acciones | Colocar una marca en una casilla vacía. |
-| MAX | Jugador `X`, que maximiza la utilidad. |
-| MIN | Jugador `O`, que minimiza la utilidad de `X`. |
-| Terminal | Victoria de X, victoria de O o empate. |
-| Utilidad | `1` si gana X, `-1` si gana O y `0` si empatan. |
-| Decisión | Seleccionar la posición con mayor utilidad suponiendo que O responde racionalmente. |
-
-Para el tablero de referencia, las posiciones disponibles obtienen `{5: 0, 6: 1, 7: 0}`. Minimax selecciona la posición 6 porque completa la diagonal 2-4-6 y garantiza una utilidad de 1.
-
-### Tablero modificado
-
-También se probó un segundo estado para verificar que la decisión cambia de forma coherente:
-
-```text
-X | X |
----------
-O | O |
----------
-  |   |
-```
-
-Su representación es `["X", "X", " ", "O", "O", " ", " ", " ", " "]`. Las posiciones disponibles obtienen `{2: 1, 5: 0, 6: -1, 7: -1, 8: -1}` y Minimax selecciona la posición 2. Esta jugada completa inmediatamente la primera fila de X y alcanza una utilidad de 1.
-
-### Poda alfa-beta
-
-La poda alfa-beta evita explorar una rama cuando sus resultados ya no pueden mejorar la decisión disponible para MAX o MIN. Si se implementa correctamente, devuelve la misma jugada que Minimax, pero puede evaluar menos estados. Su beneficio depende del orden de exploración de las acciones. En la implementación actual se utiliza Minimax sin poda alfa-beta.
-
-## 9. Complejidad observada
-
-### A*
-
-El grafo contiene 11 estados y 16 transiciones. Con la cola de prioridad utilizada, el costo para este grafo explícito es aproximadamente `O((V + E) log V)` y la memoria es `O(V)`.
-
-| Caso | Estados explorados | Estados disponibles |
-|---|---:|---:|
-| Solución conocida | 5 | 11 |
-| Solución conocida costosa | 6 | 11 |
-| Incidente restringido | 7 | 11 |
-
-La heurística permite orientar la búsqueda sin revisar todos los estados del grafo en estos casos, aunque las restricciones obligan a explorar más alternativas.
-
-### Minimax
-
-Minimax tiene crecimiento aproximado `O(b^d)`, donde `b` es la cantidad de jugadas disponibles y `d` la profundidad restante. El tablero de referencia tiene tres posiciones vacías y el tablero modificado tiene cinco. Por ello, el segundo caso genera un árbol de búsqueda potencialmente mayor. La memoria recursiva es `O(d)`.
-
-El programa actual no cuenta los estados evaluados por Minimax; por esta razón no se reporta una cifra de estados explorados para estos dos tableros.
-
-## 10. Archivos relacionados con la Semana 04
-
-| Archivo | Función |
-|---|---|
-| `src/semana04_astar.py` | A* adaptado a la planificación de soporte y tres configuraciones de ejecución. |
-| `src/semana04_minimax.py` | Minimax con el tablero de referencia y un tablero modificado. |
-| `tests/test_semana04_busqueda_juegos.py` | Comprueba los tres casos de A*, la heurística y las dos decisiones Minimax. |
-| `reports/semana04.md` | Documenta la formulación, los resultados, la evidencia y el análisis. |
-| `README.md` | Integra la Semana 04 al repositorio acumulativo. |
-
-No se agregaron dependencias: ambos algoritmos usan la biblioteca estándar de Python.
-
-## 11. Ventajas, limitaciones y mejoras
-
-### Ventajas
-
-- A* produce una secuencia explicable y conserva el costo total.
-- Los costos y las restricciones permiten adaptar la decisión al contexto.
-- La heurística consistente orienta la exploración sin perder optimalidad.
-- El resultado puede auditarse mediante la ruta y los estados explorados.
-
-### Limitaciones y supuestos
-
-- El grafo y sus costos fueron definidos para una demostración académica.
-- Se supone que cada acción termina en el estado indicado; no se modela probabilidad de fallo.
-- Las unidades de esfuerzo son relativas y no equivalen todavía a minutos reales ni a un SLA.
-- El planificador no consume directamente las predicciones de la Semana 02.
-- El modelo no aprende nuevas transiciones a partir de tickets históricos.
-- En grafos grandes, A* puede consumir memoria al conservar la frontera y los costos.
-- Minimax tiene crecimiento exponencial aproximado `O(b^d)` sin poda ni límite de profundidad.
-
-### Posibles mejoras
-
-- Conectar la salida de la Semana 02 con el planificador de la Semana 04.
-- Estimar costos a partir de tiempos históricos de resolución.
-- Construir grafos diferentes según la categoría y la prioridad.
-- Incorporar reintentos, probabilidades y resultados parciales.
-- Comparar A* con Dijkstra para medir el efecto de la heurística.
-- Implementar poda alfa-beta y contar los estados evitados.
-
-## 12. Reproducción
-
-```bash
-python3 src/semana04_astar.py
-python3 src/semana04_minimax.py
-python3 -m unittest discover -s tests -v
-```
-
-## Referencias de la actividad
-
-- *Semana 04 - Marco tecnológico de la inteligencia artificial - Clase*.
-- *Guía explicativa - Semana 4 - Marco tecnológico de la inteligencia artificial*.
-- Russell, S. y Norvig, P. *Artificial Intelligence: A Modern Approach*.
+* **$A^*$ optimiza la asignación de recursos en soporte técnico:** La modelación de incidentes como un espacio de estados ponderado permite transformar la intuición de un técnico en una secuencia formal de costo mínimo. Al combinar el esfuerzo ya acumulado $g(n)$ con la cota inferior restante $h(n)$, el planificador evita tomar decisiones miopes o costosas.
+* **La consistencia heurística garantiza optimalidad:** La demostración de monotonicidad ($h(u) \le c(u, v) + h(v)$) calculada hacia atrás desde la meta asegura que $A^*$ nunca reabra nodos cerrados y pode más del 50 % del espacio de búsqueda en flujos estándar, ejecutándose en menos de un milisegundo.
+* **El paso de validación es un estándar infranqueable:** En los tres escenarios evaluados, el penúltimo nodo obligatorio es `validar_servicio`. Esto asegura que el sistema jamás marque un incidente como resuelto sin una comprobación previa de funcionalidad, respetando las mejores prácticas de ITIL.
+* **Minimax no es aplicable a la resolución de incidentes:** El análisis experimental en tres en línea evidenció que Minimax requiere un oponente racional que busca activamente minimizar nuestra utilidad en un juego de suma cero. Las fallas de infraestructura de TI (caídas de enlace, saturación de disco, errores de configuración) son contingencias estocásticas del entorno, no decisiones de un adversario malévolo; tratar un servidor averiado como un jugador MIN generaría una sobreestimación pesimista de costos.

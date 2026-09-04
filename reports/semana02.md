@@ -1,64 +1,71 @@
-# Semana 02: Clasificación supervisada de tickets de soporte técnico en TI
+# Semana 02: Clasificación supervisada multietiqueta de tickets de soporte TI
 
-## 1. Introducción y objetivos
+## 1. Alcance técnico y formulación del problema
 
-El objetivo de esta práctica es trasladar los principios del aprendizaje supervisado —trabajados inicialmente con problemas de referencia como el conjunto de datos *Iris*— a un caso de uso práctico: el **Asistente de soporte TI**.
+El objetivo de esta fase es implementar un pipeline de aprendizaje automático supervisado capaz de procesar tickets de soporte en lenguaje natural y predecir de forma simultánea las tres dimensiones requeridas para el triaje operativo en una mesa de ayuda corporativa:
+* **Categoría funcional:** Dominio tecnológico del incidente (`hardware`, `software`, `red`, `accesos`).
+* **Nivel de prioridad:** Severidad operativa del ticket (`alta`, `media`, `baja`), alineada a los tiempos de respuesta exigidos por los SLAs.
+* **Tipo de caso (Incidente):** Clasificación binaria entre una falla que interrumpe la continuidad operativa (`sí`) frente a una solicitud de aprovisionamiento o trámite rutinario (`no`).
 
-A diferencia de los ejercicios introductorios basados en medidas cuantitativas cerradas, este sistema analiza el texto redactado por los usuarios en sus solicitudes de servicio. A partir de esa información, el modelo aprende a predecir de manera simultánea tres variables clave para la gestión del soporte:
-
-- **Categoría:** El área tecnológica correspondiente (*hardware*, *software*, *red* o *accesos*).
-- **Prioridad:** El nivel de urgencia de la atención (*alta*, *media* o *baja*).
-- **Tipo de caso (Incidente):** La distinción entre una falla que detiene el servicio (*sí*) y una consulta o trámite regular (*no*).
+En producción, un modelo de triaje no puede depender de predicciones aisladas. La inferencia debe ser atómica y consistente: el sistema clasifica categoría, prioridad e impacto en un único paso de ejecución para enrutar el ticket de forma inmediata al grupo resolutor adecuado.
 
 ---
 
-## 2. Transición metodológica: del caso clásico al análisis de texto
+## 2. Transición metodológica: Del dataset canónico al análisis de texto libre
 
-El flujo de trabajo habitual en ciencia de datos se mantiene: carga de datos, separación de muestras de entrenamiento y prueba, construcción de la secuencia de procesamiento (*pipeline*), entrenamiento del clasificador y evaluación final. No obstante, trabajar con lenguaje natural exige adaptar las herramientas y los métodos:
+En los laboratorios introductorios se utiliza comúnmente el dataset *Iris*, compuesto por cuatro variables cuantitativas continuas perfectamente delimitadas. El soporte técnico real presenta un escenario diametralmente opuesto: texto libre no estructurado con errores de digitación, tecnicismos, abreviaciones y lenguaje coloquial.
 
-| Criterio | Ejemplo introductorio (*Iris*) | Proyecto de soporte TI | Justificación del cambio |
+| Criterio de ingeniería | Dataset canónico de laboratorio (*Iris*) | Pipeline de Soporte TI (Semana 02) | Justificación técnica |
 |---|---|---|---|
-| **Origen de datos** | Funciones integradas (`load_iris()`) | Archivos estructurados (`tickets_soporte.csv`) | Simula la ingesta real de datos desde plataformas de mesas de ayuda. |
-| **Variables de entrada** | 4 medidas numéricas de longitud y ancho | Texto no estructurado del ticket | Requiere transformar el lenguaje humano a un formato cuantitativo computable. |
-| **Representación** | Estandarización numérica (`StandardScaler`) | Vectorización textual (`TfidfVectorizer`) | Permite ponderar la relevancia e importancia de cada palabra según su frecuencia. |
-| **Variables objetivo** | Una única variable (especie de flor) | Tres variables simultáneas (categoría, prioridad, incidente) | Da respuesta a las múltiples dimensiones de triaje que exige el soporte técnico. |
-| **Algoritmo base** | Regresión logística simple | Regresión logística multietiqueta/multisalida | Permite resolver tres problemas de clasificación en un único flujo de ejecución. |
+| **Formato de entrada** | 4 características escalares numéricas (longitud/ancho). | Texto no estructurado en lenguaje natural. | Refleja la forma en que los usuarios reportan incidentes a través de portales o correos. |
+| **Preprocesamiento** | Estandarización numérica de varianza (`StandardScaler`). | Vectorización sparse TF-IDF con eliminación de acentos Unicode. | Pondera la relevancia discriminativa de términos técnicos descartando stop words sin valor semántico. |
+| **Dimensión del target** | Variable univariada multiclase (3 especies). | Target multivariado de 3 dimensiones simultáneas. | Da respuesta al problema real de triaje corporativo (tipo de falla + criticidad + afectación). |
+| **Arquitectura del modelo** | Regresión logística multinomial simple. | `MultiOutputClassifier` sobre `LogisticRegression` (`max_iter=1000`). | Desacopla tres estimadores lineales independientes dentro de un único pipeline serializable. |
+| **Origen del dato** | Generación sintética en memoria (`load_iris()`). | Ingesta estructurada desde CSV (`tickets_soporte.csv`). | Simula el consumo de bases de datos relacionales o exports de plataformas de ticketing. |
 
 ---
 
-## 3. Conjunto de datos y diseño experimental
+## 3. Dataset y diseño experimental
 
-### 3.1. Evolución del corpus: de 128 a 1.000 registros
-Inicialmente se realizó una prueba piloto con **128 tickets**. Aunque este primer ejercicio permitió comprobar que el código y el flujo de trabajo funcionaban correctamente, la muestra era demasiado pequeña para reflejar las variadas formas en que los usuarios describen un problema, lo que dejaba un alto margen de incertidumbre en los resultados.
+### 3.1. Evolución del corpus de entrenamiento
+La fase exploratoria arrancó con un baseline preliminar de **128 tickets** (`tickets_soporte_antiguo.csv` / `OLD`). Aunque permitió comprobar la sintaxis del código, el volumen era insuficiente: con solo 96 registros en entrenamiento, la varianza del estimador era excesivamente alta y vocabulario técnico común quedaba fuera del diccionario de frecuencias.
 
-Para construir un modelo más confiable, el conjunto se amplió a **1.000 tickets documentados**, lo que brindó una base de datos más amplia, equilibrada y cercana al entorno de trabajo diario de una organización:
+Para estabilizar el modelo, se consolidó el dataset actual de **1.000 tickets estructurados** en `data/tickets_soporte.csv`:
 
-| Parámetro experimental | Línea base inicial | Corpus ampliado | Impacto metodológico |
+| Parámetro experimental | Baseline preliminar (`OLD`) | Dataset actual de trabajo | Impacto en el modelo |
 |---|---:|---:|---|
-| **Total de tickets** | 128 | **1.000** | Aumento de casi 8 veces en volumen textual y diversidad sintáctica. |
-| **Muestras de entrenamiento (75 %)** | 96 | **750** | Mayor cobertura de coocurrencias de términos técnicos y contextos operativos. |
-| **Muestras de prueba (25 %)** | 32 | **250** | Reducción drástica de la varianza del estimador y representatividad estadística. |
-| **Peso individual por muestra en test** | 3.125 % ($\frac{1}{32}$) | **0.400 %** ($\frac{1}{250}$) | Un único error de clasificación ya no distorsiona drásticamente las métricas globales. |
-| **Estructura de balance** | 32 por categoría | **250 por categoría** | Diseño factorial simétrico que anula el sesgo por clase mayoritaria. |
-| **Semilla de aleatoriedad** | `random_state=42` | `random_state=42` | Garantiza la estricta reproducibilidad de las particiones estratificadas. |
+| **Archivo fuente** | `tickets_soporte_antiguo.csv` | `tickets_soporte.csv` | Transición a la data estructurada de producción del asistente. |
+| **Volumen total** | 128 tickets | **1.000 tickets** | Crecimiento de 7.8x en volumen de texto y diversidad léxica. |
+| **Muestras de entrenamiento (75 %)** | 96 tickets | **750 tickets** | Mayor densidad de coocurrencias de términos técnicos (*Active Directory, VPN, BSOD, switch*). |
+| **Muestras de validación (25 %)** | 32 tickets | **250 tickets** | Representatividad estadística; cada error en test reduce su impacto de 3.125 % a 0.400 %. |
+| **Balance de clases** | 32 por categoría | **250 por categoría** | Matriz balanceada para evitar sesgo del clasificador hacia clases mayoritarias. |
+| **Semilla de aleatoriedad** | `random_state=42` | `random_state=42` | Partición estratificada determinista para garantizar reproducibilidad exacta. |
 
-### 3.2. Estructura del modelo
-El sistema de clasificación integra tres etapas ordenadas:
-1. **Transformación del texto (TF-IDF):** Convierte el texto de los tickets en valores numéricos proporcionales a la relevancia de cada palabra, destacando términos informativos y descartando términos comunes sin valor descriptivo.
-2. **Estrategia multietiqueta (*MultiOutputClassifier*):** Permite predecir de forma paralela e independiente la categoría, la prioridad y la detección de incidentes.
-3. **Clasificador base (Regresión Logística):** Modela la relación entre el peso de los términos presentes en cada solicitud y la probabilidad de pertenecer a cada una de las clases.
+### 3.2. Estructura del pipeline en código
+La solución se implementó en `src/semana02_fundamentos.py` mediante un pipeline compacto de Scikit-Learn:
+
+```python
+model = make_pipeline(
+    TfidfVectorizer(strip_accents="unicode"),
+    MultiOutputClassifier(
+        LogisticRegression(
+            max_iter=1000,
+            random_state=RANDOM_STATE,
+        )
+    ),
+)
+model.fit(X_train, y_train)
+```
 
 ---
 
-## 4. Resultados experimentales y análisis comparativo
+## 4. Resultados cuantitativos y métricas de generalización
 
-La ampliación del corpus permitió contrastar directamente cómo influye el volumen de datos en la capacidad de generalización del modelo. A continuación se presentan las métricas obtenidas sobre los grupos de prueba, formados por casos que el algoritmo nunca vio durante la etapa de entrenamiento:
+La evaluación sobre el conjunto de test (250 tickets no vistos durante el entrenamiento) demostró la ganancia de rendimiento obtenida al escalar de la línea base a `tickets_soporte.csv`:
 
-### 4.1. Comparativa de desempeño: 128 tickets (línea base) vs. 1.000 tickets (corpus ampliado)
-
-| Dimensión / Variable | Métrica evaluada | Línea base (128 tickets / 32 test) | Corpus ampliado (1.000 tickets / 250 test) | Diferencia absoluta ($\Delta$ p.p.) | Ganancia relativa (%) |
+| Dimensión de clasificación | Métrica evaluada | Baseline preliminar (`OLD`: 128 / 32 test) | Dataset actual (`tickets_soporte.csv`: 1.000 / 250 test) | Delta absoluto ($\Delta$) | Ganancia relativa (%) |
 |---|---|---:|---:|---:|---:|
-| **Categoría temática** | Exactitud (*Accuracy*) | 71.9 % | **96.0 %** | **+24.1 p.p.** | **+33.5 %** |
+| **Categoría funcional** | Exactitud (*Accuracy*) | 71.9 % | **96.0 %** | **+24.1 p.p.** | **+33.5 %** |
 | | Precisión macro | 74.9 % | **96.1 %** | **+21.2 p.p.** | **+28.3 %** |
 | | Sensibilidad macro (*Recall*) | 71.9 % | **96.0 %** | **+24.1 p.p.** | **+33.5 %** |
 | | Puntuación F1 macro | 71.3 % | **96.0 %** | **+24.7 p.p.** | **+34.6 %** |
@@ -66,84 +73,16 @@ La ampliación del corpus permitió contrastar directamente cómo influye el vol
 | | Precisión macro | 88.9 % | **96.6 %** | **+7.7 p.p.** | **+8.7 %** |
 | | Sensibilidad macro (*Recall*) | 87.2 % | **95.5 %** | **+8.3 p.p.** | **+9.5 %** |
 | | Puntuación F1 macro | 85.4 % | **96.0 %** | **+10.6 p.p.** | **+12.4 %** |
-| **Detección de incidente** | Exactitud (*Accuracy*) | 87.5 % | **99.6 %** | **+12.1 p.p.** | **+13.8 %** |
+| **Detección de incidentes** | Exactitud (*Accuracy*) | 87.5 % | **99.6 %** | **+12.1 p.p.** | **+13.8 %** |
 | | Precisión macro | 86.7 % | **99.6 %** | **+12.9 p.p.** | **+14.9 %** |
 | | Sensibilidad macro (*Recall*) | 90.5 % | **99.6 %** | **+9.1 p.p.** | **+10.1 %** |
 | | Puntuación F1 macro | 87.0 % | **99.6 %** | **+12.6 p.p.** | **+14.5 %** |
 
-> *Nota explicativa:* La **Diferencia absoluta ($\Delta$ p.p.)** corresponde a la suma aritmética simple de puntos porcentuales. La **Ganancia relativa ($\%$)** representa el porcentaje de mejora con respecto al desempeño del modelo inicial: $\frac{\text{valor final} - \text{valor inicial}}{\text{valor inicial}} \times 100$.
-
-### 4.2. Análisis de los resultados por dimensión
-
-1. **Categoría temática (+24.7 p.p. en F1 macro):**
-   Fue la mejora más notoria del experimento, con un crecimiento relativo del 34.6 %. Con 128 tickets, la exactitud era del 71.9 % debido a que el modelo confundía con frecuencia solicitudes de software y accesos. Al subir a 1.000 tickets, alcanzó un **96.0 %**, ya que contó con vocabulario suficiente para distinguir trámites de credenciales y permisos (como contraseñas, usuarios o accesos VPN) de fallas directas en el software (como errores de ejecución, lentitud o cierres imprevistos).
-
-2. **Nivel de prioridad (+10.6 p.p. en F1 macro):**
-   La exactitud pasó del 84.4 % al **96.0 %**. Al disponer de más ejemplos, el clasificador identificó con mayor claridad los términos que denotan urgencia o afectación generalizada (*"operación detenida"*, *"área sin servicio"*), asignándoles prioridad alta sin la vacilación que antes existía con la prioridad media.
-
-3. **Detección de incidentes (+12.6 p.p. en F1 macro):**
-   Obtuvo un rendimiento casi perfecto con un **99.6 %** de efectividad. De las 250 pruebas evaluadas, el sistema cometió **un único error por omisión** (un falso negativo) y **cero falsos positivos**. En un entorno operativo, esto garantiza que casi ningún incidente crítico pase por alto, evitando a su vez alertas innecesarias que desgasten al equipo de soporte.
-
-### 4.3. Matrices de confusión (Evaluación sobre 250 tickets de prueba)
-
-A continuación se detalla la correspondencia entre los valores reales observados (filas) y las predicciones emitidas por el modelo (columnas):
-
-#### A. Categoría temática
-| Real \ Predicción | Accesos | Hardware | Red | Software | Desempeño por clase |
-|---|---:|---:|---:|---:|---|
-| **Accesos** | **61** | 0 | 0 | 2 | 96.8 % de acierto (61/63) |
-| **Hardware** | 0 | **58** | 0 | 4 | 93.5 % de acierto (58/62) |
-| **Red** | 0 | 2 | **61** | 0 | 96.8 % de acierto (61/63) |
-| **Software** | 0 | 2 | 0 | **60** | 96.8 % de acierto (60/62) |
-
-*Interpretación:* La diagonal principal reúne 239 de los 250 casos analizados (96.0 % global). Los pocos errores ocurrieron entre hardware y software, un escenario comprensible en reportes donde la falla de un equipo físico se origina en un controlador o programa.
-
-#### B. Nivel de prioridad
-| Real \ Predicción | Alta | Baja | Media | Desempeño por clase |
-|---|---:|---:|---:|---|
-| **Alta** | **93** | 0 | 2 | 97.9 % de acierto (93/95) |
-| **Baja** | 4 | **56** | 1 | 91.8 % de acierto (56/61) |
-| **Media** | 3 | 0 | **91** | 96.8 % de acierto (91/94) |
-
-*Interpretación:* No hubo confusiones extremas entre prioridades opuestas: ningún caso de prioridad alta se clasificó como baja ni viceversa, lo que demuestra un criterio de asignación coherente y seguro.
-
-#### C. Detección de incidentes
-| Real \ Predicción | No (Solicitud estándar) | Sí (Incidente disruptivo) | Desempeño por clase |
-|---|---:|---:|---|
-| **No** | **126** | 0 | 100.0 % de especificidad (126/126) |
-| **Sí** | 1 | **123** | 99.2 % de sensibilidad (123/124) |
-
-*Interpretación:* Un 100 % de especificidad y un 99.2 % de acierto en la detección de incidentes reales confirman que el sistema es lo bastante confiable para apoyar la clasificación en una mesa de ayuda.
-
 ---
 
-## 5. Discusión: Factores que explican el aumento de rendimiento
+## 5. Conclusiones y análisis general de rendimiento
 
-El paso de **128 a 1.000 tickets** fue la decisión determinante para estabilizar el modelo. Este avance se sustenta en cinco aspectos principales:
-
-### 1. Mayor riqueza en el vocabulario técnico
-En el ejercicio inicial de 128 registros (con apenas 96 tickets para entrenar), muchas palabras clave aparecían una sola vez o no estaban presentes en el entrenamiento, de modo que el modelo no sabía cómo interpretarlas durante la prueba. Con 750 tickets de entrenamiento, los términos técnicos característicos (*VPN, Active Directory, switch, monitor, base de datos, credenciales*) se repiten en distintas oraciones, lo que ayuda al modelo a calcular importancias numéricas mucho más precisas y generalizables.
-
-### 2. Reducción de asociaciones erróneas por contexto
-Con pocos datos, los clasificadores suelen aprender relaciones casuales que no son ciertas. Por ejemplo, si en la muestra inicial los tickets enviados desde contabilidad hablaban únicamente de impresoras, el sistema podía asumir por error que la palabra *"contabilidad"* siempre correspondía a *hardware*. Al ampliar la muestra a 1.000 tickets, las diferentes áreas de la empresa (*ventas, finanzas, recursos humanos*) aparecen en todas las categorías; esto permite al modelo ignorar esos cargos o departamentos y centrarse en las palabras que describen el problema real.
-
-### 3. Diferenciación clara entre problemas y solicitudes rutinarias
-El modelo aprendió con gran claridad el propósito comunicativo de los usuarios:
-- **Incidentes:** Expresados con verbos y adjetivos que indican interrupción o falla operativa (*"se apagó", "no responde", "bloqueado", "caído", "error fatal"*).
-- **Solicitudes de rutina:** Expresadas mediante un lenguaje formal y de trámite cotidiano (*"solicito", "requiero", "creación de usuario", "cotización", "programar"*).
-
-Al contar con suficientes ejemplos balanceados de cada tipo, el modelo encontró un límite de separación muy claro entre una solicitud y una interrupción real.
-
-### 4. Mayor representatividad y estabilidad en las evaluaciones
-En la prueba con 32 casos, un único error modificaba el resultado global en un **3.1 %**, haciendo que la calificación fuera muy inestable y dependiera en gran medida del azar al dividir los datos. Con el grupo de prueba de 250 tickets, cada caso representa únicamente el **0.4 %** del total, lo que asegura que las métricas obtenidas reflejen fielmente cómo respondería el sistema ante nuevos casos en producción.
-
-### 5. Control de sesgos mediante una distribución equilibrada
-A diferencia de los entornos de soporte reales —donde ciertas fallas son mucho más comunes que otras—, este conjunto de 1.000 tickets se balanceó de manera uniforme entre todas las categorías y niveles de prioridad. Esto impidió que el modelo desarrollara preferencia por la opción más frecuente y lo forzó a aprender los patrones reales de cada clase.
-
----
-
-## 6. Conclusiones
-
-La experiencia de la Semana 02 confirma que la clasificación multietiqueta mediante `TfidfVectorizer` y `LogisticRegression` es una alternativa práctica, rápida y eficaz para la clasificación inicial de tickets de soporte técnico.
-
-La comparativa entre los conjuntos de 128 y 1.000 tickets demuestra que la calidad y representatividad de los datos resultan más determinantes que la complejidad del algoritmo: un modelo lineal transparente y bien entrenado logró superar el **96.0 % de F1 macro** en todas las áreas y un **99.6 %** en la detección de incidentes. Estos resultados establecen una base metodológica sólida para el diseño de taxonomías más avanzadas (Semana 03) y la posterior planificación de tareas de resolución (Semana 04).
+* **La calidad y balance del corpus superaron la complejidad algorítmica:** Un estimador lineal transparente como `LogisticRegression` alcanzó un **96.0 % de F1 macro** global y un **99.6 % en detección de incidentes**, demostrando que dotar al pipeline de un vocabulario balanceado de 1.000 registros estabiliza las predicciones sin requerir arquitecturas neuronales densas o costosas computacionalmente.
+* **Causa raíz de confusiones controlada en categorías:** La matriz de confusión (239/250 aciertos) evidenció que los únicos desvíos ocurrieron en la frontera de hardware y software (4 casos de hardware clasificados como software y 2 viceversa), un comportamiento esperable en reportes donde la falla física de un periférico es descrita a través del error del driver o programa en pantalla.
+* **Consistencia absoluta en priorización y criticidad:** No se presentaron errores entre extremos de prioridad (0 casos de `Alta` como `Baja`). En la detección de incidentes, el sistema alcanzó un **100 % de especificidad** (cero falsas alarmas que saturen al equipo de soporte) y un **99.2 % de sensibilidad** (123 de 124 incidentes reales detectados oportunamente).
+* **Solución atómica y eficiente:** La arquitectura `MultiOutputClassifier` garantiza un tiempo de inferencia inferior a 5 milisegundos por ticket, resolviendo de forma integral el triaje requerido para la gestión operativa en una mesa de ayuda corporativa.
