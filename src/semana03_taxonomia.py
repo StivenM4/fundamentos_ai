@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import re
 import sys
 import unicodedata
@@ -106,6 +107,19 @@ CUSTOM_RULES: dict[str, tuple[str, ...]] = {
     "Sistemas expertos": ("prioridad", "impacto", "urgencia", "sla"),
 }
 
+# Carga de activadores externos ampliados desde data/activadores_taxonomia.json si está presente
+ACTIVADORES_PATH = PROJECT_ROOT / "data" / "activadores_taxonomia.json"
+if ACTIVADORES_PATH.exists():
+    try:
+        with ACTIVADORES_PATH.open("r", encoding="utf-8") as _f_act:
+            _loaded_act = json.load(_f_act)
+            if "BASE_RULES" in _loaded_act:
+                BASE_RULES = {k: tuple(v) for k, v in _loaded_act["BASE_RULES"].items()}
+            if "CUSTOM_RULES" in _loaded_act:
+                CUSTOM_RULES = {k: tuple(v) for k, v in _loaded_act["CUSTOM_RULES"].items()}
+    except Exception:
+        pass
+
 TECHNIQUE_RECOMMENDATIONS = {
     "Procesamiento de lenguaje natural": (
         "clasificador de texto con TF-IDF y regresión logística"
@@ -118,7 +132,7 @@ TECHNIQUE_RECOMMENDATIONS = {
     "Robótica": "percepción y planificación conectadas con sensores del dispositivo",
 }
 
-# Clasificación manual esperada para los 20 casos del CSV, en el mismo orden.
+# Clasificación manual esperada para los 50 casos del CSV, en el mismo orden.
 MANUAL_REFERENCE: tuple[str, ...] = (
     "Procesamiento de lenguaje natural",
     "Visión por computador",
@@ -140,6 +154,37 @@ MANUAL_REFERENCE: tuple[str, ...] = (
     "Sistemas expertos",
     "IA generativa",
     "Procesamiento de lenguaje natural",
+    # Casos ampliados 21 a 50
+    "Procesamiento de lenguaje natural",
+    "Visión por computador",
+    "Aprendizaje predictivo",
+    "Sistemas de recomendación",
+    "Sistemas expertos",
+    "IA generativa",
+    "Robótica",
+    "Procesamiento de lenguaje natural",
+    "Visión por computador",
+    "Aprendizaje predictivo",
+    "Sistemas de recomendación",
+    "Sistemas expertos",
+    "IA generativa",
+    "Robótica",
+    "Procesamiento de lenguaje natural",
+    "Visión por computador",
+    "Aprendizaje predictivo",
+    "Sistemas de recomendación",
+    "Sistemas expertos",
+    "IA generativa",
+    "Robótica",
+    "Procesamiento de lenguaje natural",
+    "Visión por computador",
+    "Aprendizaje predictivo",
+    "Sistemas de recomendación",
+    "Sistemas expertos",
+    "IA generativa",
+    "Robótica",
+    "Procesamiento de lenguaje natural",
+    "Visión por computador",
 )
 
 
@@ -233,8 +278,8 @@ def load_cases(path: Path = DEFAULT_DATA_PATH) -> list[str]:
             raise ValueError('El CSV debe contener únicamente el encabezado "descripcion".')
         cases = [row["descripcion"].strip() for row in reader if row["descripcion"].strip()]
 
-    if len(cases) != 20:
-        raise ValueError(f"Se esperaban 20 casos y se encontraron {len(cases)}.")
+    if len(cases) < 20:
+        raise ValueError(f"Se esperaban al menos 20 casos y se encontraron {len(cases)}.")
     return cases
 
 
