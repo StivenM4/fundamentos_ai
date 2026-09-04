@@ -1,129 +1,1001 @@
 texto,categoria,prioridad,incidente
-"Todos los computadores de contabilidad se apagaron y no encienden; el cierre mensual está detenido",hardware,alta,si
-"El servidor principal emite una alarma de temperatura y se apaga; toda la empresa está afectada",hardware,alta,si
-"Fallaron varios discos del almacenamiento y ningún equipo puede consultar los archivos corporativos",hardware,alta,si
-"El computador de recepción no enciende y bloquea la atención de todos los visitantes",hardware,alta,si
-"El monitor del puesto de diseño parpadea y dificulta el trabajo del área",hardware,media,si
-"La impresora de recursos humanos atasca el papel y el equipo no puede imprimir contratos",hardware,media,si
-"El teclado del analista dejó de responder pero puede usar temporalmente otro equipo",hardware,media,si
-"El portátil de un usuario tiene la batería dañada y solo funciona conectado",hardware,baja,si
-"Solicito reemplazar todos los portátiles obsoletos antes de iniciar el proyecto corporativo",hardware,alta,no
-"Necesitamos ampliar con urgencia la memoria de los equipos usados en la operación crítica",hardware,alta,no
-"Requiero instalar una segunda pantalla para el nuevo integrante del equipo comercial",hardware,media,no
-"Solicito cambiar la impresora compartida del área porque el contrato de alquiler terminó",hardware,media,no
-"Necesitamos cotizar cámaras web para las reuniones del equipo de ventas",hardware,media,no
-"Solicito un mouse ergonómico para mi puesto cuando haya disponibilidad",hardware,baja,no
-"Requiero audífonos para videollamadas; la compra puede programarse sin urgencia",hardware,baja,no
-"Deseo aumentar el almacenamiento de mi portátil para el próximo trimestre",hardware,baja,no
-"El sistema de facturación se cerró y ningún empleado puede emitir facturas",software,alta,si
-"La aplicación corporativa muestra un error al iniciar y detuvo la operación de toda la empresa",software,alta,si
-"El servicio de nómina quedó bloqueado antes del pago general de empleados",software,alta,si
-"La base de datos del sistema comercial no responde y todas las sedes están detenidas",software,alta,si
-"Excel se cierra al abrir una plantilla y afecta los reportes del equipo financiero",software,media,si
-"La aplicación de inventario presenta errores para varios usuarios de la bodega",software,media,si
-"El navegador de un analista se congela al cargar el portal interno",software,media,si
-"El editor de PDF de mi equipo abre lentamente pero todavía permite trabajar",software,baja,si
-"Solicito desplegar la nueva versión del sistema de ventas para todas las sedes este fin de semana",software,alta,no
-"Necesitamos instalar con prioridad la actualización de seguridad en todos los computadores",software,alta,no
-"Requiero una licencia del programa contable para una persona que ingresa al área",software,media,no
-"Solicito configurar la herramienta de diseño para el nuevo equipo de mercadeo",software,media,no
-"Necesitamos agregar una plantilla al procesador de texto del departamento jurídico",software,media,no
-"Quiero instalar un lector de archivos comprimidos en mi computador cuando sea posible",software,baja,no
-"Solicito actualizar el navegador de mi portátil durante la próxima semana",software,baja,no
-"Requiero una aplicación de notas para uso personal sin fecha urgente",software,baja,no
-"La conexión a internet cayó en todas las sedes y la operación de la empresa está detenida",red,alta,si
-"Ningún usuario puede conectarse a la red corporativa y los servicios críticos están aislados",red,alta,si
-"El enlace principal entre la oficina y el centro de datos dejó de responder",red,alta,si
-"La red wifi de atención al cliente está caída y afecta a todo el personal",red,alta,si
-"La conexión inalámbrica del piso tres es intermitente y afecta al equipo de proyectos",red,media,si
-"Las videollamadas se cortan para varios usuarios del área comercial",red,media,si
-"Un punto de red de la sala de reuniones no entrega conexión estable",red,media,si
-"Mi portátil pierde ocasionalmente la señal wifi pero puedo usar cable",red,baja,si
-"Solicito habilitar una red temporal para el evento corporativo de mañana",red,alta,no
-"Necesitamos ampliar urgentemente el ancho de banda para la transmisión de toda la compañía",red,alta,no
-"Requiero configurar wifi para el nuevo espacio del equipo de desarrollo",red,media,no
-"Solicito habilitar dos puntos de red adicionales en la oficina de compras",red,media,no
-"Necesitamos crear una red de invitados para los proveedores del área",red,media,no
-"Quiero registrar mi teléfono en la red inalámbrica cuando sea posible",red,baja,no
-"Solicito cambiar la contraseña del wifi de la sala de descanso sin urgencia",red,baja,no
-"Requiero revisar la cobertura de red de mi puesto durante el próximo mes",red,baja,no
-"Todas las cuentas administrativas quedaron bloqueadas y no es posible operar los sistemas críticos",accesos,alta,si
-"Ningún empleado puede iniciar sesión en el correo corporativo y la empresa está detenida",accesos,alta,si
-"El directorio corporativo rechazó las credenciales de todos los usuarios de la sede",accesos,alta,si
-"La cuenta de servicio de facturación expiró y bloqueó toda la operación",accesos,alta,si
-"Varios integrantes de compras perdieron permisos para aprobar órdenes",accesos,media,si
-"El coordinador no puede iniciar sesión en la plataforma de proyectos del área",accesos,media,si
-"Mi contraseña fue bloqueada y no puedo entrar al portal interno",accesos,media,si
-"No puedo acceder a una carpeta secundaria pero tengo disponibles los demás recursos",accesos,baja,si
-"Solicito crear cuentas para todo el personal de la nueva sede antes de su apertura",accesos,alta,no
-"Necesitamos revocar de inmediato los permisos corporativos de varios usuarios retirados",accesos,alta,no
-"Requiero acceso al módulo de compras para el nuevo analista del área",accesos,media,no
-"Solicito permisos de lectura para el equipo auditor en la carpeta financiera",accesos,media,no
-"Necesitamos crear un grupo de acceso para los integrantes del proyecto",accesos,media,no
-"Quiero cambiar voluntariamente mi contraseña durante la próxima semana",accesos,baja,no
-"Solicito acceso a una carpeta de consulta que usaré el próximo mes",accesos,baja,no
-"Requiero actualizar mi foto de perfil en la cuenta corporativa sin urgencia",accesos,baja,no
-"Los equipos físicos del centro de atención no encienden y detuvieron el servicio completo",hardware,alta,si
-"El servidor físico de archivos sufrió una falla y dejó sin operación a toda la compañía",hardware,alta,si
-"Varias impresoras de facturación dejaron de funcionar durante el cierre crítico",hardware,alta,si
-"Los portátiles de la mesa de ayuda se sobrecalientan y se apagan durante la atención",hardware,alta,si
-"El monitor del coordinador muestra líneas y afecta el seguimiento del equipo",hardware,media,si
-"La impresora del área administrativa imprime páginas con manchas",hardware,media,si
-"Un portátil del equipo comercial tiene dañado el puerto de carga",hardware,media,si
-"El mouse de un puesto falla algunas veces y existe uno de respaldo",hardware,baja,si
-"Solicito renovar los servidores físicos que soportan la plataforma crítica",hardware,alta,no
-"Requerimos comprar impresoras para la apertura urgente de todas las sedes",hardware,alta,no
-"Solicito un portátil para la nueva persona del equipo de soporte",hardware,media,no
-"Necesitamos reemplazar el monitor del puesto de recepción durante esta semana",hardware,media,no
-"Requiero una impresora adicional para el departamento de cartera",hardware,media,no
-"Quiero solicitar un teclado inalámbrico para mi escritorio sin urgencia",hardware,baja,no
-"Solicito revisar la batería del portátil durante el mantenimiento del próximo mes",hardware,baja,no
-"Deseo cambiar el monitor de mi puesto por uno más grande cuando haya presupuesto",hardware,baja,no
-"El software de atención dejó de funcionar y bloqueó a todos los agentes",software,alta,si
-"La aplicación de pagos presenta una falla crítica para toda la compañía",software,alta,si
-"El sistema de inventarios perdió conexión con la base de datos y detuvo las sedes",software,alta,si
-"El programa de despacho muestra error a todos los operadores y paralizó las entregas",software,alta,si
-"La aplicación de compras se cierra para varios miembros del equipo",software,media,si
-"El sistema de reportes muestra datos incompletos al departamento financiero",software,media,si
-"El programa de videollamadas falla para un grupo de usuarios del área",software,media,si
-"Mi navegador tarda en abrir el sistema pero puedo continuar trabajando",software,baja,si
-"Solicito instalar el software de seguridad en todos los servidores antes de la auditoría",software,alta,no
-"Requerimos migrar con prioridad la aplicación corporativa de todas las sedes",software,alta,no
-"Solicito una licencia del programa de diseño para el equipo creativo",software,media,no
-"Necesitamos configurar la aplicación móvil para el departamento comercial",software,media,no
-"Requiero actualizar el sistema de reportes durante la ventana de mantenimiento",software,media,no
-"Quiero agregar una extensión a mi navegador cuando haya disponibilidad",software,baja,no
-"Solicito instalar un programa para leer documentos sin una fecha urgente",software,baja,no
-"Deseo actualizar una aplicación opcional de mi portátil el próximo mes",software,baja,no
-"La red corporativa dejó sin conexión a todas las oficinas y detuvo el servicio",red,alta,si
-"La conexión de internet principal falló y ninguna sede puede operar",red,alta,si
-"El wifi corporativo está caído para todos los empleados de la compañía",red,alta,si
-"El enlace de red hacia los servidores se interrumpió y afecta los sistemas críticos",red,alta,si
-"La red del área de soporte pierde conexión varias veces durante el día",red,media,si
-"El wifi del equipo de mercadeo presenta lentitud en las reuniones",red,media,si
-"La conexión de la sala principal se corta para los asistentes",red,media,si
-"Mi conexión de red es lenta pero puedo trabajar desde otra ubicación",red,baja,si
-"Solicito configurar la red de la nueva sede antes de su apertura urgente",red,alta,no
-"Requerimos aumentar la conexión de internet para el evento de toda la empresa",red,alta,no
-"Solicito habilitar wifi para el nuevo equipo del piso cuatro",red,media,no
-"Necesitamos instalar puntos de red para el departamento de capacitación",red,media,no
-"Requiero configurar un enlace de conexión para la oficina regional",red,media,no
-"Quiero conectar una tableta personal al wifi cuando esté permitido",red,baja,no
-"Solicito revisar la velocidad de mi conexión durante el próximo mes",red,baja,no
-"Deseo conocer la contraseña de la red de invitados sin ninguna urgencia",red,baja,no
-"El acceso al sistema crítico fue bloqueado para todos los administradores",accesos,alta,si
-"Las cuentas corporativas de toda la sede no permiten iniciar sesión",accesos,alta,si
-"Todas las contraseñas del equipo de operaciones fueron rechazadas y detuvieron el servicio",accesos,alta,si
-"Los permisos de acceso al sistema de pagos fallaron para toda la compañía",accesos,alta,si
-"El acceso de varios analistas al módulo de compras fue bloqueado",accesos,media,si
-"La cuenta del supervisor no permite iniciar sesión en la aplicación del área",accesos,media,si
-"Mi contraseña corporativa expiró y no puedo acceder a las herramientas",accesos,media,si
-"Perdí los permisos sobre una carpeta opcional pero conservo los demás accesos",accesos,baja,si
-"Solicito habilitar las cuentas del personal de la nueva sede antes de la apertura",accesos,alta,no
-"Requerimos eliminar de inmediato los accesos de todo el proveedor que terminó contrato",accesos,alta,no
-"Solicito permisos en el sistema financiero para el nuevo equipo auditor",accesos,media,no
-"Necesitamos crear cuentas corporativas para los integrantes del departamento",accesos,media,no
-"Requiero acceso de lectura a la aplicación de indicadores del proyecto",accesos,media,no
-"Quiero cambiar la contraseña de mi cuenta de manera preventiva",accesos,baja,no
-"Solicito permisos para consultar una carpeta el próximo trimestre",accesos,baja,no
-"Deseo actualizar una pregunta de seguridad de mi cuenta sin urgencia",accesos,baja,no
+Todos los computadores de contabilidad se apagaron y no encienden; el cierre mensual está detenido,hardware,alta,si
+El servidor principal emite una alarma de temperatura y se apaga; toda la empresa está afectada,hardware,alta,si
+Fallaron varios discos del almacenamiento y ningún equipo puede consultar los archivos corporativos,hardware,alta,si
+El computador de recepción no enciende y bloquea la atención de todos los visitantes,hardware,alta,si
+El monitor del puesto de diseño parpadea y dificulta el trabajo del área,hardware,media,si
+La impresora de recursos humanos atasca el papel y el equipo no puede imprimir contratos,hardware,media,si
+El teclado del analista dejó de responder pero puede usar temporalmente otro equipo,hardware,media,si
+El portátil de un usuario tiene la batería dañada y solo funciona conectado,hardware,baja,si
+Solicito reemplazar todos los portátiles obsoletos antes de iniciar el proyecto corporativo,hardware,alta,no
+Necesitamos ampliar con urgencia la memoria de los equipos usados en la operación crítica,hardware,alta,no
+Requiero instalar una segunda pantalla para el nuevo integrante del equipo comercial,hardware,media,no
+Solicito cambiar la impresora compartida del área porque el contrato de alquiler terminó,hardware,media,no
+Necesitamos cotizar cámaras web para las reuniones del equipo de ventas,hardware,media,no
+Solicito un mouse ergonómico para mi puesto cuando haya disponibilidad,hardware,baja,no
+Requiero audífonos para videollamadas; la compra puede programarse sin urgencia,hardware,baja,no
+Deseo aumentar el almacenamiento de mi portátil para el próximo trimestre,hardware,baja,no
+El sistema de facturación se cerró y ningún empleado puede emitir facturas,software,alta,si
+La aplicación corporativa muestra un error al iniciar y detuvo la operación de toda la empresa,software,alta,si
+El servicio de nómina quedó bloqueado antes del pago general de empleados,software,alta,si
+La base de datos del sistema comercial no responde y todas las sedes están detenidas,software,alta,si
+Excel se cierra al abrir una plantilla y afecta los reportes del equipo financiero,software,media,si
+La aplicación de inventario presenta errores para varios usuarios de la bodega,software,media,si
+El navegador de un analista se congela al cargar el portal interno,software,media,si
+El editor de PDF de mi equipo abre lentamente pero todavía permite trabajar,software,baja,si
+Solicito desplegar la nueva versión del sistema de ventas para todas las sedes este fin de semana,software,alta,no
+Necesitamos instalar con prioridad la actualización de seguridad en todos los computadores,software,alta,no
+Requiero una licencia del programa contable para una persona que ingresa al área,software,media,no
+Solicito configurar la herramienta de diseño para el nuevo equipo de mercadeo,software,media,no
+Necesitamos agregar una plantilla al procesador de texto del departamento jurídico,software,media,no
+Quiero instalar un lector de archivos comprimidos en mi computador cuando sea posible,software,baja,no
+Solicito actualizar el navegador de mi portátil durante la próxima semana,software,baja,no
+Requiero una aplicación de notas para uso personal sin fecha urgente,software,baja,no
+La conexión a internet cayó en todas las sedes y la operación de la empresa está detenida,red,alta,si
+Ningún usuario puede conectarse a la red corporativa y los servicios críticos están aislados,red,alta,si
+El enlace principal entre la oficina y el centro de datos dejó de responder,red,alta,si
+La red wifi de atención al cliente está caída y afecta a todo el personal,red,alta,si
+La conexión inalámbrica del piso tres es intermitente y afecta al equipo de proyectos,red,media,si
+Las videollamadas se cortan para varios usuarios del área comercial,red,media,si
+Un punto de red de la sala de reuniones no entrega conexión estable,red,media,si
+Mi portátil pierde ocasionalmente la señal wifi pero puedo usar cable,red,baja,si
+Solicito habilitar una red temporal para el evento corporativo de mañana,red,alta,no
+Necesitamos ampliar urgentemente el ancho de banda para la transmisión de toda la compañía,red,alta,no
+Requiero configurar wifi para el nuevo espacio del equipo de desarrollo,red,media,no
+Solicito habilitar dos puntos de red adicionales en la oficina de compras,red,media,no
+Necesitamos crear una red de invitados para los proveedores del área,red,media,no
+Quiero registrar mi teléfono en la red inalámbrica cuando sea posible,red,baja,no
+Solicito cambiar la contraseña del wifi de la sala de descanso sin urgencia,red,baja,no
+Requiero revisar la cobertura de red de mi puesto durante el próximo mes,red,baja,no
+Todas las cuentas administrativas quedaron bloqueadas y no es posible operar los sistemas críticos,accesos,alta,si
+Ningún empleado puede iniciar sesión en el correo corporativo y la empresa está detenida,accesos,alta,si
+El directorio corporativo rechazó las credenciales de todos los usuarios de la sede,accesos,alta,si
+La cuenta de servicio de facturación expiró y bloqueó toda la operación,accesos,alta,si
+Varios integrantes de compras perdieron permisos para aprobar órdenes,accesos,media,si
+El coordinador no puede iniciar sesión en la plataforma de proyectos del área,accesos,media,si
+Mi contraseña fue bloqueada y no puedo entrar al portal interno,accesos,media,si
+No puedo acceder a una carpeta secundaria pero tengo disponibles los demás recursos,accesos,baja,si
+Solicito crear cuentas para todo el personal de la nueva sede antes de su apertura,accesos,alta,no
+Necesitamos revocar de inmediato los permisos corporativos de varios usuarios retirados,accesos,alta,no
+Requiero acceso al módulo de compras para el nuevo analista del área,accesos,media,no
+Solicito permisos de lectura para el equipo auditor en la carpeta financiera,accesos,media,no
+Necesitamos crear un grupo de acceso para los integrantes del proyecto,accesos,media,no
+Quiero cambiar voluntariamente mi contraseña durante la próxima semana,accesos,baja,no
+Solicito acceso a una carpeta de consulta que usaré el próximo mes,accesos,baja,no
+Requiero actualizar mi foto de perfil en la cuenta corporativa sin urgencia,accesos,baja,no
+Los equipos físicos del centro de atención no encienden y detuvieron el servicio completo,hardware,alta,si
+El servidor físico de archivos sufrió una falla y dejó sin operación a toda la compañía,hardware,alta,si
+Varias impresoras de facturación dejaron de funcionar durante el cierre crítico,hardware,alta,si
+Los portátiles de la mesa de ayuda se sobrecalientan y se apagan durante la atención,hardware,alta,si
+El monitor del coordinador muestra líneas y afecta el seguimiento del equipo,hardware,media,si
+La impresora del área administrativa imprime páginas con manchas,hardware,media,si
+Un portátil del equipo comercial tiene dañado el puerto de carga,hardware,media,si
+El mouse de un puesto falla algunas veces y existe uno de respaldo,hardware,baja,si
+Solicito renovar los servidores físicos que soportan la plataforma crítica,hardware,alta,no
+Requerimos comprar impresoras para la apertura urgente de todas las sedes,hardware,alta,no
+Solicito un portátil para la nueva persona del equipo de soporte,hardware,media,no
+Necesitamos reemplazar el monitor del puesto de recepción durante esta semana,hardware,media,no
+Requiero una impresora adicional para el departamento de cartera,hardware,media,no
+Quiero solicitar un teclado inalámbrico para mi escritorio sin urgencia,hardware,baja,no
+Solicito revisar la batería del portátil durante el mantenimiento del próximo mes,hardware,baja,no
+Deseo cambiar el monitor de mi puesto por uno más grande cuando haya presupuesto,hardware,baja,no
+El software de atención dejó de funcionar y bloqueó a todos los agentes,software,alta,si
+La aplicación de pagos presenta una falla crítica para toda la compañía,software,alta,si
+El sistema de inventarios perdió conexión con la base de datos y detuvo las sedes,software,alta,si
+El programa de despacho muestra error a todos los operadores y paralizó las entregas,software,alta,si
+La aplicación de compras se cierra para varios miembros del equipo,software,media,si
+El sistema de reportes muestra datos incompletos al departamento financiero,software,media,si
+El programa de videollamadas falla para un grupo de usuarios del área,software,media,si
+Mi navegador tarda en abrir el sistema pero puedo continuar trabajando,software,baja,si
+Solicito instalar el software de seguridad en todos los servidores antes de la auditoría,software,alta,no
+Requerimos migrar con prioridad la aplicación corporativa de todas las sedes,software,alta,no
+Solicito una licencia del programa de diseño para el equipo creativo,software,media,no
+Necesitamos configurar la aplicación móvil para el departamento comercial,software,media,no
+Requiero actualizar el sistema de reportes durante la ventana de mantenimiento,software,media,no
+Quiero agregar una extensión a mi navegador cuando haya disponibilidad,software,baja,no
+Solicito instalar un programa para leer documentos sin una fecha urgente,software,baja,no
+Deseo actualizar una aplicación opcional de mi portátil el próximo mes,software,baja,no
+La red corporativa dejó sin conexión a todas las oficinas y detuvo el servicio,red,alta,si
+La conexión de internet principal falló y ninguna sede puede operar,red,alta,si
+El wifi corporativo está caído para todos los empleados de la compañía,red,alta,si
+El enlace de red hacia los servidores se interrumpió y afecta los sistemas críticos,red,alta,si
+La red del área de soporte pierde conexión varias veces durante el día,red,media,si
+El wifi del equipo de mercadeo presenta lentitud en las reuniones,red,media,si
+La conexión de la sala principal se corta para los asistentes,red,media,si
+Mi conexión de red es lenta pero puedo trabajar desde otra ubicación,red,baja,si
+Solicito configurar la red de la nueva sede antes de su apertura urgente,red,alta,no
+Requerimos aumentar la conexión de internet para el evento de toda la empresa,red,alta,no
+Solicito habilitar wifi para el nuevo equipo del piso cuatro,red,media,no
+Necesitamos instalar puntos de red para el departamento de capacitación,red,media,no
+Requiero configurar un enlace de conexión para la oficina regional,red,media,no
+Quiero conectar una tableta personal al wifi cuando esté permitido,red,baja,no
+Solicito revisar la velocidad de mi conexión durante el próximo mes,red,baja,no
+Deseo conocer la contraseña de la red de invitados sin ninguna urgencia,red,baja,no
+El acceso al sistema crítico fue bloqueado para todos los administradores,accesos,alta,si
+Las cuentas corporativas de toda la sede no permiten iniciar sesión,accesos,alta,si
+Todas las contraseñas del equipo de operaciones fueron rechazadas y detuvieron el servicio,accesos,alta,si
+Los permisos de acceso al sistema de pagos fallaron para toda la compañía,accesos,alta,si
+El acceso de varios analistas al módulo de compras fue bloqueado,accesos,media,si
+La cuenta del supervisor no permite iniciar sesión en la aplicación del área,accesos,media,si
+Mi contraseña corporativa expiró y no puedo acceder a las herramientas,accesos,media,si
+Perdí los permisos sobre una carpeta opcional pero conservo los demás accesos,accesos,baja,si
+Solicito habilitar las cuentas del personal de la nueva sede antes de la apertura,accesos,alta,no
+Requerimos eliminar de inmediato los accesos de todo el proveedor que terminó contrato,accesos,alta,no
+Solicito permisos en el sistema financiero para el nuevo equipo auditor,accesos,media,no
+Necesitamos crear cuentas corporativas para los integrantes del departamento,accesos,media,no
+Requiero acceso de lectura a la aplicación de indicadores del proyecto,accesos,media,no
+Quiero cambiar la contraseña de mi cuenta de manera preventiva,accesos,baja,no
+Solicito permisos para consultar una carpeta el próximo trimestre,accesos,baja,no
+Deseo actualizar una pregunta de seguridad de mi cuenta sin urgencia,accesos,baja,no
+Múltiples estaciones de trabajo en logística sufrieron daño en las tarjetas de red integradas tras la tormenta,hardware,alta,si
+La estación de trabajo del gerente de dirección general sufrió un cortocircuito en el puerto de alimentación,hardware,alta,si
+La unidad de respaldo UPS de bodega empezó a emitir humo y dejó sin energía a toda la oficina,hardware,alta,si
+Múltiples estaciones de trabajo en sede sur sufrieron daño en las tarjetas de red integradas tras la tormenta,hardware,alta,si
+Se sobrecalentó el procesador del servidor de archivos de desarrollo alcanzando 95 grados y apagándose solo,hardware,alta,si
+El servidor de almacenamiento recursos humanos sufrió falla crítica en la controladora RAID y los datos están inaccesibles,hardware,alta,si
+La unidad de respaldo UPS de sede norte empezó a emitir humo y dejó sin energía a toda la oficina,hardware,alta,si
+El servidor de almacenamiento sede sur sufrió falla crítica en la controladora RAID y los datos están inaccesibles,hardware,alta,si
+La estación de trabajo del especialista de sede sur sufrió un cortocircuito en el puerto de alimentación,hardware,alta,si
+La unidad de respaldo UPS de control de calidad empezó a emitir humo y dejó sin energía a toda la oficina,hardware,alta,si
+El equipo del director de contabilidad donde se procesa la facturación no enciende y detiene la emisión de pedidos,hardware,alta,si
+La estación de trabajo del auxiliar de desarrollo sufrió un cortocircuito en el puerto de alimentación,hardware,alta,si
+El equipo del gerente de bodega donde se procesa la facturación no enciende y detiene la emisión de pedidos,hardware,alta,si
+Fallo total en la matriz de discos del SAN corporativo bloqueando el acceso a discos virtuales,hardware,alta,si
+Todos los computadores de la sala de soporte técnico se apagaron repentinamente por sobretensión y no vuelven a encender,hardware,alta,si
+Falla generalizada en las fuentes de poder de los servidores blade que soportan la operación de call center,hardware,alta,si
+El equipo del supervisor de tesorería donde se procesa la facturación no enciende y detiene la emisión de pedidos,hardware,alta,si
+El disco duro principal del servidor de base de datos de logística presenta sectores dañados irreversibles,hardware,alta,si
+Todos los computadores de la sala de sede sur se apagaron repentinamente por sobretensión y no vuelven a encender,hardware,alta,si
+El equipo portátil del auxiliar de recepción no reconoce el cargador ni la batería a minutos de la auditoría,hardware,alta,si
+Se sobrecalentó el procesador del servidor de archivos de marketing alcanzando 95 grados y apagándose solo,hardware,alta,si
+El servidor de almacenamiento compras sufrió falla crítica en la controladora RAID y los datos están inaccesibles,hardware,alta,si
+Todos los computadores de la sala de compras se apagaron repentinamente por sobretensión y no vuelven a encender,hardware,alta,si
+La pantalla del puesto central de control en dirección general explotó internamente y detiene la supervisión en vivo,hardware,alta,si
+Múltiples estaciones de trabajo en call center sufrieron daño en las tarjetas de red integradas tras la tormenta,hardware,alta,si
+Falla generalizada en las fuentes de poder de los servidores blade que soportan la operación de call center. Se solicita atención técnica.,hardware,alta,si
+Múltiples estaciones de trabajo en dirección general sufrieron daño en las tarjetas de red integradas tras la tormenta,hardware,alta,si
+Se sobrecalentó el procesador del servidor de archivos de ventas alcanzando 95 grados y apagándose solo,hardware,alta,si
+La estación de trabajo del director de compras sufrió un cortocircuito en el puerto de alimentación,hardware,alta,si
+El computador principal que gestiona el despacho en soporte técnico tiene la tarjeta madre quemada y no da video,hardware,alta,si
+Los ventiladores del rack principal de sede sur fallaron provocando el apagado automático por térmicos,hardware,alta,si
+Múltiples estaciones de trabajo en atención al cliente sufrieron daño en las tarjetas de red integradas tras la tormenta,hardware,alta,si
+La unidad de respaldo UPS de tesorería empezó a emitir humo y dejó sin energía a toda la oficina,hardware,alta,si
+La pantalla del puesto central de control en dirección general explotó internamente y detiene la supervisión en vivo. Se solicita atención técnica.,hardware,alta,si
+La unidad de respaldo UPS de planta de producción empezó a emitir humo y dejó sin energía a toda la oficina,hardware,alta,si
+La unidad de respaldo UPS de auditoría interna empezó a emitir humo y dejó sin energía a toda la oficina,hardware,alta,si
+Los ventiladores del rack principal de control de calidad fallaron provocando el apagado automático por térmicos,hardware,alta,si
+El equipo del gerente de bodega donde se procesa la facturación no enciende y detiene la emisión de pedidos. Se solicita atención técnica.,hardware,alta,si
+La estación de trabajo del consultor de sede sur sufrió un cortocircuito en el puerto de alimentación,hardware,alta,si
+El equipo del especialista de planta de producción donde se procesa la facturación no enciende y detiene la emisión de pedidos,hardware,alta,si
+Los ventiladores del rack principal de planta de producción fallaron provocando el apagado automático por térmicos,hardware,alta,si
+Falla generalizada en las fuentes de poder de los servidores blade que soportan la operación de compras,hardware,alta,si
+El disco duro principal del servidor de base de datos de auditoría interna presenta sectores dañados irreversibles,hardware,alta,si
+Fallo total en la matriz de discos del SAN corporativo bloqueando el acceso a discos virtuales. Se solicita atención técnica.,hardware,alta,si
+El switch principal de distribución eléctrica de la sala de servidores se quemó y apagó los racks centrales,hardware,alta,si
+Se sobrecalentó el procesador del servidor de archivos de recursos humanos alcanzando 95 grados y apagándose solo,hardware,alta,si
+La pantalla del puesto central de control en recepción explotó internamente y detiene la supervisión en vivo,hardware,alta,si
+El disco duro principal del servidor de base de datos de dirección general presenta sectores dañados irreversibles,hardware,alta,si
+El equipo portátil del coordinador de contabilidad no reconoce el cargador ni la batería a minutos de la auditoría,hardware,alta,si
+Múltiples estaciones de trabajo en sede sur sufrieron daño en las tarjetas de red integradas tras la tormenta. Se solicita atención técnica.,hardware,alta,si
+Reporte desde el área: Fallo total en la matriz de discos del SAN corporativo bloqueando el acceso a discos virtuales,hardware,alta,si
+El equipo del director de desarrollo donde se procesa la facturación no enciende y detiene la emisión de pedidos,hardware,alta,si
+El computador principal que gestiona el despacho en contabilidad tiene la tarjeta madre quemada y no da video,hardware,alta,si
+El disco duro principal del servidor de base de datos de ventas presenta sectores dañados irreversibles,hardware,alta,si
+Los ventiladores del rack principal de logística fallaron provocando el apagado automático por térmicos,hardware,alta,si
+El equipo portátil del auditor de sede norte no reconoce el cargador ni la batería a minutos de la auditoría,hardware,alta,si
+La unidad de respaldo UPS de bodega empezó a emitir humo y dejó sin energía a toda la oficina. Se solicita atención técnica.,hardware,alta,si
+Es prioritario adquirir fuentes de poder redundantes para los servidores críticos de sede sur,hardware,alta,no
+Solicitud urgente de renovación de portátiles obsoletos para el equipo de recepción antes del cierre de trimestre,hardware,alta,no
+Compra urgente de docking stations Thunderbolt para la dirección de contabilidad para viajes ejecutivos,hardware,alta,no
+Instalación de estaciones de trabajo de alto rendimiento para los nuevos ingenieros de departamento jurídico que entran mañana,hardware,alta,no
+Solicitud urgente de renovación de portátiles obsoletos para el equipo de compras antes del cierre de trimestre,hardware,alta,no
+Requerimos instalar con máxima urgencia un segundo monitor en los puestos de recursos humanos para la nueva campaña,hardware,alta,no
+Requerimos instalar con máxima urgencia un segundo monitor en los puestos de sede sur para la nueva campaña,hardware,alta,no
+Es prioritario adquirir fuentes de poder redundantes para los servidores críticos de auditoría interna,hardware,alta,no
+Es prioritario adquirir fuentes de poder redundantes para los servidores críticos de dirección general,hardware,alta,no
+Es necesario cambiar con urgencia las pantallas desgastadas del centro de monitoreo de desarrollo,hardware,alta,no
+Solicito cotizar y desplegar lectores biométricos nuevos en todos los accesos principales de marketing,hardware,alta,no
+Requerimos duplicar la memoria RAM en los servidores de procesamiento de call center para la carga de fin de mes,hardware,alta,no
+Solicito cotizar y desplegar lectores biométricos nuevos en todos los accesos principales de control de calidad,hardware,alta,no
+Solicito la compra e instalación inmediata de discos de estado sólido para los servidores de compras,hardware,alta,no
+Instalación de estaciones de trabajo de alto rendimiento para los nuevos ingenieros de contabilidad que entran mañana,hardware,alta,no
+Solicito cotizar y desplegar lectores biométricos nuevos en todos los accesos principales de compras,hardware,alta,no
+Solicito la compra e instalación inmediata de discos de estado sólido para los servidores de contabilidad,hardware,alta,no
+Solicitud urgente de renovación de portátiles obsoletos para el equipo de compras antes del cierre de trimestre. Se solicita atención técnica.,hardware,alta,no
+Solicitud urgente de renovación de portátiles obsoletos para el equipo de atención al cliente antes del cierre de trimestre,hardware,alta,no
+Solicito cotizar y desplegar lectores biométricos nuevos en todos los accesos principales de compras. Se solicita atención técnica.,hardware,alta,no
+Compra urgente de docking stations Thunderbolt para la dirección de marketing para viajes ejecutivos,hardware,alta,no
+Es prioritario adquirir fuentes de poder redundantes para los servidores críticos de planta de producción,hardware,alta,no
+Compra urgente de docking stations Thunderbolt para la dirección de compras para viajes ejecutivos,hardware,alta,no
+Requerimos duplicar la memoria RAM en los servidores de procesamiento de marketing para la carga de fin de mes,hardware,alta,no
+Requerimos instalar con máxima urgencia un segundo monitor en los puestos de desarrollo para la nueva campaña,hardware,alta,no
+Requerimos duplicar la memoria RAM en los servidores de procesamiento de desarrollo para la carga de fin de mes,hardware,alta,no
+La tarjeta de sonido integrada del equipo de tesorería emite estática en llamadas corporativas,hardware,media,si
+El monitor del auxiliar de soporte técnico parpadea continuamente y genera fatiga visual tras una hora de uso,hardware,media,si
+La impresora departamental de compras presenta atasco de papel frecuente y mancha los documentos,hardware,media,si
+El puerto USB-C del computador del supervisor de sede sur no detecta dispositivos externos ni memorias,hardware,media,si
+El teclado ergonómico del puesto de desarrollo tiene varias teclas bloqueadas pero se puede conectar uno básico,hardware,media,si
+La webcam integrada del portátil de control de calidad se apaga de forma intermitente durante las videollamadas,hardware,media,si
+La impresora departamental de control de calidad presenta atasco de papel frecuente y mancha los documentos,hardware,media,si
+La impresora departamental de tesorería presenta atasco de papel frecuente y mancha los documentos,hardware,media,si
+El monitor del gerente de recursos humanos parpadea continuamente y genera fatiga visual tras una hora de uso,hardware,media,si
+El teclado ergonómico del puesto de desarrollo tiene varias teclas bloqueadas pero se puede conectar uno básico. Se solicita atención técnica.,hardware,media,si
+El escáner de alta velocidad de marketing se calienta excesivamente y emite un zumbido al digitalizar,hardware,media,si
+El monitor del especialista de ventas parpadea continuamente y genera fatiga visual tras una hora de uso,hardware,media,si
+El monitor del asistente de soporte técnico parpadea continuamente y genera fatiga visual tras una hora de uso,hardware,media,si
+El escáner de alta velocidad de departamento jurídico se calienta excesivamente y emite un zumbido al digitalizar,hardware,media,si
+La tarjeta de sonido integrada del equipo de sede sur emite estática en llamadas corporativas,hardware,media,si
+El teclado ergonómico del puesto de marketing tiene varias teclas bloqueadas pero se puede conectar uno básico,hardware,media,si
+El puerto USB-C del computador del auditor de tesorería no detecta dispositivos externos ni memorias,hardware,media,si
+La tarjeta de sonido integrada del equipo de sede sur emite estática en llamadas corporativas. Se solicita atención técnica.,hardware,media,si
+La tarjeta de sonido integrada del equipo de atención al cliente emite estática en llamadas corporativas,hardware,media,si
+El monitor del supervisor de planta de producción parpadea continuamente y genera fatiga visual tras una hora de uso,hardware,media,si
+El lector de código de barras de sede norte demora varios intentos en registrar las etiquetas,hardware,media,si
+El monitor del coordinador de sede norte parpadea continuamente y genera fatiga visual tras una hora de uso,hardware,media,si
+El teclado ergonómico del puesto de recursos humanos tiene varias teclas bloqueadas pero se puede conectar uno básico,hardware,media,si
+La impresora departamental de compras presenta atasco de papel frecuente y mancha los documentos. Se solicita atención técnica.,hardware,media,si
+La impresora departamental de planta de producción presenta atasco de papel frecuente y mancha los documentos,hardware,media,si
+El ventilador interno de la torre de recepción hace un ruido fuerte continuo aunque el equipo sigue operando,hardware,media,si
+El ventilador interno de la torre de recursos humanos hace un ruido fuerte continuo aunque el equipo sigue operando,hardware,media,si
+El adaptador de corriente del portátil de planta de producción hace falso contacto y solo carga en cierta posición,hardware,media,si
+El lector de código de barras de atención al cliente demora varios intentos en registrar las etiquetas,hardware,media,si
+El puerto USB-C del computador del gerente de atención al cliente no detecta dispositivos externos ni memorias,hardware,media,si
+La webcam integrada del portátil de soporte técnico se apaga de forma intermitente durante las videollamadas,hardware,media,si
+El adaptador de corriente del portátil de departamento jurídico hace falso contacto y solo carga en cierta posición,hardware,media,si
+El dock station del analista de recursos humanos desconecta aleatoriamente el segundo monitor,hardware,media,si
+El escáner de alta velocidad de recepción se calienta excesivamente y emite un zumbido al digitalizar,hardware,media,si
+La impresora departamental de recursos humanos presenta atasco de papel frecuente y mancha los documentos,hardware,media,si
+El puerto USB-C del computador del asistente de sede norte no detecta dispositivos externos ni memorias,hardware,media,si
+El teclado ergonómico del puesto de call center tiene varias teclas bloqueadas pero se puede conectar uno básico,hardware,media,si
+El puerto USB-C del computador del asistente de call center no detecta dispositivos externos ni memorias,hardware,media,si
+El teclado ergonómico del puesto de control de calidad tiene varias teclas bloqueadas pero se puede conectar uno básico,hardware,media,si
+Solicito cambio de tóner y revisión general de la impresora compartida en recepción,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del asistente de sede sur,hardware,media,no
+Requerimos programar el mantenimiento preventivo y limpieza de polvo de las torres de bodega,hardware,media,no
+Requerimos programar el mantenimiento preventivo y limpieza de polvo de las torres de logística,hardware,media,no
+Solicito cotización de un proyector HDMI para la sala de reuniones de dirección general,hardware,media,no
+Solicito adición de una tarjeta de red gigabit PCIe para un equipo de pruebas en marketing,hardware,media,no
+Requiero un soporte elevador con hub USB integrado para el portátil en dirección general,hardware,media,no
+Solicito audífonos con cancelación de ruido para las reuniones del equipo de dirección general,hardware,media,no
+Requerimos programar el mantenimiento preventivo y limpieza de polvo de las torres de desarrollo,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del auxiliar de contabilidad,hardware,media,no
+Solicito cotización de un proyector HDMI para la sala de reuniones de dirección general. Se solicita atención técnica.,hardware,media,no
+Solicito audífonos con cancelación de ruido para las reuniones del equipo de sede sur,hardware,media,no
+Requerimos un lector de tarjetas SD externo para el computador de diseño en contabilidad,hardware,media,no
+Requerimos programar el mantenimiento preventivo y limpieza de polvo de las torres de bodega. Se solicita atención técnica.,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del auditor de call center,hardware,media,no
+Requerimos un lector de tarjetas SD externo para el computador de diseño en bodega,hardware,media,no
+Solicito cotización de un proyector HDMI para la sala de reuniones de tesorería,hardware,media,no
+Es necesario inventariar los monitores antiguos de tesorería para donación o reciclaje,hardware,media,no
+Requiero un soporte elevador con hub USB integrado para el portátil en compras,hardware,media,no
+Es necesario inventariar los monitores antiguos de sede sur para donación o reciclaje,hardware,media,no
+Solicito adición de una tarjeta de red gigabit PCIe para un equipo de pruebas en bodega,hardware,media,no
+Solicito cotización de un proyector HDMI para la sala de reuniones de ventas,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del auxiliar de ventas,hardware,media,no
+Pido instalar un cable de red más largo y canaleta en el puesto del nuevo analista de compras,hardware,media,no
+Solicito cotización de un proyector HDMI para la sala de reuniones de logística,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del gerente de auditoría interna,hardware,media,no
+Requiero un soporte elevador con hub USB integrado para el portátil en control de calidad,hardware,media,no
+Solicito cambio de tóner y revisión general de la impresora compartida en compras,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del especialista de marketing,hardware,media,no
+Es necesario inventariar los monitores antiguos de dirección general para donación o reciclaje,hardware,media,no
+Solicito cambio de tóner y revisión general de la impresora compartida en call center,hardware,media,no
+Pido instalar un cable de red más largo y canaleta en el puesto del nuevo analista de sede sur,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del asistente de logística,hardware,media,no
+Solicito cotización de un proyector HDMI para la sala de reuniones de planta de producción,hardware,media,no
+Solicito instalación de un teclado y mouse inalámbricos para el puesto del auditor de logística,hardware,media,no
+Pido instalar un cable de red más largo y canaleta en el puesto del nuevo analista de call center,hardware,media,no
+Pido instalar un cable de red más largo y canaleta en el puesto del nuevo analista de recepción,hardware,media,no
+Requerimos programar el mantenimiento preventivo y limpieza de polvo de las torres de soporte técnico,hardware,media,no
+Requiero un soporte elevador con hub USB integrado para el portátil en dirección general. Se solicita atención técnica.,hardware,media,no
+Pido instalar un cable de red más largo y canaleta en el puesto del nuevo analista de contabilidad,hardware,media,no
+Requerimos un lector de tarjetas SD externo para el computador de diseño en marketing,hardware,media,no
+Pido instalar un cable de red más largo y canaleta en el puesto del nuevo analista de recursos humanos,hardware,media,no
+Solicito adición de una tarjeta de red gigabit PCIe para un equipo de pruebas en atención al cliente,hardware,media,no
+Solicito cambio de tóner y revisión general de la impresora compartida en sede norte,hardware,media,no
+La cubierta plástica trasera de la impresora de atención al cliente tiene un clip roto pero cierra normalmente,hardware,baja,si
+El estuche de transporte del portátil asignado a sede sur tiene la cremallera atascada,hardware,baja,si
+El botón de expulsión de la bandeja de la lectora óptica en desarrollo está algo duro pero abre,hardware,baja,si
+Una de las patas de soporte del teclado del puesto de recepción está rota y tambalea un poco,hardware,baja,si
+El estuche de transporte del portátil asignado a soporte técnico tiene la cremallera atascada,hardware,baja,si
+El led indicador de encendido de la pantalla del asistente de departamento jurídico no alumbra pero la pantalla funciona bien,hardware,baja,si
+El botón de expulsión de la bandeja de la lectora óptica en desarrollo está algo duro pero abre. Se solicita atención técnica.,hardware,baja,si
+El mouse pad corporativo del supervisor de control de calidad está desgastado en los bordes,hardware,baja,si
+El cable de alimentación de la torre de marketing queda algo corto con respecto a la toma,hardware,baja,si
+El cable de alimentación de la torre de ventas queda algo corto con respecto a la toma,hardware,baja,si
+El estuche de transporte del portátil asignado a sede norte tiene la cremallera atascada,hardware,baja,si
+El mouse pad corporativo del gerente de recursos humanos está desgastado en los bordes,hardware,baja,si
+El estuche de transporte del portátil asignado a compras tiene la cremallera atascada,hardware,baja,si
+Deseo cambiar el teclado estándar por uno compacto para tener más espacio en el escritorio de contabilidad,hardware,baja,no
+Solicito cables USB adicionales de repuesto para los teléfonos móviles corporativos de auditoría interna,hardware,baja,no
+Requiero fundas protectoras contra el polvo para los monitores de la sala de control de calidad,hardware,baja,no
+Solicito cables USB adicionales de repuesto para los teléfonos móviles corporativos de soporte técnico,hardware,baja,no
+Requiero un adaptador de displayport a VGA para presentaciones esporádicas en compras,hardware,baja,no
+Solicito un pad mouse ergonómico de gel cuando haya existencias en almacén para logística,hardware,baja,no
+Solicito cables USB adicionales de repuesto para los teléfonos móviles corporativos de ventas,hardware,baja,no
+Solicito un soporte de monitor para liberar espacio en el escritorio del consultor de tesorería,hardware,baja,no
+Solicito cables USB adicionales de repuesto para los teléfonos móviles corporativos de logística,hardware,baja,no
+Deseo cambiar el teclado estándar por uno compacto para tener más espacio en el escritorio de control de calidad,hardware,baja,no
+Solicito etiquetas adhesivas para marcar los cables de energía de los equipos de control de calidad,hardware,baja,no
+Requiero un adaptador de displayport a VGA para presentaciones esporádicas en sede sur,hardware,baja,no
+Deseo cambiar el teclado estándar por uno compacto para tener más espacio en el escritorio de auditoría interna,hardware,baja,no
+Pido revisar si hay disponibilidad de bases refrigerantes para portátiles en inventario de compras,hardware,baja,no
+Solicito un soporte de monitor para liberar espacio en el escritorio del asistente de compras,hardware,baja,no
+Solicito un soporte de monitor para liberar espacio en el escritorio del asistente de recursos humanos,hardware,baja,no
+Solicito cables USB adicionales de repuesto para los teléfonos móviles corporativos de dirección general,hardware,baja,no
+Solicito etiquetas adhesivas para marcar los cables de energía de los equipos de sede sur,hardware,baja,no
+Deseo cambiar el teclado estándar por uno compacto para tener más espacio en el escritorio de bodega,hardware,baja,no
+Requiero un adaptador de displayport a VGA para presentaciones esporádicas en bodega,hardware,baja,no
+Requiero fundas protectoras contra el polvo para los monitores de la sala de desarrollo,hardware,baja,no
+Solicito etiquetas adhesivas para marcar los cables de energía de los equipos de sede sur. Se solicita atención técnica.,hardware,baja,no
+Requiero un adaptador de displayport a VGA para presentaciones esporádicas en tesorería,hardware,baja,no
+Requiero un adaptador de displayport a VGA para presentaciones esporádicas en soporte técnico,hardware,baja,no
+Solicito un pad mouse ergonómico de gel cuando haya existencias en almacén para planta de producción,hardware,baja,no
+Solicito un soporte de monitor para liberar espacio en el escritorio del auxiliar de contabilidad,hardware,baja,no
+Pido revisar si hay disponibilidad de bases refrigerantes para portátiles en inventario de soporte técnico,hardware,baja,no
+Solicito cables USB adicionales de repuesto para los teléfonos móviles corporativos de auditoría interna. Se solicita atención técnica.,hardware,baja,no
+Pido revisar si hay disponibilidad de bases refrigerantes para portátiles en inventario de desarrollo,hardware,baja,no
+Solicito un pad mouse ergonómico de gel cuando haya existencias en almacén para soporte técnico,hardware,baja,no
+Requiero un adaptador de displayport a VGA para presentaciones esporádicas en ventas,hardware,baja,no
+Deseo cambiar el teclado estándar por uno compacto para tener más espacio en el escritorio de recepción,hardware,baja,no
+Solicito un pad mouse ergonómico de gel cuando haya existencias en almacén para soporte técnico. Se solicita atención técnica.,hardware,baja,no
+Solicito un pad mouse ergonómico de gel cuando haya existencias en almacén para recursos humanos,hardware,baja,no
+Deseo cambiar el teclado estándar por uno compacto para tener más espacio en el escritorio de control de calidad. Se solicita atención técnica.,hardware,baja,no
+Solicito un pad mouse ergonómico de gel cuando haya existencias en almacén para dirección general,hardware,baja,no
+Solicito etiquetas adhesivas para marcar los cables de energía de los equipos de marketing,hardware,baja,no
+Solicito etiquetas adhesivas para marcar los cables de energía de los equipos de atención al cliente,hardware,baja,no
+Pido revisar si hay disponibilidad de bases refrigerantes para portátiles en inventario de desarrollo. Se solicita atención técnica.,hardware,baja,no
+La herramienta de teletrabajo instalada en recursos humanos genera pantallazo azul al iniciar el cliente,software,alta,si
+El sistema de facturación electrónica de sede sur se cerró inesperadamente y no permite timbrar comprobantes,software,alta,si
+El CRM corporativo de compras quedó completamente inoperativo impidiendo registrar ventas de los asesores,software,alta,si
+El software de despacho logístico en tesorería no carga las rutas y detiene la salida de transporte,software,alta,si
+La plataforma de nómina de marketing se congeló durante el cálculo de fin de mes y arrojó fallo de integridad,software,alta,si
+El servicio de mensajería corporativa de bodega desconectó a toda la empresa sin permitir reconectar,software,alta,si
+La aplicación web transaccional no abre y arroja error 500 para todos los usuarios de auditoría interna,software,alta,si
+El servicio de mensajería corporativa de marketing desconectó a toda la empresa sin permitir reconectar,software,alta,si
+La plataforma de pagos en línea en dirección general rechaza todas las transacciones con error de certificado vencido,software,alta,si
+La aplicación web transaccional no abre y arroja error 500 para todos los usuarios de recepción,software,alta,si
+La plataforma de pagos en línea en logística rechaza todas las transacciones con error de certificado vencido,software,alta,si
+La base de datos del sistema de gestión de almacén en logística arroja error de corrupción de índices,software,alta,si
+El sistema de facturación electrónica de departamento jurídico se cerró inesperadamente y no permite timbrar comprobantes,software,alta,si
+El antivirus bloqueó por falso positivo el ejecutable del software productivo de soporte técnico,software,alta,si
+La plataforma de pagos en línea en marketing rechaza todas las transacciones con error de certificado vencido,software,alta,si
+El servicio de mensajería corporativa de compras desconectó a toda la empresa sin permitir reconectar,software,alta,si
+La plataforma de pagos en línea en departamento jurídico rechaza todas las transacciones con error de certificado vencido,software,alta,si
+El software de despacho logístico en logística no carga las rutas y detiene la salida de transporte,software,alta,si
+El software de despacho logístico en tesorería no carga las rutas y detiene la salida de transporte. Se solicita atención técnica.,software,alta,si
+El programa contable arrojó error fatal en la exportación de libros oficiales y se cierra al instante,software,alta,si
+El software ERP de la empresa arroja un error de memoria violada y bloquea las compras de sede norte,software,alta,si
+El sistema de facturación electrónica de desarrollo se cerró inesperadamente y no permite timbrar comprobantes,software,alta,si
+El software ERP de la empresa arroja un error de memoria violada y bloquea las compras de desarrollo,software,alta,si
+El antivirus bloqueó por falso positivo el ejecutable del software productivo de control de calidad,software,alta,si
+El software de punto de venta en las cajas de ventas no responde y bloquea el cobro a clientes,software,alta,si
+El antivirus bloqueó por falso positivo el ejecutable del software productivo de dirección general,software,alta,si
+El software de despacho logístico en sede sur no carga las rutas y detiene la salida de transporte,software,alta,si
+La actualización del sistema operativo causó un bucle de reinicios en las estaciones de trabajo de desarrollo,software,alta,si
+La base de datos del sistema de gestión de almacén en atención al cliente arroja error de corrupción de índices,software,alta,si
+La herramienta de teletrabajo instalada en recursos humanos genera pantallazo azul al iniciar el cliente. Se solicita atención técnica.,software,alta,si
+La actualización del sistema operativo causó un bucle de reinicios en las estaciones de trabajo de compras,software,alta,si
+El servicio de mensajería corporativa de recepción desconectó a toda la empresa sin permitir reconectar,software,alta,si
+El CRM corporativo de contabilidad quedó completamente inoperativo impidiendo registrar ventas de los asesores,software,alta,si
+La herramienta de teletrabajo instalada en atención al cliente genera pantallazo azul al iniciar el cliente,software,alta,si
+La actualización del sistema operativo causó un bucle de reinicios en las estaciones de trabajo de marketing,software,alta,si
+El software de despacho logístico en dirección general no carga las rutas y detiene la salida de transporte,software,alta,si
+La base de datos del sistema de gestión de almacén en recepción arroja error de corrupción de índices,software,alta,si
+El programa contable arrojó error fatal en la exportación de libros oficiales y se cierra al instante. Se solicita atención técnica.,software,alta,si
+La plataforma de nómina de recursos humanos se congeló durante el cálculo de fin de mes y arrojó fallo de integridad,software,alta,si
+La plataforma de pagos en línea en desarrollo rechaza todas las transacciones con error de certificado vencido,software,alta,si
+Reporte desde el área: El programa contable arrojó error fatal en la exportación de libros oficiales y se cierra al instante,software,alta,si
+El antivirus bloqueó por falso positivo el ejecutable del software productivo de auditoría interna,software,alta,si
+El software de despacho logístico en contabilidad no carga las rutas y detiene la salida de transporte,software,alta,si
+La base de datos del sistema de gestión de almacén en compras arroja error de corrupción de índices,software,alta,si
+La plataforma de pagos en línea en compras rechaza todas las transacciones con error de certificado vencido,software,alta,si
+El antivirus bloqueó por falso positivo el ejecutable del software productivo de planta de producción,software,alta,si
+La actualización del sistema operativo causó un bucle de reinicios en las estaciones de trabajo de sede sur,software,alta,si
+El CRM corporativo de desarrollo quedó completamente inoperativo impidiendo registrar ventas de los asesores,software,alta,si
+El CRM corporativo de call center quedó completamente inoperativo impidiendo registrar ventas de los asesores,software,alta,si
+La base de datos del sistema de gestión de almacén en departamento jurídico arroja error de corrupción de índices,software,alta,si
+La plataforma de nómina de logística se congeló durante el cálculo de fin de mes y arrojó fallo de integridad,software,alta,si
+El CRM corporativo de logística quedó completamente inoperativo impidiendo registrar ventas de los asesores,software,alta,si
+El software de despacho logístico en ventas no carga las rutas y detiene la salida de transporte,software,alta,si
+La plataforma de nómina de auditoría interna se congeló durante el cálculo de fin de mes y arrojó fallo de integridad,software,alta,si
+La plataforma de pagos en línea en planta de producción rechaza todas las transacciones con error de certificado vencido,software,alta,si
+El servicio de mensajería corporativa de departamento jurídico desconectó a toda la empresa sin permitir reconectar,software,alta,si
+La herramienta de teletrabajo instalada en marketing genera pantallazo azul al iniciar el cliente,software,alta,si
+Solicito actualizar la licencia empresarial del software ERP en call center antes de que expire mañana,software,alta,no
+Instalación prioritaria del entorno de desarrollo y compiladores para los nuevos desarrolladores de contabilidad,software,alta,no
+Requerimos desplegar inmediatamente la actualización de la plataforma bancaria para el área de dirección general,software,alta,no
+Solicito el despliegue prioritario de la versión 2.5 del sistema comercial para sede sur este sábado,software,alta,no
+Requerimos desplegar inmediatamente la actualización de la plataforma bancaria para el área de auditoría interna,software,alta,no
+Solicito el despliegue prioritario de la versión 2.5 del sistema comercial para planta de producción este sábado,software,alta,no
+Instalación urgente del cliente de monitoreo de seguridad en las estaciones de auditoría interna,software,alta,no
+Requerimos instalar con urgencia la librería de firma digital en los computadores de gerencia de ventas,software,alta,no
+Instalación prioritaria del entorno de desarrollo y compiladores para los nuevos desarrolladores de auditoría interna,software,alta,no
+Es urgente instalar los parches críticos de seguridad del sistema operativo en los servidores de soporte técnico,software,alta,no
+Es urgente instalar los parches críticos de seguridad del sistema operativo en los servidores de planta de producción,software,alta,no
+Requerimos desplegar inmediatamente la actualización de la plataforma bancaria para el área de bodega,software,alta,no
+Instalación prioritaria del entorno de desarrollo y compiladores para los nuevos desarrolladores de recursos humanos,software,alta,no
+Es urgente instalar los parches críticos de seguridad del sistema operativo en los servidores de sede sur,software,alta,no
+Solicito actualizar la licencia empresarial del software ERP en sede norte antes de que expire mañana,software,alta,no
+Instalación urgente del cliente de monitoreo de seguridad en las estaciones de control de calidad,software,alta,no
+Solicito migración planificada de la base de datos de pruebas de departamento jurídico a la nueva versión,software,alta,no
+Solicito el despliegue prioritario de la versión 2.5 del sistema comercial para recepción este sábado,software,alta,no
+Solicito actualizar la licencia empresarial del software ERP en marketing antes de que expire mañana,software,alta,no
+Es urgente instalar los parches críticos de seguridad del sistema operativo en los servidores de ventas,software,alta,no
+Requerimos desplegar inmediatamente la actualización de la plataforma bancaria para el área de sede sur,software,alta,no
+Requerimos desplegar inmediatamente la actualización de la plataforma bancaria para el área de contabilidad,software,alta,no
+Instalación urgente del cliente de monitoreo de seguridad en las estaciones de recepción,software,alta,no
+Instalación prioritaria del entorno de desarrollo y compiladores para los nuevos desarrolladores de tesorería,software,alta,no
+Instalación prioritaria del entorno de desarrollo y compiladores para los nuevos desarrolladores de departamento jurídico,software,alta,no
+Es urgente instalar los parches críticos de seguridad del sistema operativo en los servidores de compras,software,alta,no
+El editor de texto corporativo se cuelga al insertar tablas con más de 100 filas en planta de producción,software,media,si
+El software de visualización de planos en logística funciona muy lento al cargar capas complejas,software,media,si
+El navegador web corporativo se congela al intentar descargar archivos pesados en bodega,software,media,si
+La suite ofimática de recursos humanos muestra advertencia de producto sin licencia tras reiniciar,software,media,si
+La suite ofimática de departamento jurídico muestra advertencia de producto sin licencia tras reiniciar,software,media,si
+El cliente de correo de departamento jurídico no autocompleta las direcciones del libro global de contactos,software,media,si
+Outlook arroja error de sincronización de carpetas de correo en el equipo del asistente de control de calidad,software,media,si
+El software de visualización de planos en dirección general funciona muy lento al cargar capas complejas,software,media,si
+La aplicación de inventario de auditoría interna duplica algunas filas al guardar los formularios,software,media,si
+Outlook arroja error de sincronización de carpetas de correo en el equipo del analista de recepción,software,media,si
+El software de visualización de planos en atención al cliente funciona muy lento al cargar capas complejas,software,media,si
+La aplicación interna de gestión de turnos en contabilidad muestra caracteres extraños en los reportes,software,media,si
+El navegador web corporativo se congela al intentar descargar archivos pesados en planta de producción,software,media,si
+Excel se bloquea cada vez que el auditor de dirección general ejecuta la macro de consolidación mensual,software,media,si
+Excel se bloquea cada vez que el supervisor de ventas ejecuta la macro de consolidación mensual,software,media,si
+La aplicación de inventario de control de calidad duplica algunas filas al guardar los formularios,software,media,si
+La suite ofimática de planta de producción muestra advertencia de producto sin licencia tras reiniciar,software,media,si
+El editor de texto corporativo se cuelga al insertar tablas con más de 100 filas en auditoría interna,software,media,si
+La herramienta de videoconferencia arroja error de audio desincronizado para el usuario de call center,software,media,si
+El programa de diseño en atención al cliente no exporta en formato PDF y genera un archivo de 0 bytes,software,media,si
+La suite ofimática de atención al cliente muestra advertencia de producto sin licencia tras reiniciar,software,media,si
+La herramienta de videoconferencia arroja error de audio desincronizado para el usuario de departamento jurídico,software,media,si
+La aplicación de inventario de tesorería duplica algunas filas al guardar los formularios,software,media,si
+Outlook arroja error de sincronización de carpetas de correo en el equipo del asistente de atención al cliente,software,media,si
+El programa de diseño en logística no exporta en formato PDF y genera un archivo de 0 bytes,software,media,si
+La aplicación de inventario de contabilidad duplica algunas filas al guardar los formularios,software,media,si
+La herramienta de videoconferencia arroja error de audio desincronizado para el usuario de desarrollo,software,media,si
+El navegador web corporativo se congela al intentar descargar archivos pesados en sede norte,software,media,si
+El cliente de correo de auditoría interna no autocompleta las direcciones del libro global de contactos,software,media,si
+Excel se bloquea cada vez que el asistente de marketing ejecuta la macro de consolidación mensual,software,media,si
+La aplicación de inventario de bodega duplica algunas filas al guardar los formularios,software,media,si
+La herramienta de videoconferencia arroja error de audio desincronizado para el usuario de auditoría interna,software,media,si
+Excel se bloquea cada vez que el gerente de recepción ejecuta la macro de consolidación mensual,software,media,si
+La suite ofimática de departamento jurídico muestra advertencia de producto sin licencia tras reiniciar. Se solicita atención técnica.,software,media,si
+Excel se bloquea cada vez que el especialista de sede sur ejecuta la macro de consolidación mensual,software,media,si
+Outlook arroja error de sincronización de carpetas de correo en el equipo del coordinador de compras,software,media,si
+La herramienta de videoconferencia arroja error de audio desincronizado para el usuario de logística,software,media,si
+La herramienta de videoconferencia arroja error de audio desincronizado para el usuario de departamento jurídico. Se solicita atención técnica.,software,media,si
+La aplicación interna de gestión de turnos en desarrollo muestra caracteres extraños en los reportes,software,media,si
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de compras,software,media,no
+Solicito configurar una plantilla estándar de firma electrónica en el cliente de correo de soporte técnico,software,media,no
+Solicito configurar una plantilla estándar de firma electrónica en el cliente de correo de recursos humanos,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en atención al cliente,software,media,no
+Requerimos instalar la herramienta de compresión y descompresión de archivos en los equipos de contabilidad,software,media,no
+Requerimos instalar la herramienta de compresión y descompresión de archivos en los equipos de planta de producción,software,media,no
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de bodega,software,media,no
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de call center,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en control de calidad,software,media,no
+Pido instalar el software de emulación de terminal para tareas de administración en compras,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en compras,software,media,no
+Solicito instalar la suite de diseño gráfico Adobe en el computador del diseñador de atención al cliente,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en soporte técnico,software,media,no
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de tesorería,software,media,no
+Solicito habilitar la extensión de traducción en el navegador corporativo para el área de logística,software,media,no
+Requiero asignación e instalación de licencia de Microsoft Visio para el supervisor de sede norte,software,media,no
+Solicito instalar la suite de diseño gráfico Adobe en el computador del diseñador de bodega,software,media,no
+Solicito configurar una plantilla estándar de firma electrónica en el cliente de correo de recursos humanos. Se solicita atención técnica.,software,media,no
+Requerimos instalar la herramienta de compresión y descompresión de archivos en los equipos de atención al cliente,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en recursos humanos,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en atención al cliente. Se solicita atención técnica.,software,media,no
+Solicito instalar la suite de diseño gráfico Adobe en el computador del diseñador de recepción,software,media,no
+Pido instalar el software de emulación de terminal para tareas de administración en departamento jurídico,software,media,no
+Requiero asignación e instalación de licencia de Microsoft Visio para el coordinador de desarrollo,software,media,no
+Requiero asignación e instalación de licencia de Microsoft Visio para el director de control de calidad,software,media,no
+Requerimos instalar la herramienta de compresión y descompresión de archivos en los equipos de contabilidad. Se solicita atención técnica.,software,media,no
+Solicito habilitar la extensión de traducción en el navegador corporativo para el área de tesorería,software,media,no
+Solicito habilitar la extensión de traducción en el navegador corporativo para el área de call center,software,media,no
+Solicito configurar una plantilla estándar de firma electrónica en el cliente de correo de compras,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en planta de producción,software,media,no
+Solicito configurar una plantilla estándar de firma electrónica en el cliente de correo de ventas,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en recepción,software,media,no
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de planta de producción,software,media,no
+Pido instalar el software de emulación de terminal para tareas de administración en control de calidad,software,media,no
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de dirección general,software,media,no
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de departamento jurídico,software,media,no
+Reporte desde el área: Solicito configurar una plantilla estándar de firma electrónica en el cliente de correo de recursos humanos,software,media,no
+Solicito habilitar la extensión de traducción en el navegador corporativo para el área de planta de producción,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en dirección general,software,media,no
+Requerimos instalar la herramienta de compresión y descompresión de archivos en los equipos de marketing,software,media,no
+Solicito configurar la conexión ODBC hacia el servidor de consultas en el equipo de logística,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en planta de producción. Se solicita atención técnica.,software,media,no
+Requerimos instalar la herramienta de compresión y descompresión de archivos en los equipos de departamento jurídico,software,media,no
+Es necesario instalar un editor de código fuente para el área de analítica en dirección general. Se solicita atención técnica.,software,media,no
+El visor de imágenes predeterminado de tesorería no recuerda el tamaño de ventana anterior,software,baja,si
+La barra de herramientas del editor en auditoría interna se desorganiza al cambiar de resolución de pantalla,software,baja,si
+El tema oscuro de la aplicación de notas corporativas no aplica bien en los bordes en compras,software,baja,si
+El tema oscuro de la aplicación de notas corporativas no aplica bien en los bordes en call center,software,baja,si
+La barra de herramientas del editor en marketing se desorganiza al cambiar de resolución de pantalla,software,baja,si
+La calculadora del sistema operativo tarda 5 segundos en abrir en el equipo de bodega,software,baja,si
+La barra de herramientas del editor en tesorería se desorganiza al cambiar de resolución de pantalla,software,baja,si
+El tema oscuro de la aplicación de notas corporativas no aplica bien en los bordes en control de calidad,software,baja,si
+El visor de imágenes predeterminado de call center no recuerda el tamaño de ventana anterior,software,baja,si
+El reproductor multimedia corporativo de departamento jurídico abre con la ventana minimizada por defecto,software,baja,si
+La barra de herramientas del editor en desarrollo se desorganiza al cambiar de resolución de pantalla,software,baja,si
+Un icono del acceso directo al sistema en el escritorio del consultor de bodega aparece en blanco,software,baja,si
+La calculadora del sistema operativo tarda 5 segundos en abrir en el equipo de sede norte,software,baja,si
+Requiero apoyo para organizar las carpetas de mensajes archivados en el cliente de correo de ventas,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de departamento jurídico,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de control de calidad,software,baja,no
+Deseo cambiar el fondo de pantalla corporativo por la nueva versión de aniversario en compras,software,baja,no
+Pido configurar el corrector ortográfico en inglés en el procesador de textos para call center,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de contabilidad,software,baja,no
+Pido configurar el corrector ortográfico en inglés en el procesador de textos para logística,software,baja,no
+Requiero apoyo para organizar las carpetas de mensajes archivados en el cliente de correo de dirección general,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de call center,software,baja,no
+Solicito desactivar el sonido de inicio de sesión de Windows en el equipo de compras,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de recepción,software,baja,no
+Requiero apoyo para organizar las carpetas de mensajes archivados en el cliente de correo de recepción,software,baja,no
+Solicito desactivar el sonido de inicio de sesión de Windows en el equipo de recursos humanos,software,baja,no
+Solicito desactivar el sonido de inicio de sesión de Windows en el equipo de departamento jurídico,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de bodega,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de departamento jurídico,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de logística,software,baja,no
+Pido configurar el corrector ortográfico en inglés en el procesador de textos para bodega,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de call center. Se solicita atención técnica.,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de planta de producción,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de logística,software,baja,no
+Pido configurar el corrector ortográfico en inglés en el procesador de textos para desarrollo,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de call center,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de control de calidad,software,baja,no
+Requiero apoyo para organizar las carpetas de mensajes archivados en el cliente de correo de logística,software,baja,no
+Pido configurar el corrector ortográfico en inglés en el procesador de textos para call center. Se solicita atención técnica.,software,baja,no
+Solicito crear un acceso directo en el escritorio para la página de capacitaciones de dirección general,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de control de calidad. Se solicita atención técnica.,software,baja,no
+Solicito desactivar el sonido de inicio de sesión de Windows en el equipo de marketing,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de tesorería,software,baja,no
+Deseo cambiar el fondo de pantalla corporativo por la nueva versión de aniversario en bodega,software,baja,no
+Deseo cambiar el fondo de pantalla corporativo por la nueva versión de aniversario en recursos humanos,software,baja,no
+Deseo cambiar el fondo de pantalla corporativo por la nueva versión de aniversario en planta de producción,software,baja,no
+Deseo cambiar el fondo de pantalla corporativo por la nueva versión de aniversario en atención al cliente,software,baja,no
+Pido configurar el corrector ortográfico en inglés en el procesador de textos para contabilidad,software,baja,no
+Deseo cambiar el fondo de pantalla corporativo por la nueva versión de aniversario en bodega. Se solicita atención técnica.,software,baja,no
+Requiero apoyo para organizar las carpetas de mensajes archivados en el cliente de correo de ventas. Se solicita atención técnica.,software,baja,no
+Solicito desactivar el sonido de inicio de sesión de Windows en el equipo de contabilidad,software,baja,no
+Solicito instalar un visor de archivos PDF alternativo y gratuito en el equipo de call center. Se solicita atención técnica.,software,baja,no
+El enlace de contingencia de atención al cliente no conmutó automáticamente tras la caída de la línea primaria,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de dirección general,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de desarrollo,red,alta,si
+El switch de núcleo que comunica los servidores de recursos humanos no responde y bloquea el tráfico interno,red,alta,si
+Tormenta de difusión (broadcast storm) en la VLAN de call center saturando al 100% los puertos del switch,red,alta,si
+El enlace de contingencia de logística no conmutó automáticamente tras la caída de la línea primaria,red,alta,si
+Pérdida masiva de paquetes en la telefonía IP de compras cortando todas las llamadas con clientes,red,alta,si
+El enlace principal de fibra óptica de la sede sede norte está caído y toda la sucursal quedó sin internet,red,alta,si
+Tormenta de difusión (broadcast storm) en la VLAN de contabilidad saturando al 100% los puertos del switch,red,alta,si
+Tormenta de difusión (broadcast storm) en la VLAN de soporte técnico saturando al 100% los puertos del switch,red,alta,si
+El servidor DNS interno no responde peticiones y ningún usuario de logística puede navegar ni abrir sistemas,red,alta,si
+Fallo físico en el cable troncal de fibra óptica que conecta el edificio administrativo con control de calidad,red,alta,si
+El switch de núcleo que comunica los servidores de atención al cliente no responde y bloquea el tráfico interno,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de recursos humanos,red,alta,si
+El túnel VPN Site-to-Site entre la sede central y la planta de recepción se desconectó afectando despachos,red,alta,si
+Pérdida masiva de paquetes en la telefonía IP de atención al cliente cortando todas las llamadas con clientes,red,alta,si
+El enlace de contingencia de sede norte no conmutó automáticamente tras la caída de la línea primaria,red,alta,si
+Tormenta de difusión (broadcast storm) en la VLAN de sede norte saturando al 100% los puertos del switch,red,alta,si
+Caída de la puerta de enlace predeterminada en el segmento de red de logística bloqueando servidores,red,alta,si
+El servidor DNS interno no responde peticiones y ningún usuario de sede sur puede navegar ni abrir sistemas,red,alta,si
+Caída de la puerta de enlace predeterminada en el segmento de red de control de calidad bloqueando servidores,red,alta,si
+Caída de la puerta de enlace predeterminada en el segmento de red de atención al cliente bloqueando servidores,red,alta,si
+Caída de la puerta de enlace predeterminada en el segmento de red de desarrollo bloqueando servidores,red,alta,si
+La red WiFi corporativa de desarrollo no permite que ningún portátil se autentique deteniendo la operación,red,alta,si
+El servidor DNS interno no responde peticiones y ningún usuario de dirección general puede navegar ni abrir sistemas,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de auditoría interna,red,alta,si
+El switch de núcleo que comunica los servidores de recursos humanos no responde y bloquea el tráfico interno. Se solicita atención técnica.,red,alta,si
+Caída de la puerta de enlace predeterminada en el segmento de red de logística bloqueando servidores. Se solicita atención técnica.,red,alta,si
+Aislamiento completo de la red de bodega debido a un bucle de red generado en un concentrador local,red,alta,si
+El enlace principal de fibra óptica de la sede planta de producción está caído y toda la sucursal quedó sin internet,red,alta,si
+Pérdida masiva de paquetes en la telefonía IP de atención al cliente cortando todas las llamadas con clientes. Se solicita atención técnica.,red,alta,si
+Caída de la puerta de enlace predeterminada en el segmento de red de call center bloqueando servidores,red,alta,si
+Fallo físico en el cable troncal de fibra óptica que conecta el edificio administrativo con tesorería,red,alta,si
+El enlace de contingencia de departamento jurídico no conmutó automáticamente tras la caída de la línea primaria,red,alta,si
+El switch de núcleo que comunica los servidores de planta de producción no responde y bloquea el tráfico interno,red,alta,si
+El firewall central cayó tras un pico de tráfico y cortó todas las conexiones externas de bodega,red,alta,si
+El firewall central cayó tras un pico de tráfico y cortó todas las conexiones externas de logística,red,alta,si
+Pérdida masiva de paquetes en la telefonía IP de call center cortando todas las llamadas con clientes,red,alta,si
+Aislamiento completo de la red de dirección general debido a un bucle de red generado en un concentrador local,red,alta,si
+El firewall central cayó tras un pico de tráfico y cortó todas las conexiones externas de desarrollo,red,alta,si
+Aislamiento completo de la red de recepción debido a un bucle de red generado en un concentrador local,red,alta,si
+El servidor DNS interno no responde peticiones y ningún usuario de sede sur puede navegar ni abrir sistemas. Se solicita atención técnica.,red,alta,si
+El enlace de contingencia de dirección general no conmutó automáticamente tras la caída de la línea primaria,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de dirección general. Se solicita atención técnica.,red,alta,si
+La red WiFi corporativa de call center no permite que ningún portátil se autentique deteniendo la operación,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de bodega,red,alta,si
+El servidor DNS interno no responde peticiones y ningún usuario de soporte técnico puede navegar ni abrir sistemas,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de contabilidad,red,alta,si
+Fallo físico en el cable troncal de fibra óptica que conecta el edificio administrativo con sede norte,red,alta,si
+Caída de la puerta de enlace predeterminada en el segmento de red de desarrollo bloqueando servidores. Se solicita atención técnica.,red,alta,si
+La red WiFi corporativa de ventas no permite que ningún portátil se autentique deteniendo la operación,red,alta,si
+El túnel VPN Site-to-Site entre la sede central y la planta de atención al cliente se desconectó afectando despachos,red,alta,si
+El enlace de contingencia de recursos humanos no conmutó automáticamente tras la caída de la línea primaria,red,alta,si
+Falla total en el servidor DHCP corporativo dejando sin dirección IP a todos los equipos de ventas,red,alta,si
+El enlace principal de fibra óptica de la sede recursos humanos está caído y toda la sucursal quedó sin internet,red,alta,si
+Tormenta de difusión (broadcast storm) en la VLAN de desarrollo saturando al 100% los puertos del switch,red,alta,si
+El enlace de contingencia de control de calidad no conmutó automáticamente tras la caída de la línea primaria,red,alta,si
+Es prioritario aumentar el ancho de banda del enlace de internet en marketing antes del evento virtual,red,alta,no
+Solicito apertura urgente de puertos en el firewall para la integración bancaria del área de call center,red,alta,no
+Solicito apertura urgente de puertos en el firewall para la integración bancaria del área de departamento jurídico,red,alta,no
+Solicito migrar el direccionamiento IP de los servidores críticos de sede norte este fin de semana,red,alta,no
+Solicito apertura urgente de puertos en el firewall para la integración bancaria del área de compras,red,alta,no
+Requerimos crear una ruta estática urgente en el enrutador central para el nuevo enlace de tesorería,red,alta,no
+Requerimos configurar con urgencia una nueva VLAN aislada para la auditoría de seguridad de departamento jurídico,red,alta,no
+Pido habilitar acceso remoto urgente por VPN para el equipo de contingencia de bodega,red,alta,no
+Es prioritario aumentar el ancho de banda del enlace de internet en atención al cliente antes del evento virtual,red,alta,no
+Solicito apertura urgente de puertos en el firewall para la integración bancaria del área de auditoría interna,red,alta,no
+Requerimos configurar con urgencia una nueva VLAN aislada para la auditoría de seguridad de bodega,red,alta,no
+Requerimos crear una ruta estática urgente en el enrutador central para el nuevo enlace de compras,red,alta,no
+Requerimos crear una ruta estática urgente en el enrutador central para el nuevo enlace de call center,red,alta,no
+Solicito migrar el direccionamiento IP de los servidores críticos de tesorería este fin de semana,red,alta,no
+Solicito apertura urgente de puertos en el firewall para la integración bancaria del área de control de calidad,red,alta,no
+Pido habilitar acceso remoto urgente por VPN para el equipo de contingencia de atención al cliente,red,alta,no
+Solicito migrar el direccionamiento IP de los servidores críticos de planta de producción este fin de semana,red,alta,no
+Configuración prioritaria de calidad de servicio (QoS) para el tráfico de videoconferencias de desarrollo,red,alta,no
+Solicito apertura urgente de puertos en el firewall para la integración bancaria del área de soporte técnico,red,alta,no
+Es prioritario aumentar el ancho de banda del enlace de internet en ventas antes del evento virtual,red,alta,no
+Solicito migrar el direccionamiento IP de los servidores críticos de call center este fin de semana,red,alta,no
+Solicito migrar el direccionamiento IP de los servidores críticos de logística este fin de semana,red,alta,no
+Solicito migrar el direccionamiento IP de los servidores críticos de planta de producción este fin de semana. Se solicita atención técnica.,red,alta,no
+Requerimos crear una ruta estática urgente en el enrutador central para el nuevo enlace de recursos humanos,red,alta,no
+Pido habilitar acceso remoto urgente por VPN para el equipo de contingencia de departamento jurídico,red,alta,no
+Requerimos configurar con urgencia una nueva VLAN aislada para la auditoría de seguridad de atención al cliente,red,alta,no
+El equipo del coordinador de sede norte pierde conexión a la red cableada de manera aleatoria durante el día,red,media,si
+No es posible acceder a la impresora de red desde el segmento de computadores de sede norte,red,media,si
+Conflicto de dirección IP estática en el segmento de call center afectando a dos computadores,red,media,si
+Alta latencia y lentitud al transferir archivos grandes hacia el servidor compartido desde logística,red,media,si
+El punto de acceso inalámbrico más cercano a la oficina de marketing no emite señal de 5 GHz,red,media,si
+Lentitud generalizada en la consulta de sitios web externos desde la red de bodega por saturación de proxy,red,media,si
+La VPN corporativa desconecta al usuario de auditoría interna tras 10 minutos de inactividad,red,media,si
+Lentitud generalizada en la consulta de sitios web externos desde la red de planta de producción por saturación de proxy,red,media,si
+Pérdida de paquetes del 15% hacia el servidor de aplicaciones desde los puestos de planta de producción,red,media,si
+Conflicto de dirección IP estática en el segmento de atención al cliente afectando a dos computadores,red,media,si
+El cliente VPN muestra error de negociación de certificados TLS al conectar desde la casa de recursos humanos,red,media,si
+El cliente VPN muestra error de negociación de certificados TLS al conectar desde la casa de departamento jurídico,red,media,si
+Lentitud generalizada en la consulta de sitios web externos desde la red de tesorería por saturación de proxy,red,media,si
+No es posible acceder a la impresora de red desde el segmento de computadores de recursos humanos,red,media,si
+El cliente VPN muestra error de negociación de certificados TLS al conectar desde la casa de control de calidad,red,media,si
+La conexión WiFi en la sala de juntas de call center tiene caídas intermitentes cada 15 minutos,red,media,si
+El equipo del auditor de recursos humanos pierde conexión a la red cableada de manera aleatoria durante el día,red,media,si
+Lentitud generalizada en la consulta de sitios web externos desde la red de sede norte por saturación de proxy,red,media,si
+El cliente VPN muestra error de negociación de certificados TLS al conectar desde la casa de planta de producción,red,media,si
+La conexión WiFi en la sala de juntas de control de calidad tiene caídas intermitentes cada 15 minutos,red,media,si
+Pérdida de paquetes del 15% hacia el servidor de aplicaciones desde los puestos de marketing,red,media,si
+Lentitud generalizada en la consulta de sitios web externos desde la red de auditoría interna por saturación de proxy,red,media,si
+La VPN corporativa desconecta al usuario de tesorería tras 10 minutos de inactividad,red,media,si
+El equipo del coordinador de atención al cliente pierde conexión a la red cableada de manera aleatoria durante el día,red,media,si
+No es posible acceder a la impresora de red desde el segmento de computadores de ventas,red,media,si
+Alta latencia y lentitud al transferir archivos grandes hacia el servidor compartido desde control de calidad,red,media,si
+No es posible acceder a la impresora de red desde el segmento de computadores de sede norte. Se solicita atención técnica.,red,media,si
+La VPN corporativa desconecta al usuario de call center tras 10 minutos de inactividad,red,media,si
+El punto de acceso inalámbrico más cercano a la oficina de soporte técnico no emite señal de 5 GHz,red,media,si
+Conflicto de dirección IP estática en el segmento de recepción afectando a dos computadores,red,media,si
+Pérdida de paquetes del 15% hacia el servidor de aplicaciones desde los puestos de atención al cliente,red,media,si
+Conflicto de dirección IP estática en el segmento de logística afectando a dos computadores,red,media,si
+Pérdida de paquetes del 15% hacia el servidor de aplicaciones desde los puestos de soporte técnico,red,media,si
+El punto de acceso inalámbrico más cercano a la oficina de recepción no emite señal de 5 GHz,red,media,si
+Conflicto de dirección IP estática en el segmento de recursos humanos afectando a dos computadores,red,media,si
+Pérdida de paquetes del 15% hacia el servidor de aplicaciones desde los puestos de bodega,red,media,si
+El punto de acceso inalámbrico más cercano a la oficina de soporte técnico no emite señal de 5 GHz. Se solicita atención técnica.,red,media,si
+Lentitud generalizada en la consulta de sitios web externos desde la red de recursos humanos por saturación de proxy,red,media,si
+No es posible acceder a la impresora de red desde el segmento de computadores de soporte técnico,red,media,si
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de sede norte,red,media,no
+Solicito reubicar el punto de acceso WiFi de sede norte para mejorar la cobertura en esquinas,red,media,no
+Solicito asignación de una dirección IP fija para una nueva máquina de pruebas en call center,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de marketing,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de marketing,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de bodega,red,media,no
+Solicito reservar una IP en el servidor DHCP para la impresora departamental de logística,red,media,no
+Solicito asignación de una dirección IP fija para una nueva máquina de pruebas en atención al cliente,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de recepción,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de ventas,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de control de calidad,red,media,no
+Solicito reubicar el punto de acceso WiFi de call center para mejorar la cobertura en esquinas,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de recepción,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de compras,red,media,no
+Pido verificación y certificación del cableado estructurado del módulo de departamento jurídico,red,media,no
+Pido verificación y certificación del cableado estructurado del módulo de call center,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de control de calidad,red,media,no
+Solicito reubicar el punto de acceso WiFi de sede norte para mejorar la cobertura en esquinas. Se solicita atención técnica.,red,media,no
+Solicito reubicar el punto de acceso WiFi de ventas para mejorar la cobertura en esquinas,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de dirección general,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de call center,red,media,no
+Requerimos ponchar e instalar un nuevo punto de red de pared para un nuevo puesto en sede norte,red,media,no
+Solicito reservar una IP en el servidor DHCP para la impresora departamental de recursos humanos,red,media,no
+Solicito reservar una IP en el servidor DHCP para la impresora departamental de control de calidad,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de desarrollo,red,media,no
+Pido verificación y certificación del cableado estructurado del módulo de control de calidad,red,media,no
+Solicito asignación de una dirección IP fija para una nueva máquina de pruebas en desarrollo,red,media,no
+Reporte desde el área: Solicito reubicar el punto de acceso WiFi de sede norte para mejorar la cobertura en esquinas,red,media,no
+Pido verificación y certificación del cableado estructurado del módulo de soporte técnico,red,media,no
+Es necesario habilitar la navegación a un dominio externo de proveedores en el proxy de compras,red,media,no
+Es necesario habilitar la navegación a un dominio externo de proveedores en el proxy de logística,red,media,no
+Solicito configurar la conexión WiFi para invitados en la sala de reuniones de bodega. Se solicita atención técnica.,red,media,no
+Solicito reservar una IP en el servidor DHCP para la impresora departamental de auditoría interna,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de control de calidad. Se solicita atención técnica.,red,media,no
+Solicito asignación de una dirección IP fija para una nueva máquina de pruebas en recursos humanos,red,media,no
+Solicito reservar una IP en el servidor DHCP para la impresora departamental de marketing,red,media,no
+Solicito reubicar el punto de acceso WiFi de logística para mejorar la cobertura en esquinas,red,media,no
+Pido verificación y certificación del cableado estructurado del módulo de departamento jurídico. Se solicita atención técnica.,red,media,no
+Solicito asignación de una dirección IP fija para una nueva máquina de pruebas en compras,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de recursos humanos,red,media,no
+Pido configurar el cliente VPN en el portátil corporativo del nuevo asesor de recepción. Se solicita atención técnica.,red,media,no
+Solicito asignación de una dirección IP fija para una nueva máquina de pruebas en sede norte,red,media,no
+Pido verificación y certificación del cableado estructurado del módulo de bodega,red,media,no
+Solicito reubicar el punto de acceso WiFi de contabilidad para mejorar la cobertura en esquinas,red,media,no
+El icono de red en la barra de tareas de compras muestra un aviso de advertencia pero navega bien,red,baja,si
+El cable de red del puesto de ventas es de color amarillo brillante y desentona con el mobiliario,red,baja,si
+La velocidad de subida en la red de invitados de call center es ligeramente más baja de lo habitual,red,baja,si
+La velocidad de subida en la red de invitados de sede sur es ligeramente más baja de lo habitual,red,baja,si
+Ocasionalmente demora 3 segundos de más en resolver una dirección web local en sede norte,red,baja,si
+El conector plástico RJ45 del cable de red del supervisor de soporte técnico tiene la pestaña rota pero funciona,red,baja,si
+El conector plástico RJ45 del cable de red del auxiliar de soporte técnico tiene la pestaña rota pero funciona,red,baja,si
+El icono de red en la barra de tareas de contabilidad muestra un aviso de advertencia pero navega bien,red,baja,si
+Ocasionalmente demora 3 segundos de más en resolver una dirección web local en recursos humanos,red,baja,si
+La señal WiFi en el pasillo adyacente a logística muestra solo dos barras de cobertura,red,baja,si
+El enchufe de la toma de red en atención al cliente está un poco flojo en la canaleta plástica,red,baja,si
+El conector plástico RJ45 del cable de red del consultor de call center tiene la pestaña rota pero funciona,red,baja,si
+El icono de red en la barra de tareas de ventas muestra un aviso de advertencia pero navega bien,red,baja,si
+Solicito organizar los cables de red que cuelgan detrás del escritorio en auditoría interna,red,baja,no
+Pido revisar la intensidad de la señal WiFi en la cafetería cercana a la oficina de recursos humanos,red,baja,no
+Solicito un cable de red categoría 6 de 3 metros de repuesto para la gaveta de departamento jurídico,red,baja,no
+Solicito un cable de red categoría 6 de 3 metros de repuesto para la gaveta de marketing,red,baja,no
+Deseo cambiar el nombre descriptivo de la conexión de red en el panel de control en departamento jurídico,red,baja,no
+Solicito una prueba de velocidad de descarga en el computador del supervisor de sede sur,red,baja,no
+Deseo cambiar el nombre descriptivo de la conexión de red en el panel de control en tesorería,red,baja,no
+Deseo cambiar el nombre descriptivo de la conexión de red en el panel de control en call center,red,baja,no
+Solicito organizar los cables de red que cuelgan detrás del escritorio en atención al cliente,red,baja,no
+Solicito un cable de red categoría 6 de 3 metros de repuesto para la gaveta de call center,red,baja,no
+Solicito una prueba de velocidad de descarga en el computador del especialista de control de calidad,red,baja,no
+Deseo cambiar el nombre descriptivo de la conexión de red en el panel de control en ventas,red,baja,no
+Solicito organizar los cables de red que cuelgan detrás del escritorio en auditoría interna. Se solicita atención técnica.,red,baja,no
+Pido verificar si es posible cambiar la contraseña de la red inalámbrica de invitados en dirección general,red,baja,no
+Solicito organizar los cables de red que cuelgan detrás del escritorio en desarrollo,red,baja,no
+Solicito una prueba de velocidad de descarga en el computador del director de recepción,red,baja,no
+Pido verificar si es posible cambiar la contraseña de la red inalámbrica de invitados en departamento jurídico,red,baja,no
+Solicito un cable de red categoría 6 de 3 metros de repuesto para la gaveta de recursos humanos,red,baja,no
+Solicito organizar los cables de red que cuelgan detrás del escritorio en departamento jurídico,red,baja,no
+Solicito una prueba de velocidad de descarga en el computador del especialista de recepción,red,baja,no
+Pido revisar la intensidad de la señal WiFi en la cafetería cercana a la oficina de control de calidad,red,baja,no
+Solicito una prueba de velocidad de descarga en el computador del auxiliar de tesorería,red,baja,no
+Pido verificar si es posible cambiar la contraseña de la red inalámbrica de invitados en desarrollo,red,baja,no
+Solicito organizar los cables de red que cuelgan detrás del escritorio en tesorería,red,baja,no
+Solicito organizar los cables de red que cuelgan detrás del escritorio en soporte técnico,red,baja,no
+Pido verificar si es posible cambiar la contraseña de la red inalámbrica de invitados en ventas,red,baja,no
+Pido revisar la intensidad de la señal WiFi en la cafetería cercana a la oficina de recepción,red,baja,no
+Solicito un cable de red categoría 6 de 3 metros de repuesto para la gaveta de bodega,red,baja,no
+Pido revisar la intensidad de la señal WiFi en la cafetería cercana a la oficina de call center,red,baja,no
+Solicito una prueba de velocidad de descarga en el computador del analista de planta de producción,red,baja,no
+Pido verificar si es posible cambiar la contraseña de la red inalámbrica de invitados en bodega,red,baja,no
+Deseo cambiar el nombre descriptivo de la conexión de red en el panel de control en call center. Se solicita atención técnica.,red,baja,no
+Solicito un cable de red categoría 6 de 3 metros de repuesto para la gaveta de planta de producción,red,baja,no
+Pido verificar si es posible cambiar la contraseña de la red inalámbrica de invitados en call center,red,baja,no
+Deseo cambiar el nombre descriptivo de la conexión de red en el panel de control en dirección general,red,baja,no
+Solicito un cable de red categoría 6 de 3 metros de repuesto para la gaveta de contabilidad,red,baja,no
+Solicito una prueba de velocidad de descarga en el computador del especialista de sede norte,red,baja,no
+Pido verificar si es posible cambiar la contraseña de la red inalámbrica de invitados en logística,red,baja,no
+Deseo cambiar el nombre descriptivo de la conexión de red en el panel de control en control de calidad,red,baja,no
+El certificado digital de autenticación de departamento jurídico venció hoy e impide facturar ante la entidad tributaria,accesos,alta,si
+Revocación errónea de permisos en la carpeta raíz compartida de logística deteniendo la operación del área,accesos,alta,si
+Todos los usuarios de control de calidad perdieron repentinamente el acceso a la base de datos de producción,accesos,alta,si
+Acceso denegado a todas las carpetas de red para el equipo de auditoría en la sede de control de calidad,accesos,alta,si
+No es posible ingresar a la consola de gestión de atención al cliente porque el código 2FA arroja clave incorrecta,accesos,alta,si
+Acceso denegado a todas las carpetas de red para el equipo de auditoría en la sede de recursos humanos,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en departamento jurídico,accesos,alta,si
+El token de autenticación MFA de Microsoft no llega al teléfono del director de ventas para firma de nómina,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en compras,accesos,alta,si
+Revocación errónea de permisos en la carpeta raíz compartida de bodega deteniendo la operación del área,accesos,alta,si
+El usuario administrador de contabilidad perdió privilegios de superusuario en el sistema transaccional,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en planta de producción,accesos,alta,si
+El usuario administrador de sede sur perdió privilegios de superusuario en el sistema transaccional,accesos,alta,si
+El certificado digital de autenticación de recursos humanos venció hoy e impide facturar ante la entidad tributaria,accesos,alta,si
+El inicio de sesión único (SSO) corporativo está caído impidiendo ingresar a todas las aplicaciones de soporte técnico,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en desarrollo,accesos,alta,si
+El certificado digital de autenticación de recursos humanos venció hoy e impide facturar ante la entidad tributaria. Se solicita atención técnica.,accesos,alta,si
+Las credenciales de acceso al servidor bancario de recursos humanos fueron bloqueadas por intentos fallidos,accesos,alta,si
+El usuario administrador de sede norte perdió privilegios de superusuario en el sistema transaccional,accesos,alta,si
+El token de autenticación MFA de Microsoft no llega al teléfono del director de sede sur para firma de nómina,accesos,alta,si
+El token de autenticación MFA de Microsoft no llega al teléfono del director de bodega para firma de nómina,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en tesorería,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en bodega,accesos,alta,si
+El token de autenticación MFA de Microsoft no llega al teléfono del director de ventas para firma de nómina. Se solicita atención técnica.,accesos,alta,si
+Acceso denegado a todas las carpetas de red para el equipo de auditoría en la sede de compras,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en departamento jurídico. Se solicita atención técnica.,accesos,alta,si
+El inicio de sesión único (SSO) corporativo está caído impidiendo ingresar a todas las aplicaciones de marketing,accesos,alta,si
+El inicio de sesión único (SSO) corporativo está caído impidiendo ingresar a todas las aplicaciones de bodega,accesos,alta,si
+El certificado digital de autenticación de sede sur venció hoy e impide facturar ante la entidad tributaria,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en ventas,accesos,alta,si
+El certificado digital de autenticación de bodega venció hoy e impide facturar ante la entidad tributaria,accesos,alta,si
+No es posible ingresar a la consola de gestión de recepción porque el código 2FA arroja clave incorrecta,accesos,alta,si
+Las credenciales de acceso al servidor bancario de planta de producción fueron bloqueadas por intentos fallidos,accesos,alta,si
+La cuenta de dominio del analista de recursos humanos está bloqueada impidiendo autorizar pagos urgentes,accesos,alta,si
+No es posible ingresar a la consola de gestión de planta de producción porque el código 2FA arroja clave incorrecta,accesos,alta,si
+No es posible ingresar a la consola de gestión de marketing porque el código 2FA arroja clave incorrecta,accesos,alta,si
+Fallo de sincronización entre el Active Directory local y Entra ID bloqueando accesos de recepción,accesos,alta,si
+El usuario administrador de sede sur perdió privilegios de superusuario en el sistema transaccional. Se solicita atención técnica.,accesos,alta,si
+No es posible ingresar a la consola de gestión de departamento jurídico porque el código 2FA arroja clave incorrecta,accesos,alta,si
+Revocación errónea de permisos en la carpeta raíz compartida de soporte técnico deteniendo la operación del área,accesos,alta,si
+El usuario administrador de recursos humanos perdió privilegios de superusuario en el sistema transaccional,accesos,alta,si
+El token de autenticación MFA de Microsoft no llega al teléfono del director de control de calidad para firma de nómina,accesos,alta,si
+El usuario administrador de control de calidad perdió privilegios de superusuario en el sistema transaccional,accesos,alta,si
+Las credenciales de acceso al servidor bancario de recepción fueron bloqueadas por intentos fallidos,accesos,alta,si
+Las credenciales de acceso al servidor bancario de atención al cliente fueron bloqueadas por intentos fallidos,accesos,alta,si
+Fallo de sincronización entre el Active Directory local y Entra ID bloqueando accesos de bodega,accesos,alta,si
+Bloqueo masivo de contraseñas de dominio tras una política de seguridad aplicada por error en sede sur,accesos,alta,si
+Las credenciales de acceso al servidor bancario de compras fueron bloqueadas por intentos fallidos,accesos,alta,si
+Todos los usuarios de dirección general perdieron repentinamente el acceso a la base de datos de producción,accesos,alta,si
+Revocación errónea de permisos en la carpeta raíz compartida de bodega deteniendo la operación del área. Se solicita atención técnica.,accesos,alta,si
+La cuenta de dominio del especialista de departamento jurídico está bloqueada impidiendo autorizar pagos urgentes,accesos,alta,si
+El certificado digital de autenticación de desarrollo venció hoy e impide facturar ante la entidad tributaria,accesos,alta,si
+El token de autenticación MFA de Microsoft no llega al teléfono del director de atención al cliente para firma de nómina,accesos,alta,si
+Acceso denegado a todas las carpetas de red para el equipo de auditoría en la sede de atención al cliente,accesos,alta,si
+El token de autenticación MFA de Microsoft no llega al teléfono del director de auditoría interna para firma de nómina,accesos,alta,si
+El usuario administrador de auditoría interna perdió privilegios de superusuario en el sistema transaccional,accesos,alta,si
+El usuario administrador de contabilidad perdió privilegios de superusuario en el sistema transaccional. Se solicita atención técnica.,accesos,alta,si
+Solicito generar certificado digital prioritario para firma de contratos ejecutivos de sede norte,accesos,alta,no
+Solicito otorgar privilegios de administrador temporales para el despliegue de software en marketing,accesos,alta,no
+Requerimos reactivar con urgencia las credenciales del auditor externo que revisará balances en tesorería,accesos,alta,no
+Requerimos reactivar con urgencia las credenciales del auditor externo que revisará balances en auditoría interna,accesos,alta,no
+Requerimos habilitar acceso VPN de emergencia para el personal de guardia de auditoría interna,accesos,alta,no
+Habilitación inmediata de accesos a la base de datos para el equipo de respuesta a incidentes en contabilidad,accesos,alta,no
+Solicito generar certificado digital prioritario para firma de contratos ejecutivos de bodega,accesos,alta,no
+Solicito asignar rol de aprobador de órdenes de compra con máxima prioridad en el ERP para call center,accesos,alta,no
+Requerimos reactivar con urgencia las credenciales del auditor externo que revisará balances en tesorería. Se solicita atención técnica.,accesos,alta,no
+Creación urgente de usuario y accesos completos para el nuevo director de planta de producción que inicia hoy,accesos,alta,no
+Solicito otorgar privilegios de administrador temporales para el despliegue de software en call center,accesos,alta,no
+Requerimos reactivar con urgencia las credenciales del auditor externo que revisará balances en recursos humanos,accesos,alta,no
+Habilitación inmediata de accesos a la base de datos para el equipo de respuesta a incidentes en control de calidad,accesos,alta,no
+Requerimos reactivar con urgencia las credenciales del auditor externo que revisará balances en recepción,accesos,alta,no
+Creación urgente de usuario y accesos completos para el nuevo director de bodega que inicia hoy,accesos,alta,no
+Solicito generar certificado digital prioritario para firma de contratos ejecutivos de call center,accesos,alta,no
+Habilitación inmediata de accesos a la base de datos para el equipo de respuesta a incidentes en call center,accesos,alta,no
+Solicito otorgar privilegios de administrador temporales para el despliegue de software en recepción,accesos,alta,no
+Solicito generar certificado digital prioritario para firma de contratos ejecutivos de sede norte. Se solicita atención técnica.,accesos,alta,no
+Creación urgente de usuario y accesos completos para el nuevo director de tesorería que inicia hoy,accesos,alta,no
+Solicito asignar rol de aprobador de órdenes de compra con máxima prioridad en el ERP para atención al cliente,accesos,alta,no
+Habilitación inmediata de accesos a la base de datos para el equipo de respuesta a incidentes en control de calidad. Se solicita atención técnica.,accesos,alta,no
+Habilitación inmediata de accesos a la base de datos para el equipo de respuesta a incidentes en sede norte,accesos,alta,no
+Requerimos reactivar con urgencia las credenciales del auditor externo que revisará balances en recepción. Se solicita atención técnica.,accesos,alta,no
+Solicito otorgar privilegios de administrador temporales para el despliegue de software en soporte técnico,accesos,alta,no
+Solicito asignar rol de aprobador de órdenes de compra con máxima prioridad en el ERP para departamento jurídico,accesos,alta,no
+El usuario de sede norte olvidó el PIN de desbloqueo de su tarjeta inteligente corporativa,accesos,media,si
+El usuario de auditoría interna recibe error 403 Forbidden al ingresar a la intranet departamental,accesos,media,si
+La aplicación web de auditoría interna no reconoce el rol asignado al usuario y restringe la pantalla de edición,accesos,media,si
+El usuario de atención al cliente olvidó el PIN de desbloqueo de su tarjeta inteligente corporativa,accesos,media,si
+Mensaje de acceso no autorizado al intentar abrir un buzón compartido de correo en planta de producción,accesos,media,si
+El usuario de contabilidad no puede ver los archivos compartidos por el equipo de compras,accesos,media,si
+La cuenta de VPN del auditor de dirección general fue deshabilitada por falta de uso en los últimos 30 días,accesos,media,si
+Desincronización de contraseña entre el equipo local y el servidor de dominio en compras,accesos,media,si
+Desincronización de contraseña entre el equipo local y el servidor de dominio en auditoría interna,accesos,media,si
+El usuario de recepción recibe error 403 Forbidden al ingresar a la intranet departamental,accesos,media,si
+El usuario de compras no puede ingresar al sistema de gestión documental por error de grupo de seguridad,accesos,media,si
+Desincronización de contraseña entre el equipo local y el servidor de dominio en logística,accesos,media,si
+El auxiliar de control de calidad no tiene permisos de escritura en la carpeta compartida de su proyecto,accesos,media,si
+Mensaje de acceso no autorizado al intentar abrir un buzón compartido de correo en bodega,accesos,media,si
+Falta de permisos para consultar el módulo de reportes históricos en el aplicativo de desarrollo,accesos,media,si
+Desincronización de contraseña entre el equipo local y el servidor de dominio en auditoría interna. Se solicita atención técnica.,accesos,media,si
+El usuario de sede norte no puede ingresar al sistema de gestión documental por error de grupo de seguridad,accesos,media,si
+El usuario de atención al cliente recibe error 403 Forbidden al ingresar a la intranet departamental,accesos,media,si
+El usuario de soporte técnico recibe error 403 Forbidden al ingresar a la intranet departamental,accesos,media,si
+El usuario de control de calidad no puede ingresar al sistema de gestión documental por error de grupo de seguridad,accesos,media,si
+El usuario de sede sur olvidó el PIN de desbloqueo de su tarjeta inteligente corporativa,accesos,media,si
+El usuario de dirección general no puede ver los archivos compartidos por el equipo de compras,accesos,media,si
+La cuenta de VPN del gerente de marketing fue deshabilitada por falta de uso en los últimos 30 días,accesos,media,si
+La aplicación web de sede sur no reconoce el rol asignado al usuario y restringe la pantalla de edición,accesos,media,si
+Falta de permisos para consultar el módulo de reportes históricos en el aplicativo de departamento jurídico,accesos,media,si
+Falta de permisos para consultar el módulo de reportes históricos en el aplicativo de auditoría interna,accesos,media,si
+La cuenta de VPN del consultor de call center fue deshabilitada por falta de uso en los últimos 30 días,accesos,media,si
+La aplicación web de departamento jurídico no reconoce el rol asignado al usuario y restringe la pantalla de edición,accesos,media,si
+Desincronización de contraseña entre el equipo local y el servidor de dominio en sede sur,accesos,media,si
+Mensaje de acceso no autorizado al intentar abrir un buzón compartido de correo en call center,accesos,media,si
+La aplicación web de tesorería no reconoce el rol asignado al usuario y restringe la pantalla de edición,accesos,media,si
+La contraseña de correo corporativo del supervisor de call center expiró y la herramienta de autoservicio no abre,accesos,media,si
+El usuario de dirección general no puede ver los archivos compartidos por el equipo de compras. Se solicita atención técnica.,accesos,media,si
+Falta de permisos para consultar el módulo de reportes históricos en el aplicativo de marketing,accesos,media,si
+La aplicación web de sede sur no reconoce el rol asignado al usuario y restringe la pantalla de edición. Se solicita atención técnica.,accesos,media,si
+El usuario de logística no puede ingresar al sistema de gestión documental por error de grupo de seguridad,accesos,media,si
+Desincronización de contraseña entre el equipo local y el servidor de dominio en compras. Se solicita atención técnica.,accesos,media,si
+El gerente de sede norte no tiene permisos de escritura en la carpeta compartida de su proyecto,accesos,media,si
+El usuario de compras no puede ver los archivos compartidos por el equipo de compras,accesos,media,si
+Requerimos modificar los permisos de acceso a la carpeta de presupuestos para el analista de desarrollo,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de logística,accesos,media,no
+Solicito crear un nuevo usuario de red y buzón de correo para el nuevo practicante de sede sur,accesos,media,no
+Solicito acceso temporal a la carpeta de contratos antiguos para el supervisor de auditoría interna,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en departamento jurídico,accesos,media,no
+Solicito habilitar permisos de lectura en el repositorio Git de la empresa para el desarrollador de tesorería,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en sede sur,accesos,media,no
+Solicito enrolar el nuevo teléfono inteligente del director de desarrollo en la aplicación Microsoft Authenticator,accesos,media,no
+Solicito crear un nuevo usuario de red y buzón de correo para el nuevo practicante de soporte técnico,accesos,media,no
+Solicito enrolar el nuevo teléfono inteligente del analista de departamento jurídico en la aplicación Microsoft Authenticator,accesos,media,no
+Solicito crear un nuevo usuario de red y buzón de correo para el nuevo practicante de departamento jurídico,accesos,media,no
+Requerimos modificar los permisos de acceso a la carpeta de presupuestos para el analista de atención al cliente,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de sede sur,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de bodega,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de dirección general,accesos,media,no
+Requerimos modificar los permisos de acceso a la carpeta de presupuestos para el analista de atención al cliente. Se solicita atención técnica.,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de dirección general. Se solicita atención técnica.,accesos,media,no
+Solicito crear un nuevo usuario de red y buzón de correo para el nuevo practicante de atención al cliente,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en ventas,accesos,media,no
+Solicito acceso temporal a la carpeta de contratos antiguos para el consultor de desarrollo,accesos,media,no
+Requerimos deshabilitar los accesos de red y plataformas para un empleado que se retira de recursos humanos,accesos,media,no
+Requerimos modificar los permisos de acceso a la carpeta de presupuestos para el analista de ventas,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de atención al cliente,accesos,media,no
+Solicito crear un nuevo usuario de red y buzón de correo para el nuevo practicante de dirección general,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en control de calidad,accesos,media,no
+Requerimos deshabilitar los accesos de red y plataformas para un empleado que se retira de departamento jurídico,accesos,media,no
+Solicito crear un nuevo usuario de red y buzón de correo para el nuevo practicante de dirección general. Se solicita atención técnica.,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en tesorería,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de departamento jurídico,accesos,media,no
+Solicito acceso temporal a la carpeta de contratos antiguos para el asistente de sede norte,accesos,media,no
+Requerimos modificar los permisos de acceso a la carpeta de presupuestos para el analista de departamento jurídico,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en compras,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de bodega. Se solicita atención técnica.,accesos,media,no
+Requerimos deshabilitar los accesos de red y plataformas para un empleado que se retira de desarrollo,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de sede sur. Se solicita atención técnica.,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en recepción,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de sede norte,accesos,media,no
+Requerimos modificar los permisos de acceso a la carpeta de presupuestos para el analista de planta de producción,accesos,media,no
+Solicito crear un nuevo usuario de red y buzón de correo para el nuevo practicante de sede sur. Se solicita atención técnica.,accesos,media,no
+Pido configurar el reenvío de correos y permisos de buzón por licencia de maternidad en planta de producción,accesos,media,no
+Solicito enrolar el nuevo teléfono inteligente del auxiliar de ventas en la aplicación Microsoft Authenticator,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de logística. Se solicita atención técnica.,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de recursos humanos,accesos,media,no
+Pido restablecer las preguntas de seguridad del portal de autogestión de contraseñas de tesorería,accesos,media,no
+El portal corporativo solicita confirmación de segundo factor cada 2 horas en vez de cada semana en sede norte,accesos,baja,si
+El usuario de planta de producción no puede cambiar su foto de perfil en el directorio corporativo,accesos,baja,si
+La sesión en la aplicación de notas de control de calidad se cierra automáticamente si no se interactúa,accesos,baja,si
+El navegador no guarda automáticamente las credenciales de la plataforma interna de contabilidad,accesos,baja,si
+El nombre de usuario asignado en la aplicación de encuestas de contabilidad tiene un error ortográfico en el apellido,accesos,baja,si
+La sesión en la aplicación de notas de recursos humanos se cierra automáticamente si no se interactúa,accesos,baja,si
+El usuario de call center no puede cambiar su foto de perfil en el directorio corporativo,accesos,baja,si
+La sesión en la aplicación de notas de tesorería se cierra automáticamente si no se interactúa,accesos,baja,si
+El usuario de tesorería no puede cambiar su foto de perfil en el directorio corporativo,accesos,baja,si
+El usuario de ventas no puede cambiar su foto de perfil en el directorio corporativo,accesos,baja,si
+El navegador no guarda automáticamente las credenciales de la plataforma interna de desarrollo,accesos,baja,si
+El usuario de control de calidad no puede cambiar su foto de perfil en el directorio corporativo,accesos,baja,si
+El usuario de recursos humanos no puede cambiar su foto de perfil en el directorio corporativo,accesos,baja,si
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de call center,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de sede sur,accesos,baja,no
+Deseo verificar qué grupos de distribución de correo tengo asignados actualmente en bodega,accesos,baja,no
+Solicito agregar al asistente de contabilidad a la lista de distribución de correo de comunicados generales,accesos,baja,no
+Requiero orientación para configurar la aplicación Authenticator en un segundo dispositivo personal en sede sur,accesos,baja,no
+Deseo verificar qué grupos de distribución de correo tengo asignados actualmente en soporte técnico,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de control de calidad,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de dirección general,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en logística,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en desarrollo,accesos,baja,no
+Solicito agregar al gerente de compras a la lista de distribución de correo de comunicados generales,accesos,baja,no
+Solicito agregar al auditor de logística a la lista de distribución de correo de comunicados generales,accesos,baja,no
+Solicito agregar al auditor de control de calidad a la lista de distribución de correo de comunicados generales,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en tesorería,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en tesorería. Se solicita atención técnica.,accesos,baja,no
+Requiero orientación para configurar la aplicación Authenticator en un segundo dispositivo personal en compras,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de tesorería,accesos,baja,no
+Deseo verificar qué grupos de distribución de correo tengo asignados actualmente en departamento jurídico,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en planta de producción,accesos,baja,no
+Deseo verificar qué grupos de distribución de correo tengo asignados actualmente en recepción,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de departamento jurídico,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en sede norte,accesos,baja,no
+Requiero orientación para configurar la aplicación Authenticator en un segundo dispositivo personal en departamento jurídico,accesos,baja,no
+Solicito agregar al auditor de sede sur a la lista de distribución de correo de comunicados generales,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en ventas,accesos,baja,no
+Deseo verificar qué grupos de distribución de correo tengo asignados actualmente en auditoría interna,accesos,baja,no
+Solicito crear un alias de correo alternativo para el departamento de soporte técnico,accesos,baja,no
+Solicito crear un alias de correo alternativo para el departamento de desarrollo,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de departamento jurídico. Se solicita atención técnica.,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de sede sur. Se solicita atención técnica.,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de compras,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en bodega,accesos,baja,no
+Solicito agregar al especialista de sede sur a la lista de distribución de correo de comunicados generales,accesos,baja,no
+Requiero orientación para configurar la aplicación Authenticator en un segundo dispositivo personal en sede sur. Se solicita atención técnica.,accesos,baja,no
+Pido actualizar el cargo y extensión telefónica del usuario en el directorio activo de soporte técnico,accesos,baja,no
+Solicito crear un alias de correo alternativo para el departamento de marketing,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en recursos humanos,accesos,baja,no
+Solicito crear un alias de correo alternativo para el departamento de recursos humanos,accesos,baja,no
+Solicito eliminar un buzón compartido antiguo que ya no se utiliza en marketing,accesos,baja,no
