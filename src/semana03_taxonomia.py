@@ -440,7 +440,6 @@ def run(
 
     cases = load_cases(data_path)
     results = analyze_cases(cases)
-    write_report(results, report_path)
     write_execution_evidence(results, evidence_path)
     return results
 
@@ -465,7 +464,6 @@ def main() -> int:
         print(f"  Técnica inicial: {result.technique}")
     print(f"\nCasos procesados: {len(results)}")
     print(f"Coincidencias con referencia manual: {len(results) - len(mismatches)}/{len(results)}")
-    print(f"Reporte generado: {args.report}")
     print(f"Evidencia generada: {args.evidence}")
     return 0
 
