@@ -1,230 +1,174 @@
 from pathlib import Path
+import csv
 import pickle
 import sqlite3
 
-import matplotlib.pyplot as plt
 import networkx as nx
-from sklearn.datasets import load_digits
-from sklearn.metrics import accuracy_score
+import numpy as np
+from PIL import Image
+from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 
 
 ROOT = Path(__file__).resolve().parent.parent
 ARTIFACTS = ROOT / "artifacts"
-EVIDENCIAS = ARTIFACTS / "evidencias_soporte"
+DATA_ERRORES = ROOT / "data" / "imagenes_errores"
+CSV_ERRORES = DATA_ERRORES / "etiquetas.csv"
+
 ARTIFACTS.mkdir(parents=True, exist_ok=True)
-EVIDENCIAS.mkdir(parents=True, exist_ok=True)
 
 
-# ---------------------------------------------------------------------
-# 1. RED NEURONAL DE REFERENCIA DE LA SEMANA 8
-# ---------------------------------------------------------------------
-# Se conserva load_digits porque es el dataset suministrado en el material
-# de clase. El repositorio no contiene actualmente un corpus etiquetado
-# de imágenes de soporte TI suficiente para entrenar un clasificador visual
-# del dominio sin fabricar datos.
-X, y = load_digits(return_X_y=True)
+def cargar_dataset_errores(tamano=(32, 32)):
+    """
+    Lee las capturas de errores de TI referenciadas en etiquetas.csv,
+    las estandariza a escala de grises y las escala a 32x32 píxeles (1024 atributos).
+    """
+    X, y, rutas = [], [], []
 
-X_train, X_test, y_train, y_test = train_test_split(
+    if not CSV_ERRORES.exists():
+        raise FileNotFoundError(f"No se encontró el archivo de metadatos: {CSV_ERRORES}")
+
+    with CSV_ERRORES.open("r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for fila in reader:
+            ruta_img = DATA_ERRORES / fila["archivo"]
+            if ruta_img.exists():
+                try:
+                    with Image.open(ruta_img) as img:
+                        # Convertir a escala de grises ('L') y redimensionar
+                        img_gray = img.convert("L").resize(tamano)
+                        # Normalizar valores a [0.0, 1.0] y aplanar a vector 1D
+                        vector = np.array(img_gray, dtype=np.float32).flatten() / 255.0
+                        X.append(vector)
+                        y.append(fila["clase"])
+                        rutas.append(fila["archivo"])
+                except Exception as e:
+                    print(f"Error procesando imagen {ruta_img.name}: {e}")
+            else:
+                print(f"Advertencia: Archivo no encontrado {ruta_img}")
+
+    return np.array(X), np.array(y), rutas
+
+
+# 1. Carga y partición de datos
+X, y, rutas = cargar_dataset_errores(tamano=(32, 32))
+print(f"Total de imágenes cargadas: {len(X)} de 4 categorías de errores TI")
+
+X_train, X_test, y_train, y_test, rutas_train, rutas_test = train_test_split(
     X,
     y,
+    rutas,
     test_size=0.25,
     random_state=42,
     stratify=y,
 )
 
+# 2. Reconocimiento mediante Red Neuronal (MLP)
 model = MLPClassifier(
-    hidden_layer_sizes=(64,),
-    max_iter=400,
+    hidden_layer_sizes=(64, 32),
+    max_iter=500,
     random_state=42,
 )
 model.fit(X_train, y_train)
 
 pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, pred)
-print("Accuracy MLP:", round(accuracy, 4))
 
+print("\n" + "=" * 65)
+print("REPORTE DE CLASIFICACIÓN DETALLADO (Conjunto de Prueba)")
+print("=" * 65)
+print(classification_report(y_test, pred))
+print("=" * 65)
+print(f"Accuracy Global: {round(accuracy * 100, 2)}% ({accuracy_score(y_test, pred, normalize=False)} de {len(y_test)} aciertos)\n")
+
+# Persistencia del modelo entrenado
 with (ARTIFACTS / "modelo_mlp.pkl").open("wb") as file:
     pickle.dump(model, file)
 
 
-# ---------------------------------------------------------------------
-# 2. EVIDENCIAS VISUALES DERIVADAS DE LA SEMANA 7
-# ---------------------------------------------------------------------
-# Estos tres casos son exactamente los utilizados por
-# src/semana07_representaciones.py.
-CASOS_SEMANA07 = [
-    {
-        "equipo_id": "PC-DIRECCION-01",
-        "temperatura_cpu_c": 70.0,
-        "carga_servidor_pct": 0.80,
-        "tasa_errores_min": 2.0,
-        "secuencia_logs": "0000",
-        "estado": "saludable",
-    },
-    {
-        "equipo_id": "WS-DISENO-CAD-03",
-        "temperatura_cpu_c": 72.0,
-        "carga_servidor_pct": 0.85,
-        "tasa_errores_min": 3.0,
-        "secuencia_logs": "1101",
-        "estado": "no_saludable",
-    },
-    {
-        "equipo_id": "SRV-BASE-DATOS-02",
-        "temperatura_cpu_c": 76.5,
-        "carga_servidor_pct": 0.92,
-        "tasa_errores_min": 5.0,
-        "secuencia_logs": "0001",
-        "estado": "no_saludable",
-    },
-]
-
-
-def crear_evidencia_visual(caso: dict) -> str:
-    """Genera una ficha PNG reproducible usando solo datos existentes de Semana 7."""
-    ruta = EVIDENCIAS / f"{caso['equipo_id'].lower()}.png"
-
-    fig, ax = plt.subplots(figsize=(7, 3.2))
-    ax.axis("off")
-    contenido = (
-        f"Equipo: {caso['equipo_id']}\n"
-        f"Temperatura CPU: {caso['temperatura_cpu_c']} C\n"
-        f"Carga CPU/RAM: {caso['carga_servidor_pct'] * 100:.0f}%\n"
-        f"Errores: {caso['tasa_errores_min']}/min\n"
-        f"Secuencia de logs: {caso['secuencia_logs']}\n"
-        f"Estado Semana 7: {caso['estado']}"
-    )
-    ax.text(0.02, 0.95, contenido, va="top", family="monospace", fontsize=12)
-    fig.tight_layout()
-    fig.savefig(ruta, dpi=120, bbox_inches="tight")
-    plt.close(fig)
-
-    return ruta.relative_to(ROOT).as_posix()
-
-
-for caso in CASOS_SEMANA07:
-    caso["ruta_imagen"] = crear_evidencia_visual(caso)
-
-
-# ---------------------------------------------------------------------
-# 3. SQLITE: EVIDENCIA DEL EJERCICIO Y EVIDENCIA DEL PROYECTO
-# ---------------------------------------------------------------------
+# 3. Base de datos SQLite para registrar evidencia y metadatos de imágenes
 with sqlite3.connect(ARTIFACTS / "imagenes.db") as con:
-    # Tabla mínima solicitada en el material de Semana 8.
     con.execute(
         """
-        CREATE TABLE IF NOT EXISTS images(
+        CREATE TABLE IF NOT EXISTS imagenes_errores(
             id INTEGER PRIMARY KEY,
-            label INTEGER,
-            split TEXT
+            archivo TEXT NOT NULL,
+            clase_real TEXT NOT NULL,
+            split TEXT NOT NULL
         )
         """
     )
-    con.execute("DELETE FROM images")
-    con.executemany(
-        "INSERT INTO images(id, label, split) VALUES (?, ?, ?)",
-        [(i, int(y[i]), "dataset") for i in range(20)],
-    )
+    con.execute("DELETE FROM imagenes_errores")
 
-    # Tabla propia del proyecto. No sustituye la tabla de clase:
-    # la complementa con evidencia derivada de Semana 7.
-    con.execute(
-        """
-        CREATE TABLE IF NOT EXISTS evidencias_soporte(
-            id INTEGER PRIMARY KEY,
-            equipo_id TEXT NOT NULL,
-            ruta_imagen TEXT NOT NULL,
-            estado TEXT NOT NULL,
-            temperatura_cpu_c REAL NOT NULL,
-            carga_servidor_pct REAL NOT NULL,
-            tasa_errores_min REAL NOT NULL,
-            secuencia_logs TEXT NOT NULL
-        )
-        """
-    )
-    con.execute("DELETE FROM evidencias_soporte")
+    registros_errores = [
+        (i, rutas_train[i], y_train[i], "train")
+        for i in range(len(rutas_train))
+    ] + [
+        (len(rutas_train) + j, rutas_test[j], y_test[j], "test")
+        for j in range(len(rutas_test))
+    ]
+
     con.executemany(
-        """
-        INSERT INTO evidencias_soporte(
-            id,
-            equipo_id,
-            ruta_imagen,
-            estado,
-            temperatura_cpu_c,
-            carga_servidor_pct,
-            tasa_errores_min,
-            secuencia_logs
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        [
-            (
-                indice,
-                caso["equipo_id"],
-                caso["ruta_imagen"],
-                caso["estado"],
-                caso["temperatura_cpu_c"],
-                caso["carga_servidor_pct"],
-                caso["tasa_errores_min"],
-                caso["secuencia_logs"],
-            )
-            for indice, caso in enumerate(CASOS_SEMANA07, start=1)
-        ],
+        "INSERT INTO imagenes_errores(id, archivo, clase_real, split) VALUES (?, ?, ?, ?)",
+        registros_errores,
     )
     con.commit()
 
-    total_digits = con.execute("SELECT COUNT(*) FROM images").fetchone()[0]
-    total_soporte = con.execute(
-        "SELECT COUNT(*) FROM evidencias_soporte"
-    ).fetchone()[0]
+    total_errores_db = con.execute("SELECT COUNT(*) FROM imagenes_errores").fetchone()[0]
 
-print("Registros load_digits en SQLite:", total_digits)
-print("Evidencias soporte en SQLite:", total_soporte)
+print("Registros de imágenes de errores en SQLite:", total_errores_db)
 
 
-# ---------------------------------------------------------------------
-# 4. ONTOLOGIA BASE DE LA CLASE
-# ---------------------------------------------------------------------
+# 4. Ontología para representar significado y relaciones del dominio TI
 G = nx.DiGraph()
 
+CLASES_ERRORES = [
+    "pantalla_azul_bsod",
+    "red_desconectada",
+    "disco_lleno",
+    "error_aplicacion_crash",
+]
+
+# Definición de clases de errores visuales reconocibles
+for clase in CLASES_ERRORES:
+    G.add_edge("error_visual", clase, rel="tiene_clase")
+
+# Relaciones del modelo sobre los errores
 G.add_edges_from(
     [
-        ("digito", "cero", {"rel": "tiene_clase"}),
-        ("digito", "uno", {"rel": "tiene_clase"}),
-        ("digito", "dos", {"rel": "tiene_clase"}),
-        ("modelo_mlp", "digito", {"rel": "reconoce"}),
-        ("imagen", "digito", {"rel": "representa"}),
-        ("prediccion", "digito", {"rel": "asigna_clase"}),
-        ("modelo_mlp", "prediccion", {"rel": "produce"}),
+        ("modelo_mlp", "error_visual", {"rel": "reconoce"}),
+        ("imagen_error", "error_visual", {"rel": "representa"}),
+        ("prediccion_error", "error_visual", {"rel": "asigna_clase"}),
+        ("modelo_mlp", "prediccion_error", {"rel": "produce"}),
     ]
 )
 
-print("Relaciones de ontologia base:", G.number_of_edges())
+print("Relaciones de ontología base de errores:", G.number_of_edges())
 
+# Integración de un ejemplo concreto de prueba en la ontología
+ejemplo_idx = 0
+ejemplo_archivo = rutas_test[ejemplo_idx]
+clase_real_ejemplo = y_test[ejemplo_idx]
+clase_predicha_ejemplo = str(model.predict([X_test[ejemplo_idx]])[0])
 
-# ---------------------------------------------------------------------
-# 5. ENLACE ENTRE UNA PREDICCION Y LA ONTOLOGIA
-# ---------------------------------------------------------------------
-ejemplo_id = 15
-clase_predicha = int(model.predict([X[ejemplo_id]])[0])
-concepto = f"digito_{clase_predicha}"
+G.add_edge(f"prediccion_{ejemplo_idx}", clase_predicha_ejemplo, rel="asigna_clase")
+G.add_edge(f"imagen_{ejemplo_idx}", f"prediccion_{ejemplo_idx}", rel="genera")
 
-G.add_edge("prediccion_15", concepto, rel="asigna_clase")
-G.add_edge("imagen_15", "prediccion_15", rel="genera")
+print(
+    f"Ejemplo de prueba #{ejemplo_idx}: archivo='{ejemplo_archivo}', real='{clase_real_ejemplo}', predicha='{clase_predicha_ejemplo}'"
+)
 
-print("Ejemplo MLP:", ejemplo_id, clase_predicha, concepto)
-
-
-# ---------------------------------------------------------------------
-# 6. ADAPTACION ONTOLOGICA AL ASISTENTE DE SOPORTE TI
-# ---------------------------------------------------------------------
+# Relaciones del dominio TI (clasificación de tickets y categorías de soporte)
 RELACIONES_PROYECTO = [
-    ("ticket_soporte", "evidencia_visual_ti", {"rel": "puede_incluir"}),
-    ("evidencia_visual_ti", "telemetria_equipo", {"rel": "documenta"}),
-    ("telemetria_equipo", "diagnostico_simbolico", {"rel": "alimenta"}),
-    ("diagnostico_simbolico", "ticket_soporte", {"rel": "puede_generar"}),
+    # Mapeo semántico de los errores visuales a las categorías de soporte
+    ("pantalla_azul_bsod", "hardware", {"rel": "pertenece_a_categoria"}),
+    ("red_desconectada", "red", {"rel": "pertenece_a_categoria"}),
+    ("disco_lleno", "software", {"rel": "pertenece_a_categoria"}),
+    ("error_aplicacion_crash", "software", {"rel": "pertenece_a_categoria"}),
+
+    # Relaciones del ticket de soporte y categorías
+    ("ticket_soporte", "error_visual", {"rel": "puede_adjuntar"}),
     ("ticket_soporte", "categoria_soporte", {"rel": "pertenece_a"}),
     ("categoria_soporte", "hardware", {"rel": "tiene_clase"}),
     ("categoria_soporte", "software", {"rel": "tiene_clase"}),
@@ -234,13 +178,11 @@ RELACIONES_PROYECTO = [
 
 G.add_edges_from(RELACIONES_PROYECTO)
 
-# La exportacion se hace al final para incluir tanto la ontologia base,
-# como la prediccion concreta y las relaciones propias del proyecto.
+# Exportación del grafo completo a GraphML
 nx.write_graphml(G, ARTIFACTS / "ontologia.graphml")
 
-print("Relaciones propias del proyecto:", len(RELACIONES_PROYECTO))
-print("Relaciones de ontologia finales:", G.number_of_edges())
-print("Modelo:", (ARTIFACTS / "modelo_mlp.pkl").relative_to(ROOT))
-print("SQLite:", (ARTIFACTS / "imagenes.db").relative_to(ROOT))
-print("GraphML:", (ARTIFACTS / "ontologia.graphml").relative_to(ROOT))
-print("Evidencias PNG:", len(list(EVIDENCIAS.glob("*.png"))))
+print("Relaciones de integración con soporte TI agregadas:", len(RELACIONES_PROYECTO))
+print("Relaciones de ontología totales en GraphML:", G.number_of_edges())
+print("Modelo guardado:", (ARTIFACTS / "modelo_mlp.pkl").relative_to(ROOT))
+print("Base SQLite guardada:", (ARTIFACTS / "imagenes.db").relative_to(ROOT))
+print("Ontología GraphML guardada:", (ARTIFACTS / "ontologia.graphml").relative_to(ROOT))
