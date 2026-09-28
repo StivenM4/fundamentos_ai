@@ -41,74 +41,7 @@ Se adopta la siguiente estrategia:
 
 ---
 
-## 2. Contexto acumulativo revisado del repositorio
-
-### Semana 01
-
-En la rama `main` revisada no se encontró `reports/semana01.md`. Por lo tanto, este documento no atribuye contenidos a una Semana 01 que no está disponible en el repositorio.
-
-### Semana 02: clasificación supervisada de tickets
-
-El proyecto implementa un pipeline sobre `data/tickets_soporte.csv` para predecir:
-
-- categoría: `hardware`, `software`, `red`, `accesos`;
-- prioridad: `alta`, `media`, `baja`;
-- condición de incidente.
-
-Esta fase establece el triaje inicial del ticket mediante aprendizaje supervisado.
-
-### Semana 03: motor simbólico explicable
-
-El proyecto incorpora reglas y activadores que permiten determinar áreas de IA, conservar los términos que dispararon la decisión y proponer una técnica inicial.
-
-Esta semana aporta explicabilidad y representación simbólica.
-
-### Semana 04: búsqueda heurística y toma de decisiones
-
-A* representa la atención del ticket como un grafo de estados y busca una secuencia de remediación de costo mínimo.
-
-Minimax se conserva como práctica académica independiente, ya que las fallas de infraestructura no representan un adversario racional.
-
-### Semana 05: sistema híbrido de soporte
-
-El proyecto integra reglas expertas, recuperación documental TF-IDF, similitud coseno, una base de conocimiento y clasificación supervisada.
-
-La salida mantiene trazabilidad mediante:
-
-```text
-regla + evidencia + similitud + clase
-```
-
-### Semana 07: representaciones y reconocimiento de estado
-
-Semana 07 introduce:
-
-- representación numérica de telemetría;
-- representación simbólica mediante hechos y reglas;
-- autómata DFA para secuencias de eventos;
-- generación automática de tickets cuando se detecta un estado no saludable.
-
-Los tres casos definidos en esa semana se reutilizan aquí sin modificar sus valores:
-
-| Equipo | Temperatura CPU | Carga CPU/RAM | Errores/min | Logs | Estado Semana 07 |
-|---|---:|---:|---:|---|---|
-| `PC-DIRECCION-01` | 70.0 °C | 80 % | 2.0 | `0000` | `saludable` |
-| `WS-DISENO-CAD-03` | 72.0 °C | 85 % | 3.0 | `1101` | `no_saludable` |
-| `SRV-BASE-DATOS-02` | 76.5 °C | 92 % | 5.0 | `0001` | `no_saludable` |
-
-Semana 08 agrega ahora una nueva capa:
-
-```text
-RECONOCER
-+
-REGISTRAR
-+
-INTERPRETAR
-```
-
----
-
-## 3. Objetivos de Semana 08 dentro del proyecto
+## 2. Objetivos de Semana 08 dentro del proyecto
 
 Al finalizar esta práctica el repositorio debe poder demostrar:
 
@@ -124,7 +57,7 @@ Al finalizar esta práctica el repositorio debe poder demostrar:
 
 ---
 
-## 4. Dependencias
+## 3. Dependencias
 
 El script utiliza:
 
@@ -150,9 +83,9 @@ Después debe agregarse a `requirements.txt` la versión **realmente instalada**
 
 ---
 
-## 5. Arquitectura implementada
+## 4. Arquitectura implementada
 
-La práctica mantiene dos flujos diferenciados para no confundir una demostración académica con una capacidad que el proyecto todavía no posee.
+La práctica separa dos partes para que sea claro qué demuestra la clase y qué se aplica realmente al proyecto.
 
 ### 5.1. Flujo neuronal reproducible
 
@@ -188,11 +121,11 @@ ontología de soporte TI
 evidencia trazable
 ```
 
-La segunda ruta no utiliza la MLP para diagnosticar la telemetría. Las fichas PNG son evidencia visual generada a partir de datos existentes, no entradas de entrenamiento del clasificador neuronal.
+La parte de soporte TI no usa la MLP para diagnosticar la telemetría. Las imágenes PNG solo sirven como evidencia visual de los datos de Semana 07; no se usan para entrenar la red neuronal.
 
 ---
 
-## 6. Diseño de la base SQLite
+## 5. Diseño de la base SQLite
 
 El archivo generado es:
 
@@ -229,11 +162,11 @@ Es la adaptación propia del proyecto:
 | `tasa_errores_min` | REAL | Errores por minuto |
 | `secuencia_logs` | TEXT | Secuencia utilizada por el DFA |
 
-Esta tabla mantiene la evidencia dentro del contexto del sistema de soporte sin inventar nuevas observaciones.
+Esta tabla conserva evidencia del sistema de soporte usando únicamente datos que ya existen en el proyecto.
 
 ---
 
-## 7. Ontología
+## 6. Ontología
 
 ### 7.1. Ontología base
 
@@ -265,7 +198,7 @@ Con la semilla y configuración suministradas por la práctica, el ejemplo 15 es
 
 ### 7.3. Relaciones propias del Gestor de Tickets
 
-La ontología añade nueve relaciones específicas del dominio:
+La ontología añade nueve relaciones propias del gestor de tickets:
 
 | Origen | Relación | Destino | Lectura natural |
 |---|---|---|---|
@@ -283,269 +216,7 @@ Estas clases ya existen en la formulación acumulativa del proyecto desde Semana
 
 ---
 
-## 8. Código ejecutable
-
-Crear:
-
-```text
-src/semana08_red_ontologia.py
-```
-
-con el siguiente contenido:
-
-```python
-from pathlib import Path
-import pickle
-import sqlite3
-
-import matplotlib.pyplot as plt
-import networkx as nx
-from sklearn.datasets import load_digits
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
-
-
-ROOT = Path(__file__).resolve().parent.parent
-ARTIFACTS = ROOT / "artifacts"
-EVIDENCIAS = ARTIFACTS / "evidencias_soporte"
-ARTIFACTS.mkdir(parents=True, exist_ok=True)
-EVIDENCIAS.mkdir(parents=True, exist_ok=True)
-
-
-# ---------------------------------------------------------------------
-# 1. RED NEURONAL DE REFERENCIA DE LA SEMANA 8
-# ---------------------------------------------------------------------
-# Se conserva load_digits porque es el dataset suministrado en el material
-# de clase. El repositorio no contiene actualmente un corpus etiquetado
-# de imágenes de soporte TI suficiente para entrenar un clasificador visual
-# del dominio sin fabricar datos.
-X, y = load_digits(return_X_y=True)
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.25,
-    random_state=42,
-    stratify=y,
-)
-
-model = MLPClassifier(
-    hidden_layer_sizes=(64,),
-    max_iter=400,
-    random_state=42,
-)
-model.fit(X_train, y_train)
-
-pred = model.predict(X_test)
-accuracy = accuracy_score(y_test, pred)
-print("Accuracy MLP:", round(accuracy, 4))
-
-with (ARTIFACTS / "modelo_mlp.pkl").open("wb") as file:
-    pickle.dump(model, file)
-
-
-# ---------------------------------------------------------------------
-# 2. EVIDENCIAS VISUALES DERIVADAS DE LA SEMANA 7
-# ---------------------------------------------------------------------
-# Estos tres casos son exactamente los utilizados por
-# src/semana07_representaciones.py.
-CASOS_SEMANA07 = [
-    {
-        "equipo_id": "PC-DIRECCION-01",
-        "temperatura_cpu_c": 70.0,
-        "carga_servidor_pct": 0.80,
-        "tasa_errores_min": 2.0,
-        "secuencia_logs": "0000",
-        "estado": "saludable",
-    },
-    {
-        "equipo_id": "WS-DISENO-CAD-03",
-        "temperatura_cpu_c": 72.0,
-        "carga_servidor_pct": 0.85,
-        "tasa_errores_min": 3.0,
-        "secuencia_logs": "1101",
-        "estado": "no_saludable",
-    },
-    {
-        "equipo_id": "SRV-BASE-DATOS-02",
-        "temperatura_cpu_c": 76.5,
-        "carga_servidor_pct": 0.92,
-        "tasa_errores_min": 5.0,
-        "secuencia_logs": "0001",
-        "estado": "no_saludable",
-    },
-]
-
-
-def crear_evidencia_visual(caso: dict) -> str:
-    """Genera una ficha PNG reproducible usando solo datos existentes de Semana 7."""
-    ruta = EVIDENCIAS / f"{caso['equipo_id'].lower()}.png"
-
-    fig, ax = plt.subplots(figsize=(7, 3.2))
-    ax.axis("off")
-    contenido = (
-        f"Equipo: {caso['equipo_id']}\n"
-        f"Temperatura CPU: {caso['temperatura_cpu_c']} C\n"
-        f"Carga CPU/RAM: {caso['carga_servidor_pct'] * 100:.0f}%\n"
-        f"Errores: {caso['tasa_errores_min']}/min\n"
-        f"Secuencia de logs: {caso['secuencia_logs']}\n"
-        f"Estado Semana 7: {caso['estado']}"
-    )
-    ax.text(0.02, 0.95, contenido, va="top", family="monospace", fontsize=12)
-    fig.tight_layout()
-    fig.savefig(ruta, dpi=120, bbox_inches="tight")
-    plt.close(fig)
-
-    return ruta.relative_to(ROOT).as_posix()
-
-
-for caso in CASOS_SEMANA07:
-    caso["ruta_imagen"] = crear_evidencia_visual(caso)
-
-
-# ---------------------------------------------------------------------
-# 3. SQLITE: EVIDENCIA DEL EJERCICIO Y EVIDENCIA DEL PROYECTO
-# ---------------------------------------------------------------------
-with sqlite3.connect(ARTIFACTS / "imagenes.db") as con:
-    # Tabla mínima solicitada en el material de Semana 8.
-    con.execute(
-        """
-        CREATE TABLE IF NOT EXISTS images(
-            id INTEGER PRIMARY KEY,
-            label INTEGER,
-            split TEXT
-        )
-        """
-    )
-    con.execute("DELETE FROM images")
-    con.executemany(
-        "INSERT INTO images(id, label, split) VALUES (?, ?, ?)",
-        [(i, int(y[i]), "dataset") for i in range(20)],
-    )
-
-    # Tabla propia del proyecto. No sustituye la tabla de clase:
-    # la complementa con evidencia derivada de Semana 7.
-    con.execute(
-        """
-        CREATE TABLE IF NOT EXISTS evidencias_soporte(
-            id INTEGER PRIMARY KEY,
-            equipo_id TEXT NOT NULL,
-            ruta_imagen TEXT NOT NULL,
-            estado TEXT NOT NULL,
-            temperatura_cpu_c REAL NOT NULL,
-            carga_servidor_pct REAL NOT NULL,
-            tasa_errores_min REAL NOT NULL,
-            secuencia_logs TEXT NOT NULL
-        )
-        """
-    )
-    con.execute("DELETE FROM evidencias_soporte")
-    con.executemany(
-        """
-        INSERT INTO evidencias_soporte(
-            id,
-            equipo_id,
-            ruta_imagen,
-            estado,
-            temperatura_cpu_c,
-            carga_servidor_pct,
-            tasa_errores_min,
-            secuencia_logs
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        [
-            (
-                indice,
-                caso["equipo_id"],
-                caso["ruta_imagen"],
-                caso["estado"],
-                caso["temperatura_cpu_c"],
-                caso["carga_servidor_pct"],
-                caso["tasa_errores_min"],
-                caso["secuencia_logs"],
-            )
-            for indice, caso in enumerate(CASOS_SEMANA07, start=1)
-        ],
-    )
-    con.commit()
-
-    total_digits = con.execute("SELECT COUNT(*) FROM images").fetchone()[0]
-    total_soporte = con.execute(
-        "SELECT COUNT(*) FROM evidencias_soporte"
-    ).fetchone()[0]
-
-print("Registros load_digits en SQLite:", total_digits)
-print("Evidencias soporte en SQLite:", total_soporte)
-
-
-# ---------------------------------------------------------------------
-# 4. ONTOLOGIA BASE DE LA CLASE
-# ---------------------------------------------------------------------
-G = nx.DiGraph()
-
-G.add_edges_from(
-    [
-        ("digito", "cero", {"rel": "tiene_clase"}),
-        ("digito", "uno", {"rel": "tiene_clase"}),
-        ("digito", "dos", {"rel": "tiene_clase"}),
-        ("modelo_mlp", "digito", {"rel": "reconoce"}),
-        ("imagen", "digito", {"rel": "representa"}),
-        ("prediccion", "digito", {"rel": "asigna_clase"}),
-        ("modelo_mlp", "prediccion", {"rel": "produce"}),
-    ]
-)
-
-print("Relaciones de ontologia base:", G.number_of_edges())
-
-
-# ---------------------------------------------------------------------
-# 5. ENLACE ENTRE UNA PREDICCION Y LA ONTOLOGIA
-# ---------------------------------------------------------------------
-ejemplo_id = 15
-clase_predicha = int(model.predict([X[ejemplo_id]])[0])
-concepto = f"digito_{clase_predicha}"
-
-G.add_edge("prediccion_15", concepto, rel="asigna_clase")
-G.add_edge("imagen_15", "prediccion_15", rel="genera")
-
-print("Ejemplo MLP:", ejemplo_id, clase_predicha, concepto)
-
-
-# ---------------------------------------------------------------------
-# 6. ADAPTACION ONTOLOGICA AL ASISTENTE DE SOPORTE TI
-# ---------------------------------------------------------------------
-RELACIONES_PROYECTO = [
-    ("ticket_soporte", "evidencia_visual_ti", {"rel": "puede_incluir"}),
-    ("evidencia_visual_ti", "telemetria_equipo", {"rel": "documenta"}),
-    ("telemetria_equipo", "diagnostico_simbolico", {"rel": "alimenta"}),
-    ("diagnostico_simbolico", "ticket_soporte", {"rel": "puede_generar"}),
-    ("ticket_soporte", "categoria_soporte", {"rel": "pertenece_a"}),
-    ("categoria_soporte", "hardware", {"rel": "tiene_clase"}),
-    ("categoria_soporte", "software", {"rel": "tiene_clase"}),
-    ("categoria_soporte", "red", {"rel": "tiene_clase"}),
-    ("categoria_soporte", "accesos", {"rel": "tiene_clase"}),
-]
-
-G.add_edges_from(RELACIONES_PROYECTO)
-
-# La exportacion se hace al final para incluir tanto la ontologia base,
-# como la prediccion concreta y las relaciones propias del proyecto.
-nx.write_graphml(G, ARTIFACTS / "ontologia.graphml")
-
-print("Relaciones propias del proyecto:", len(RELACIONES_PROYECTO))
-print("Relaciones de ontologia finales:", G.number_of_edges())
-print("Modelo:", (ARTIFACTS / "modelo_mlp.pkl").relative_to(ROOT))
-print("SQLite:", (ARTIFACTS / "imagenes.db").relative_to(ROOT))
-print("GraphML:", (ARTIFACTS / "ontologia.graphml").relative_to(ROOT))
-print("Evidencias PNG:", len(list(EVIDENCIAS.glob("*.png"))))
-
-```
-
----
-
-## 9. Ejecución
+## 7. Ejecución
 
 Desde la raíz del repositorio:
 
@@ -588,7 +259,7 @@ Este resultado corresponde al experimento de reconocimiento de dígitos y **no d
 
 ---
 
-## 10. Artefactos generados
+## 8. Artefactos generados
 
 Después de ejecutar el script deben existir:
 
@@ -634,7 +305,7 @@ Contiene tres fichas generadas directamente desde los casos de Semana 07.
 
 ---
 
-## 11. Corrección aplicada frente al orden del ejemplo de clase
+## 9. Corrección aplicada frente al orden del ejemplo de clase
 
 En el ejemplo explicado en Semana 08, el archivo GraphML puede exportarse antes de agregar las relaciones:
 
@@ -657,7 +328,7 @@ Así, `ontologia.graphml` representa realmente el estado final del grafo.
 
 ---
 
-## 12. Validación de funcionamiento
+## 10. Validación de funcionamiento
 
 El código fue verificado con las siguientes condiciones:
 
@@ -678,7 +349,7 @@ El código fue verificado con las siguientes condiciones:
 
 ---
 
-## 13. Relación con las semanas anteriores
+## 11. Relación con las semanas anteriores
 
 La Semana 08 no reemplaza las capacidades desarrolladas anteriormente.
 
@@ -712,11 +383,11 @@ ontología
 → predicción demostrable + registro + significado
 ```
 
-La evolución relevante es que el proyecto deja de limitarse a generar una salida y empieza a conservar evidencia estructurada y relaciones semánticas que pueden ser auditadas.
+La idea principal es que el proyecto ya no solo entrega un resultado: también guarda evidencia y explica cómo se relaciona esa información dentro del sistema.
 
 ---
 
-## 14. Limitaciones
+## 12. Limitaciones
 
 ### 14.1. La MLP todavía no reconoce imágenes de incidentes TI
 
@@ -758,7 +429,7 @@ Solo después tendría sentido sustituir `load_digits` por imágenes reales del 
 
 ---
 
-## 15. Conclusiones
+## 13. Conclusiones
 
 1. La Semana 08 demuestra correctamente el principio **modelo reconoce, base registra y ontología interpreta**.
 2. La red neuronal se mantiene sobre el dataset controlado establecido por la clase, evitando atribuirle capacidades que el proyecto todavía no posee.
@@ -768,55 +439,3 @@ Solo después tendría sentido sustituir `load_digits` por imágenes reales del 
 6. La implementación conserva la continuidad del proyecto sin crear datos de producción inexistentes.
 
 ---
-
-## 16. Estructura propuesta del repositorio después de Semana 08
-
-```text
-fundamentos_ai/
-├── artifacts/
-│   ├── modelo_mlp.pkl
-│   ├── imagenes.db
-│   ├── ontologia.graphml
-│   └── evidencias_soporte/
-│       ├── pc-direccion-01.png
-│       ├── ws-diseno-cad-03.png
-│       └── srv-base-datos-02.png
-├── reports/
-│   └── semana08.md
-├── src/
-│   └── semana08_red_ontologia.py
-└── requirements.txt
-```
-
----
-
-## 17. Commit sugerido por la guía
-
-Después de verificar ejecución y dependencias:
-
-```bash
-git add .
-git commit -m "semana08-representaciones"
-git status
-```
-
-Antes del commit debe comprobarse que `networkx` quedó registrado en `requirements.txt`.
-
----
-
-## 18. Checklist de entrega
-
-- [x] MLP implementada.
-- [x] División entrenamiento/prueba reproducible.
-- [x] Accuracy visible.
-- [x] Modelo persistido con `pickle`.
-- [x] SQLite generado.
-- [x] Metadatos de imágenes registrados.
-- [x] Evidencia propia del proyecto incorporada.
-- [x] Ontología base construida.
-- [x] Más de cinco relaciones propias del dominio.
-- [x] Predicción concreta enlazada con la ontología.
-- [x] GraphML exportado después de completar el grafo.
-- [x] Limitaciones identificadas.
-- [x] Código ejecutado y validado.
-- [x] Integración coherente con el gestor de tickets.
