@@ -1,441 +1,809 @@
 # Semana 08: Representaciones del reconocimiento aplicadas al Gestor de Tickets de Soporte TI
 
-## 1. Alcance técnico y criterio de integración
+## 1. Alcance de la práctica
 
-La Semana 08 estudia tres piezas que deben trabajar de forma complementaria:
+En la Semana 08 se integran tres elementos principales:
 
-1. **Reconocimiento mediante redes neuronales artificiales.**
-2. **Persistencia de imágenes y metadatos en SQLite.**
-3. **Ontologías para representar conceptos y relaciones con significado.**
+1. **Una red neuronal artificial**, encargada de reconocer imágenes de errores de TI.
+2. **Una base de datos SQLite**, utilizada para guardar información de las imágenes usadas en el entrenamiento y en las pruebas.
+3. **Una ontología representada como grafo**, que permite relacionar los errores reconocidos con conceptos del sistema de soporte técnico.
 
-La idea central es que una predicción aislada no es suficiente. El sistema debe poder conservar evidencia y asociar esa evidencia con conceptos comprensibles dentro del dominio.
+La idea principal es que el sistema no se limite a decir qué error cree que aparece en una imagen. También debe poder guardar evidencia de los datos utilizados y relacionar el resultado con el dominio del proyecto.
 
-El flujo conceptual de la semana es:
-
-```text
-ENTRADA
-  ↓
-MODELO
-  ↓
-PREDICCIÓN
-  ↓
-EVIDENCIA PERSISTENTE
-  ↓
-SIGNIFICADO / ONTOLOGÍA
-```
-
-### Decisión metodológica para este proyecto
-
-El repositorio actual está orientado a un **Asistente de Soporte TI**, funcionalmente utilizado como gestor inteligente de tickets. Sin embargo, en el estado actual del proyecto **no existe un corpus etiquetado de capturas de pantalla, fotografías de hardware o imágenes de incidentes TI suficiente para entrenar de manera válida una red neuronal visual propia del dominio**.
-
-Por esta razón, no se fabricará un dataset de imágenes de soporte ni se afirmará que el modelo reconoce fallas visuales reales.
-
-Se adopta la siguiente estrategia:
-
-- La **MLP** se entrena con `load_digits`, exactamente como plantea el material de Semana 08, para demostrar de manera reproducible el funcionamiento de una red neuronal aplicada al reconocimiento de imágenes.
-- La **persistencia de evidencia** se adapta al proyecto utilizando exclusivamente los tres casos de telemetría ya definidos en Semana 07.
-- A partir de esos casos se generan fichas PNG reproducibles, que funcionan como evidencia visual del estado de cada equipo.
-- SQLite conserva tanto el ejercicio base de imágenes como los metadatos propios de soporte TI.
-- La ontología conserva las relaciones base de la clase y añade relaciones específicas del gestor de tickets.
-- No se conecta falsamente la MLP de dígitos con una predicción de hardware, software, red o accesos. Esa adaptación requerirá posteriormente un conjunto de imágenes TI etiquetado.
-
----
-
-## 2. Objetivos de Semana 08 dentro del proyecto
-
-Al finalizar esta práctica el repositorio debe poder demostrar:
-
-1. Entrenamiento y validación reproducible de una red neuronal MLP.
-2. Persistencia del modelo entrenado.
-3. Creación de una base SQLite de imágenes y metadatos.
-4. Persistencia de evidencia visual derivada de la telemetría de Semana 07.
-5. Construcción de una ontología en un grafo dirigido.
-6. Asociación entre una imagen de prueba, una predicción y un concepto.
-7. Inclusión de conceptos y relaciones propias del dominio de soporte TI.
-8. Exportación completa de la ontología a GraphML.
-9. Generación reproducible de todos los artefactos desde un único script.
-
----
-
-## 3. Dependencias
-
-El script utiliza:
-
-```python
-pickle
-sqlite3
-matplotlib
-networkx
-scikit-learn
-```
-
-`pickle` y `sqlite3` pertenecen a la biblioteca estándar de Python.
-
-El `requirements.txt` actual del repositorio ya contiene `matplotlib` y `scikit-learn`, pero debe verificarse e incorporar `networkx` antes del commit de Semana 08.
-
-Desde el entorno virtual del proyecto:
-
-```bash
-python3 -m pip install networkx
-```
-
-Después debe agregarse a `requirements.txt` la versión **realmente instalada** en el entorno. No se fija una versión arbitraria en este reporte.
-
----
-
-## 4. Arquitectura implementada
-
-La práctica separa dos partes para que sea claro qué demuestra la clase y qué se aplica realmente al proyecto.
-
-### 5.1. Flujo neuronal reproducible
+El flujo general es:
 
 ```text
-load_digits
-   ↓
-imágenes 8 x 8
-   ↓
-64 valores numéricos
-   ↓
-MLPClassifier
-   ↓
-predicción 0..9
-   ↓
-accuracy
-   ↓
-modelo_mlp.pkl
+IMAGEN DE ERROR TI
+        ↓
+PREPARACIÓN DE LA IMAGEN
+        ↓
+RED NEURONAL MLP
+        ↓
+CLASE PREDICHA
+        ↓
+REGISTRO EN SQLITE
+        ↓
+RELACIONES EN LA ONTOLOGÍA
+        ↓
+INTEGRACIÓN CON SOPORTE TI
 ```
 
-### 5.2. Flujo de evidencia propio del proyecto
-
-```text
-CASOS SEMANA 07
-   ↓
-telemetría + logs + estado
-   ↓
-ficha visual PNG
-   ↓
-SQLite
-   ↓
-ontología de soporte TI
-   ↓
-evidencia trazable
-```
-
-La parte de soporte TI no usa la MLP para diagnosticar la telemetría. Las imágenes PNG solo sirven como evidencia visual de los datos de Semana 07; no se usan para entrenar la red neuronal.
+A diferencia de una práctica genérica con dígitos, esta implementación trabaja directamente con imágenes relacionadas con el proyecto de soporte TI.
 
 ---
 
-## 5. Diseño de la base SQLite
+## 2. Objetivos de la Semana 08
 
-El archivo generado es:
+Con esta práctica se busca:
+
+1. Cargar un conjunto de imágenes de errores de TI.
+2. Preparar las imágenes para que puedan ser procesadas por una red neuronal.
+3. Entrenar una red neuronal MLP para clasificar cuatro tipos de errores.
+4. Separar los datos entre entrenamiento y prueba.
+5. Evaluar las predicciones realizadas por el modelo.
+6. Guardar el modelo entrenado para poder reutilizarlo.
+7. Registrar en SQLite las imágenes utilizadas y su clase real.
+8. Construir una ontología sencilla con conceptos relacionados con soporte TI.
+9. Relacionar los errores visuales con las categorías utilizadas por el Gestor de Tickets.
+10. Exportar toda la estructura de relaciones a un archivo GraphML.
+
+---
+
+## 3. Datos utilizados
+
+Las imágenes se encuentran dentro de:
+
+```text
+data/imagenes_errores/
+```
+
+y el archivo:
+
+```text
+data/imagenes_errores/etiquetas.csv
+```
+
+indica qué archivo pertenece a cada clase.
+
+El programa cargó correctamente:
+
+```text
+160 imágenes
+```
+
+distribuidas en cuatro categorías:
+
+```text
+pantalla_azul_bsod
+red_desconectada
+disco_lleno
+error_aplicacion_crash
+```
+
+Estas clases representan errores visuales que pueden aparecer durante actividades de soporte técnico.
+
+### Preparación de cada imagen
+
+Antes de utilizar una imagen, el programa realiza tres pasos:
+
+```text
+Imagen original
+      ↓
+Escala de grises
+      ↓
+32 x 32 píxeles
+      ↓
+1024 valores numéricos
+```
+
+Cada imagen se convierte a escala de grises y después se redimensiona a `32 x 32`.
+
+Como:
+
+```text
+32 × 32 = 1024
+```
+
+cada imagen termina representada por 1024 números.
+
+Después, los valores de los píxeles se dividen entre `255.0`, de modo que queden aproximadamente entre:
+
+```text
+0.0 y 1.0
+```
+
+Esto permite que la red neuronal trabaje con valores más uniformes.
+
+---
+
+## 4. División entre entrenamiento y prueba
+
+El código utiliza:
+
+```text
+75 % para entrenamiento
+25 % para prueba
+```
+
+Como existen 160 imágenes:
+
+```text
+120 imágenes → entrenamiento
+40 imágenes  → prueba
+```
+
+El conjunto de entrenamiento sirve para que la red neuronal aprenda patrones.
+
+El conjunto de prueba se reserva para comprobar cómo responde el modelo ante imágenes que no utilizó directamente durante el entrenamiento.
+
+Además, se utiliza una división estratificada, lo que ayuda a conservar una proporción similar de las cuatro clases en ambos grupos.
+
+Conceptualmente:
+
+```text
+160 imágenes
+      │
+      ├── 120 → aprender
+      │
+      └── 40  → comprobar
+```
+
+---
+
+## 5. Reconocimiento mediante la red neuronal MLP
+
+El modelo utilizado es un `MLPClassifier`.
+
+La configuración utilizada contiene dos capas ocultas:
+
+```text
+Entrada
+1024 valores
+     ↓
+64 neuronas
+     ↓
+32 neuronas
+     ↓
+Clase predicha
+```
+
+Las cuatro posibles salidas son:
+
+```text
+pantalla_azul_bsod
+red_desconectada
+disco_lleno
+error_aplicacion_crash
+```
+
+La red recibe los valores de los píxeles e intenta encontrar patrones que permitan diferenciar un tipo de error de otro.
+
+El entrenamiento se realiza con las 120 imágenes del grupo de entrenamiento.
+
+Después, el modelo intenta clasificar las 40 imágenes reservadas para prueba.
+
+El script también genera un reporte de clasificación y calcula el accuracy global. En los resultados suministrados para este informe no se incluyó el valor final del accuracy, por lo tanto no se registra una cifra que no haya sido obtenida de la ejecución real.
+
+---
+
+## 6. Ejemplo real de una predicción
+
+Durante la ejecución se obtuvo:
+
+```text
+Ejemplo de prueba #0:
+archivo='red_desconectada/red_desconectada_024.png'
+real='red_desconectada'
+predicha='error_aplicacion_crash'
+```
+
+Este resultado debe interpretarse de la siguiente manera:
+
+```text
+Archivo analizado:
+red_desconectada_024.png
+
+Clase correcta:
+red_desconectada
+
+Predicción del modelo:
+error_aplicacion_crash
+```
+
+En este caso específico la red neuronal **se equivocó**.
+
+La imagen realmente pertenece a:
+
+```text
+red_desconectada
+```
+
+pero el modelo la clasificó como:
+
+```text
+error_aplicacion_crash
+```
+
+Esto es importante porque una red neuronal no garantiza que todas las predicciones sean correctas.
+
+El error también sirve como evidencia para analizar posteriormente qué clases está confundiendo el modelo.
+
+Una sola predicción equivocada no permite determinar por sí sola si el modelo funciona bien o mal. Para eso se debe revisar el accuracy general y el reporte de clasificación completo que imprime el programa.
+
+---
+
+## 7. Base de datos SQLite
+
+El programa genera:
 
 ```text
 artifacts/imagenes.db
 ```
 
-Se crean dos tablas.
+Dentro de esta base se crea la tabla:
 
-### 6.1. Tabla `images`
+```text
+imagenes_errores
+```
 
-Conserva la estructura mínima del ejercicio base:
+con los siguientes campos:
 
-| Campo | Tipo | Uso |
-|---|---|---|
-| `id` | INTEGER | Identificador del ejemplo |
-| `label` | INTEGER | Etiqueta real del dígito |
-| `split` | TEXT | Valor `dataset`, siguiendo el ejercicio de clase |
+| Campo | Significado |
+|---|---|
+| `id` | Identificador del registro |
+| `archivo` | Ruta de la imagen |
+| `clase_real` | Tipo de error correcto |
+| `split` | Indica si la imagen pertenece a entrenamiento o prueba |
 
-Se registran los primeros 20 ejemplos de `load_digits`.
+La ejecución mostró:
 
-### 6.2. Tabla `evidencias_soporte`
+```text
+Registros de imágenes de errores en SQLite: 160
+```
 
-Es la adaptación propia del proyecto:
+Esto significa que las 160 imágenes cargadas quedaron registradas dentro de la base.
 
-| Campo | Tipo | Significado |
-|---|---|---|
-| `id` | INTEGER | Identificador interno |
-| `equipo_id` | TEXT | Equipo analizado |
-| `ruta_imagen` | TEXT | Ruta de la ficha visual generada |
-| `estado` | TEXT | `saludable` o `no_saludable` |
-| `temperatura_cpu_c` | REAL | Temperatura usada en Semana 07 |
-| `carga_servidor_pct` | REAL | Carga usada en Semana 07 |
-| `tasa_errores_min` | REAL | Errores por minuto |
-| `secuencia_logs` | TEXT | Secuencia utilizada por el DFA |
+Los registros permiten saber qué imágenes participaron en el ejercicio y en qué grupo fueron utilizadas.
 
-Esta tabla conserva evidencia del sistema de soporte usando únicamente datos que ya existen en el proyecto.
+Por ejemplo:
+
+```text
+archivo                     clase_real          split
+----------------------------------------------------------------
+...png                       red_desconectada    train
+...png                       disco_lleno         test
+```
+
+SQLite no reemplaza a la red neuronal.
+
+Su función principal en esta práctica es **guardar evidencia y facilitar la trazabilidad**.
+
+La idea puede resumirse así:
+
+```text
+MODELO
+reconoce
+
+BASE DE DATOS
+registra
+```
 
 ---
 
-## 6. Ontología
+## 8. Ontología de errores de TI
 
-### 7.1. Ontología base
+La ontología permite expresar las relaciones existentes entre los conceptos del proyecto.
 
-Se conservan las siete relaciones del ejercicio de clase:
+En esta práctica se utiliza un grafo dirigido creado con NetworkX.
 
-```text
-digito → tiene_clase → cero
-digito → tiene_clase → uno
-digito → tiene_clase → dos
-modelo_mlp → reconoce → digito
-imagen → representa → digito
-prediccion → asigna_clase → digito
-modelo_mlp → produce → prediccion
-```
-
-### 7.2. Integración de una predicción concreta
-
-Para el ejemplo `15`:
+Una relación puede leerse de esta forma:
 
 ```text
-imagen_15
-   ↓ genera
-prediccion_15
-   ↓ asigna_clase
-digito_5
+ORIGEN → RELACIÓN → DESTINO
 ```
 
-Con la semilla y configuración suministradas por la práctica, el ejemplo 15 es reconocido como clase `5`.
+Por ejemplo:
 
-### 7.3. Relaciones propias del Gestor de Tickets
+```text
+modelo_mlp → reconoce → error_visual
+```
 
-La ontología añade nueve relaciones propias del gestor de tickets:
+se puede leer como:
 
-| Origen | Relación | Destino | Lectura natural |
-|---|---|---|---|
-| `ticket_soporte` | `puede_incluir` | `evidencia_visual_ti` | Un ticket de soporte puede incluir evidencia visual. |
-| `evidencia_visual_ti` | `documenta` | `telemetria_equipo` | La evidencia visual documenta la telemetría del equipo. |
-| `telemetria_equipo` | `alimenta` | `diagnostico_simbolico` | La telemetría alimenta el diagnóstico simbólico. |
-| `diagnostico_simbolico` | `puede_generar` | `ticket_soporte` | Un diagnóstico puede generar un ticket de soporte. |
-| `ticket_soporte` | `pertenece_a` | `categoria_soporte` | El ticket pertenece a una categoría de soporte. |
-| `categoria_soporte` | `tiene_clase` | `hardware` | Hardware es una categoría del proyecto. |
-| `categoria_soporte` | `tiene_clase` | `software` | Software es una categoría del proyecto. |
-| `categoria_soporte` | `tiene_clase` | `red` | Red es una categoría del proyecto. |
-| `categoria_soporte` | `tiene_clase` | `accesos` | Accesos es una categoría del proyecto. |
+> El modelo MLP reconoce errores visuales.
 
-Estas clases ya existen en la formulación acumulativa del proyecto desde Semana 02.
+La finalidad es que las conexiones tengan un significado comprensible y no sean solamente palabras unidas.
 
 ---
 
-## 7. Ejecución
+## 9. Relaciones de ontología base
 
-Desde la raíz del repositorio:
-
-```bash
-source .venv/bin/activate
-python3 src/semana08_red_ontologia.py
-```
-
-La ejecución validada del código anterior produce:
+El resultado obtenido fue:
 
 ```text
-Accuracy MLP: 0.9622
-Registros load_digits en SQLite: 20
-Evidencias soporte en SQLite: 3
-Relaciones de ontologia base: 7
-Ejemplo MLP: 15 5 digito_5
-Relaciones propias del proyecto: 9
-Relaciones de ontologia finales: 18
-Modelo: artifacts/modelo_mlp.pkl
-SQLite: artifacts/imagenes.db
-GraphML: artifacts/ontologia.graphml
-Evidencias PNG: 3
+Relaciones de ontología base de errores: 8
 ```
 
-El valor:
+Estas ocho relaciones se forman de la siguiente manera.
+
+### Cuatro relaciones para las clases de errores
 
 ```text
-Accuracy MLP: 0.9622
+error_visual → tiene_clase → pantalla_azul_bsod
+error_visual → tiene_clase → red_desconectada
+error_visual → tiene_clase → disco_lleno
+error_visual → tiene_clase → error_aplicacion_crash
 ```
 
-equivale a aproximadamente:
+### Cuatro relaciones relacionadas con el modelo
 
 ```text
-96.22 %
+modelo_mlp → reconoce → error_visual
+imagen_error → representa → error_visual
+prediccion_error → asigna_clase → error_visual
+modelo_mlp → produce → prediccion_error
 ```
 
-de predicciones correctas sobre el conjunto de prueba de `load_digits`.
+Por eso:
 
-Este resultado corresponde al experimento de reconocimiento de dígitos y **no debe interpretarse como precisión de diagnóstico del gestor de tickets**.
+```text
+4 relaciones de clases
++
+4 relaciones del funcionamiento del modelo
+=
+8 relaciones base
+```
 
 ---
 
-## 8. Artefactos generados
+## 10. Integración de una predicción concreta con la ontología
 
-Después de ejecutar el script deben existir:
+Después de realizar la predicción del ejemplo número `0`, el programa agrega dos relaciones adicionales.
+
+En este caso, el modelo predijo:
+
+```text
+error_aplicacion_crash
+```
+
+Por lo tanto se crea una relación parecida a:
+
+```text
+prediccion_0
+      ↓ asigna_clase
+error_aplicacion_crash
+```
+
+También se relaciona la imagen utilizada con esa predicción:
+
+```text
+imagen_0
+    ↓ genera
+prediccion_0
+```
+
+Estas relaciones permiten representar el recorrido:
+
+```text
+IMAGEN
+   ↓
+PREDICCIÓN
+   ↓
+CLASE ASIGNADA
+```
+
+Es importante aclarar que la ontología registra **lo que el modelo predijo**, aunque esa predicción sea incorrecta.
+
+En este ejemplo:
+
+```text
+Clase real      = red_desconectada
+Clase predicha  = error_aplicacion_crash
+```
+
+La diferencia entre ambos valores permite conservar evidencia del error cometido por el modelo.
+
+---
+
+## 11. Integración con el Gestor de Tickets
+
+El programa agrega:
+
+```text
+Relaciones de integración con soporte TI agregadas: 10
+```
+
+Estas relaciones conectan la clasificación de imágenes con las categorías usadas en el proyecto.
+
+### Relación entre errores visuales y categorías
+
+```text
+pantalla_azul_bsod
+    → pertenece_a_categoria → hardware
+
+red_desconectada
+    → pertenece_a_categoria → red
+
+disco_lleno
+    → pertenece_a_categoria → software
+
+error_aplicacion_crash
+    → pertenece_a_categoria → software
+```
+
+Estas relaciones permiten convertir una clase visual en una categoría más general del sistema de soporte.
+
+Por ejemplo:
+
+```text
+red_desconectada
+        ↓
+      red
+```
+
+o:
+
+```text
+pantalla_azul_bsod
+        ↓
+     hardware
+```
+
+### Relaciones generales del Gestor de Tickets
+
+También se agregan:
+
+```text
+ticket_soporte → puede_adjuntar → error_visual
+ticket_soporte → pertenece_a → categoria_soporte
+
+categoria_soporte → tiene_clase → hardware
+categoria_soporte → tiene_clase → software
+categoria_soporte → tiene_clase → red
+categoria_soporte → tiene_clase → accesos
+```
+
+Estas relaciones ayudan a integrar Semana 08 con la idea general del Gestor de Tickets.
+
+---
+
+## 12. ¿Por qué aparecen 20 relaciones al final?
+
+El programa muestra:
+
+```text
+Relaciones de ontología totales en GraphML: 20
+```
+
+El cálculo es:
+
+```text
+8 relaciones base
++
+2 relaciones del ejemplo de prueba
++
+10 relaciones de integración con soporte TI
+=
+20 relaciones
+```
+
+Es decir:
+
+```text
+8 + 2 + 10 = 20
+```
+
+La estructura general puede verse así:
+
+```text
+ONTOLOGÍA FINAL
+│
+├── 8 relaciones base
+│
+├── 2 relaciones del ejemplo analizado
+│
+└── 10 relaciones del Gestor de Tickets
+        ↓
+     TOTAL: 20
+```
+
+---
+
+## 13. Archivo GraphML
+
+El programa genera:
+
+```text
+artifacts/ontologia.graphml
+```
+
+Este archivo contiene el grafo completo.
+
+La exportación se realiza después de agregar:
+
+- las relaciones base;
+- las relaciones del ejemplo de predicción;
+- las relaciones propias del Gestor de Tickets.
+
+Por esa razón, el archivo final contiene las:
+
+```text
+20 relaciones
+```
+
+El GraphML sirve para guardar de manera permanente la estructura que inicialmente existe dentro del programa.
+
+En términos sencillos:
+
+```text
+NetworkX
+   ↓
+Grafo en memoria
+   ↓
+GraphML
+   ↓
+Grafo guardado en archivo
+```
+
+---
+
+## 14. Modelo entrenado
+
+La ejecución indica:
+
+```text
+Modelo guardado: artifacts\modelo_mlp.pkl
+```
+
+Este archivo contiene el modelo MLP después de haber sido entrenado.
+
+Mientras el programa se está ejecutando, el modelo existe en memoria.
+
+Al guardarlo con `pickle`, puede conservarse en disco:
+
+```text
+MLP entrenada
+     ↓
+pickle
+     ↓
+modelo_mlp.pkl
+```
+
+Esto permite reutilizar posteriormente el modelo sin tener que empezar necesariamente desde cero.
+
+El archivo `.pkl` no contiene las imágenes.
+
+Contiene el objeto del modelo ya entrenado.
+
+---
+
+## 15. Archivos generados
+
+Después de ejecutar correctamente la práctica se obtienen principalmente:
 
 ```text
 artifacts/
 ├── modelo_mlp.pkl
 ├── imagenes.db
-├── ontologia.graphml
-└── evidencias_soporte/
-    ├── pc-direccion-01.png
-    ├── ws-diseno-cad-03.png
-    └── srv-base-datos-02.png
+└── ontologia.graphml
+```
+
+Además, el conjunto de imágenes utilizado permanece dentro de:
+
+```text
+data/
+└── imagenes_errores/
+    ├── etiquetas.csv
+    └── carpetas e imágenes de las cuatro clases
 ```
 
 ### `modelo_mlp.pkl`
 
-Contiene la MLP entrenada con `load_digits`.
+Guarda la red neuronal entrenada.
 
 ### `imagenes.db`
 
-Contiene:
-
-- 20 registros del ejercicio base en `images`;
-- 3 registros propios del proyecto en `evidencias_soporte`.
+Guarda información de las 160 imágenes utilizadas.
 
 ### `ontologia.graphml`
 
-Contiene:
+Guarda las 20 relaciones de la ontología final.
 
-- las siete relaciones base;
-- las dos relaciones del ejemplo de predicción;
-- las nueve relaciones propias del proyecto.
+### `etiquetas.csv`
 
-Total esperado:
-
-```text
-18 relaciones
-```
-
-### `evidencias_soporte/*.png`
-
-Contiene tres fichas generadas directamente desde los casos de Semana 07.
+Relaciona cada archivo de imagen con su clase correcta.
 
 ---
 
-## 9. Corrección aplicada frente al orden del ejemplo de clase
+## 16. Dependencias utilizadas
 
-En el ejemplo explicado en Semana 08, el archivo GraphML puede exportarse antes de agregar las relaciones:
+El código utiliza las siguientes librerías externas:
 
 ```text
-imagen_15 → genera → prediccion_15
-prediccion_15 → asigna_clase → digito_5
+networkx
+numpy
+Pillow
+scikit-learn
 ```
 
-Si se guarda el grafo antes, las relaciones agregadas posteriormente existen en memoria pero no aparecen en el archivo ya escrito.
+También utiliza módulos incluidos con Python:
 
-En esta implementación:
+```text
+csv
+pickle
+sqlite3
+pathlib
+```
+
+Para instalar las dependencias externas se puede utilizar:
+
+```bash
+python -m pip install networkx numpy pillow scikit-learn
+```
+
+En el código:
 
 ```python
-nx.write_graphml(G, ARTIFACTS / "ontologia.graphml")
+from PIL import Image
 ```
 
-se ejecuta **al final**, después de agregar tanto la predicción concreta como las relaciones del proyecto.
+corresponde al paquete:
 
-Así, `ontologia.graphml` representa realmente el estado final del grafo.
+```text
+Pillow
+```
 
 ---
 
-## 10. Validación de funcionamiento
+## 17. Validación de los resultados obtenidos
 
-El código fue verificado con las siguientes condiciones:
+Los resultados suministrados confirman:
 
 | Validación | Resultado |
 |---|---|
-| El script termina sin excepción | Correcto |
-| La MLP entrena correctamente | Correcto |
-| Accuracy visible | `0.9622` |
-| `modelo_mlp.pkl` se genera | Correcto |
-| `imagenes.db` se genera | Correcto |
-| Registros tabla `images` | `20` |
-| Registros `evidencias_soporte` | `3` |
-| `ontologia.graphml` se genera | Correcto |
-| Relaciones base | `7` |
-| Relaciones propias del proyecto | `9` |
-| Relaciones finales GraphML | `18` |
-| Evidencias PNG generadas | `3` |
+| Imágenes registradas en SQLite | `160` |
+| Clases de errores visuales | `4` |
+| Relaciones base de la ontología | `8` |
+| Relaciones añadidas por el ejemplo concreto | `2` |
+| Relaciones propias de integración con soporte TI | `10` |
+| Relaciones finales en GraphML | `20` |
+| Modelo guardado | `artifacts\modelo_mlp.pkl` |
+| Base SQLite guardada | `artifacts\imagenes.db` |
+| Ontología guardada | `artifacts\ontologia.graphml` |
+
+El ejemplo de prueba también permitió comprobar que el sistema conserva tanto la clase real como la clase predicha, incluso cuando el modelo se equivoca.
 
 ---
 
-## 11. Relación con las semanas anteriores
+## 18. Relación con el proyecto de soporte TI
 
-La Semana 08 no reemplaza las capacidades desarrolladas anteriormente.
+Semana 08 agrega reconocimiento visual al proyecto.
+
+El flujo actual puede representarse así:
 
 ```text
-SEMANA 02
-Texto del ticket
-→ categoría / prioridad / incidente
-
-SEMANA 03
-Caso de soporte
-→ taxonomía explicable / técnica sugerida
-
-SEMANA 04
-Ticket previamente clasificado
-→ secuencia de atención A*
-
-SEMANA 05
-Consulta
-→ regla + evidencia documental + similitud + clase
-
-SEMANA 07
-Telemetría + logs
-→ representación + diagnóstico + posible ticket
-
-SEMANA 08
-Reconocimiento neuronal de referencia
-+
-evidencia visual persistente
-+
-ontología
-→ predicción demostrable + registro + significado
+IMAGEN DE UN ERROR
+        ↓
+RED NEURONAL
+        ↓
+TIPO DE ERROR VISUAL
+        ↓
+CATEGORÍA DE SOPORTE
+        ↓
+GESTOR DE TICKETS
 ```
 
-La idea principal es que el proyecto ya no solo entrega un resultado: también guarda evidencia y explica cómo se relaciona esa información dentro del sistema.
+Por ejemplo:
+
+```text
+imagen de red desconectada
+        ↓
+red_desconectada
+        ↓
+categoría red
+        ↓
+ticket de soporte
+```
+
+Otro ejemplo:
+
+```text
+imagen de pantalla azul
+        ↓
+pantalla_azul_bsod
+        ↓
+categoría hardware
+        ↓
+ticket de soporte
+```
+
+La red neuronal se encarga de reconocer patrones visuales.
+
+SQLite registra qué datos fueron utilizados.
+
+La ontología permite expresar cómo se relaciona el resultado con las categorías del proyecto.
+
+Así, Semana 08 aporta una nueva forma de entrada al sistema:
+
+```text
+ANTES
+texto + reglas + telemetría
+
+AHORA
+texto + reglas + telemetría + imágenes
+```
 
 ---
 
-## 12. Limitaciones
+## 19. Limitaciones identificadas
 
-### 14.1. La MLP todavía no reconoce imágenes de incidentes TI
+### 19.1. El modelo puede confundir clases
 
-El repositorio no contiene actualmente un conjunto de imágenes etiquetadas de:
+El ejemplo entregado demuestra una confusión real:
 
-- capturas de pantalla;
-- errores visuales;
-- cableado;
-- LEDs de equipos;
-- daños físicos;
-- otros incidentes visuales de soporte.
+```text
+real     = red_desconectada
+predicha = error_aplicacion_crash
+```
 
-Por ello, entrenar una MLP de soporte TI con datos inventados produciría una evidencia académica engañosa.
+Por lo tanto, el clasificador todavía puede cometer errores.
 
-`load_digits` se conserva como dataset controlado para comprobar la técnica de reconocimiento neuronal.
+Esto debe analizarse utilizando el `classification_report` y el accuracy general.
 
-### 14.2. Las fichas PNG no son entradas de entrenamiento
+### 19.2. El tamaño de las imágenes se reduce
 
-Las tres imágenes generadas desde Semana 07 son evidencia visual de telemetría.
+Todas las imágenes se convierten a:
 
-No se presentan como dataset de entrenamiento.
+```text
+32 x 32
+```
 
-Tres ejemplos no son suficientes para validar un clasificador visual generalizable.
+Esto facilita el entrenamiento, pero también elimina parte de la información visual original.
 
-### 14.3. El accuracy pertenece exclusivamente a `load_digits`
+### 19.3. Se trabaja en escala de grises
 
-El `96.22 %` no mide:
+El color original no se utiliza.
 
-- calidad del diagnóstico de soporte;
-- precisión del clasificador textual de Semana 02;
-- calidad del sistema híbrido de Semana 05;
-- precisión sobre capturas o fotografías reales.
+Esto simplifica la entrada de la red, pero puede perder información si en el futuro el color resulta importante para diferenciar errores.
 
-### 14.4. Siguiente ampliación válida
+### 19.4. La MLP trabaja con píxeles aplanados
 
-Para convertir esta arquitectura en un reconocedor visual real del gestor de tickets se requiere primero un dataset propio etiquetado y trazable.
+La imagen se convierte en un vector de 1024 valores.
 
-Solo después tendría sentido sustituir `load_digits` por imágenes reales del dominio.
+El modelo no analiza la imagen exactamente de la misma manera que una arquitectura especializada en visión por computador.
+
+Sin embargo, para esta práctica permite aplicar correctamente el concepto de reconocimiento mediante redes neuronales.
+
+### 19.5. Las relaciones de soporte son definidas manualmente
+
+Por ejemplo:
+
+```text
+red_desconectada → pertenece_a_categoria → red
+```
+
+no es una relación aprendida automáticamente por la MLP.
+
+Es conocimiento definido por el proyecto para dar significado a la predicción visual.
 
 ---
 
-## 13. Conclusiones
+## 20. Conclusiones
 
-1. La Semana 08 demuestra correctamente el principio **modelo reconoce, base registra y ontología interpreta**.
-2. La red neuronal se mantiene sobre el dataset controlado establecido por la clase, evitando atribuirle capacidades que el proyecto todavía no posee.
-3. SQLite amplía la trazabilidad del proyecto almacenando evidencia derivada de casos ya existentes de Semana 07.
-4. La ontología agrega más de las cinco relaciones propias solicitadas y las mantiene conectadas con conceptos que ya forman parte del gestor de tickets.
-5. Exportar GraphML al final evita perder las relaciones agregadas después de la creación del grafo base.
-6. La implementación conserva la continuidad del proyecto sin crear datos de producción inexistentes.
+1. La práctica de Semana 08 ya utiliza imágenes relacionadas directamente con el dominio de soporte TI.
+2. Se cargaron y registraron correctamente 160 imágenes pertenecientes a cuatro categorías de errores.
+3. Cada imagen se transforma a escala de grises, se ajusta a `32 x 32` y se convierte en 1024 valores que pueden ser procesados por la MLP.
+4. El modelo aprende utilizando 120 imágenes y se prueba con 40 imágenes independientes del entrenamiento.
+5. SQLite conserva información de las 160 imágenes y permite identificar cuáles fueron utilizadas para entrenamiento y cuáles para prueba.
+6. La ontología comienza con 8 relaciones base, agrega 2 relaciones correspondientes al ejemplo analizado y 10 relaciones de integración con soporte TI, obteniendo un total de 20.
+7. El ejemplo de prueba demuestra que el modelo puede equivocarse, lo cual permite analizar sus limitaciones de manera realista.
+8. El archivo `modelo_mlp.pkl` conserva el modelo entrenado, `imagenes.db` conserva la evidencia y `ontologia.graphml` conserva las relaciones con significado.
+9. La Semana 08 amplía el Gestor de Tickets al permitir trabajar también con evidencia visual de errores de TI.
+10. La idea principal puede resumirse así:
 
----
+```text
+MODELO RECONOCE
+BASE REGISTRA
+ONTOLOGÍA INTERPRETA
+GESTOR DE TICKETS UTILIZA EL RESULTADO
+```
