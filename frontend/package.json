@@ -1,0 +1,28 @@
+{
+  "name": "mesa-ayuda-ti-frontend",
+  "version": "1.0.0",
+  "description": "Frontend de Mesa de Ayuda TI con IA - Smart Service Desk",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "servicedesk",
+    "ai",
+    "express",
+    "ejs",
+    "bootstrap5",
+    "astar",
+    "rag"
+  ],
+  "author": "Squad IA - Frontend Specialist",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "marked": "^18.0.14",
+    "multer": "^2.4.0"
+  }
+}

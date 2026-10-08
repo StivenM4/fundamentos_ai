@@ -1,0 +1,74 @@
+<%- include('partials/header') %>
+
+<main class="container-fluid px-3 px-xl-4 py-4">
+  <!-- Breadcrumb & Top Bar -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-secondary"><i class="bi bi-house me-1"></i>Inicio</a></li>
+        <li class="breadcrumb-item text-secondary">Documentación & Módulos</li>
+        <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
+          <%= metadata.title %>
+        </li>
+      </ol>
+    </nav>
+    <a href="/" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+      <i class="bi bi-arrow-left"></i> Volver al Gestor de Tickets
+    </a>
+  </div>
+
+  <!-- Document Card -->
+  <div class="card sd-card border-0 shadow-sm mb-4">
+    <div class="sd-card-header bg-white py-3 px-4 border-bottom">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace">
+              MÓDULO TÉCNICO
+            </span>
+            <span class="badge bg-light text-secondary border font-monospace">
+              reports/<%= metadata.file %>
+            </span>
+          </div>
+          <h4 class="fw-bold text-dark mb-0"><%= metadata.title %></h4>
+          <small class="text-muted"><%= metadata.subtitle %></small>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-success-subtle text-success border border-success-subtle d-flex align-items-center gap-1">
+            <i class="bi bi-check-circle" style="font-size: 0.7rem;"></i> Documentación Oficial
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rendered Markdown Body -->
+    <div class="card-body p-4 p-md-5">
+      <article class="sd-markdown-content">
+        <%- htmlContent %>
+      </article>
+    </div>
+
+    <!-- Footer of document card with quick next/prev nav -->
+    <div class="card-footer bg-light py-3 px-4 border-top d-flex justify-content-between align-items-center">
+      <% if (prevSemana) { %>
+        <a href="/semanas/<%= prevSemana.id %>" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-chevron-left me-1"></i> <%= prevSemana.title %>
+        </a>
+      <% } else { %>
+        <div></div>
+      <% } %>
+
+      <% if (nextSemana) { %>
+        <a href="/semanas/<%= nextSemana.id %>" class="btn btn-sm btn-outline-primary">
+          <%= nextSemana.title %> <i class="bi bi-chevron-right ms-1"></i>
+        </a>
+      <% } else { %>
+        <a href="/" class="btn btn-sm btn-primary">
+          Ir al Gestor de Tickets <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      <% } %>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

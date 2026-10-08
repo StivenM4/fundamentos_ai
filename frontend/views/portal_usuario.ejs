@@ -1,0 +1,429 @@
+<%- include('partials/header') %>
+
+<main class="container-fluid px-3 px-xl-4 py-4">
+
+  <!-- Encabezado de la Vista -->
+  <div class="mb-4 pb-2 border-bottom">
+    <div class="d-flex align-items-center justify-content-between">
+      <div>
+        <h4 class="fw-bold text-dark mb-1">Portal de Usuario</h4>
+        <p class="text-secondary small mb-0">Envío y actualización de tickets de soporte técnico.</p>
+      </div>
+      <div>
+        <span class="badge bg-light text-secondary border px-3 py-2">Mesa de Ayuda TI</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensajes de Notificación -->
+  <% if (error) { %>
+    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+      <span><%= error %></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+  <% } %>
+
+  <% if (success) { %>
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+      <span><%= success %></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+  <% } %>
+
+  <div class="row g-4">
+
+    <!-- Panel Izquierdo: Formulario de Registro / Edición -->
+    <div class="col-12 col-lg-5">
+      <div class="card border shadow-sm">
+        <div class="card-header bg-white py-3 border-bottom">
+          <h5 id="form-heading" class="fw-semibold text-dark mb-0">Nuevo Ticket</h5>
+        </div>
+        <div class="card-body p-3 p-md-4">
+          <form id="form-ticket" action="/portal-usuario/enviar" method="POST" enctype="multipart/form-data">
+            
+            <input type="hidden" id="input-ticket-id" name="ticket_id" value="">
+
+            <div class="mb-3">
+              <label for="input-titulo" class="form-label small fw-semibold text-dark">Título del ticket</label>
+              <input 
+                type="text" 
+                id="input-titulo" 
+                name="titulo" 
+                class="form-control" 
+                required 
+                maxlength="200"
+                placeholder="Ejemplo: Falla en conexión a la red local">
+            </div>
+
+            <div class="mb-3">
+              <label for="input-descripcion" class="form-label small fw-semibold text-dark">Descripción del problema</label>
+              <textarea 
+                id="input-descripcion" 
+                name="descripcion" 
+                class="form-control" 
+                rows="5" 
+                required 
+                placeholder="Describa el problema detalladamente, indicando qué ocurrió y desde cuándo se presenta"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label for="input-imagen" class="form-label small fw-semibold text-dark">Imagen adjunta (opcional)</label>
+              <input 
+                type="file" 
+                id="input-imagen" 
+                name="imagen" 
+                class="form-control" 
+                accept="image/png,image/jpeg,image/webp,image/gif">
+              <div class="form-text small text-muted mt-1">
+                Adjunta una captura del error para que el sistema analice la imagen con OCR.
+              </div>
+              <div id="preview-contenedor" class="mt-2 d-none">
+                <small class="text-muted d-block mb-1">Imagen actual adjunta:</small>
+                <img id="img-actual-preview" src="" alt="Evidencia" class="img-thumbnail" style="max-height: 120px;">
+              </div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" id="btn-submit" class="btn btn-primary">Enviar Ticket</button>
+              <button type="button" id="btn-cancelar" class="btn btn-outline-secondary d-none">Cancelar</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Derecho: Lista de Tickets Registrados -->
+    <div class="col-12 col-lg-7">
+      <div class="card border shadow-sm">
+        <div class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between">
+          <h5 class="fw-semibold text-dark mb-0">Tickets Registrados</h5>
+          <span class="badge bg-light text-secondary border" id="portal-tickets-count-badge">Total: <%= tickets ? tickets.length : 0 %></span>
+        </div>
+
+        <!-- Filtros reactivos de tickets -->
+        <div class="p-3 border-bottom bg-light bg-opacity-50">
+          <div class="row g-2">
+            <div class="col-12 col-md-5">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white text-muted"><i class="bi bi-search"></i></span>
+                <input 
+                  type="text" 
+                  id="filtro-portal-busqueda" 
+                  class="form-control" 
+                  placeholder="Buscar por número o título..."
+                  autocomplete="off">
+                <button 
+                  class="btn btn-outline-secondary d-none" 
+                  type="button" 
+                  id="btn-limpiar-busqueda-portal" 
+                  title="Limpiar búsqueda">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filtro-portal-estado" class="visually-hidden">Estado</label>
+              <select id="filtro-portal-estado" class="form-select form-select-sm">
+                <option value="todos">Todos los estados</option>
+                <option value="abierto">Abierto</option>
+                <option value="en_proceso">En Proceso</option>
+                <option value="cerrado_resuelto">Cerrado / Resuelto</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-4">
+              <label for="filtro-portal-fecha" class="visually-hidden">Fecha</label>
+              <select id="filtro-portal-fecha" class="form-select form-select-sm">
+                <option value="todas">Todas las fechas</option>
+                <option value="hoy">Hoy</option>
+                <option value="esta_semana">Esta semana</option>
+                <option value="ultimo_mes">Último mes (1 mes)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body p-0">
+          <% if (!tickets || tickets.length === 0) { %>
+            <div class="p-4 text-center text-muted">
+              No hay tickets registrados actualmente. Complete el formulario para enviar una solicitud.
+            </div>
+          <% } else { %>
+            <div class="table-responsive sd-custom-scrollbar" style="max-height: 480px; overflow-y: auto;">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary small sd-sticky-thead">
+                  <tr>
+                    <th scope="col" style="width: 120px;">Número</th>
+                    <th scope="col">Título</th>
+                    <th scope="col" style="width: 110px;">Estado</th>
+                    <th scope="col" style="width: 140px;">Fecha</th>
+                    <th scope="col" style="width: 90px;" class="text-end">Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="portal-tickets-tbody">
+                  <% tickets.forEach(function(t) { %>
+                    <tr 
+                      class="item-ticket-row"
+                      data-id="<%= t.id %>"
+                      data-estado="<%= t.estado || 'Abierto' %>"
+                      data-fecha="<%= t.created_at ? new Date(t.created_at).toISOString() : '' %>"
+                      data-numero="<%= (t.numero_ticket || ('TCK-' + t.id)).toLowerCase() %>"
+                      data-titulo="<%= (t.titulo || '').toLowerCase() %>">
+                      <td class="font-monospace text-secondary fw-medium">
+                        <%= t.numero_ticket || ('TCK-' + t.id) %>
+                      </td>
+                      <td>
+                        <div class="fw-medium text-dark d-flex align-items-center flex-wrap gap-2">
+                          <span><%= t.titulo %></span>
+                          <% 
+                            const descRow = t.descripcion || '';
+                            const tieneOcrRow = Boolean(t.ocr_texto || descRow.includes('[Evidencia OCR S09]') || descRow.includes('[Evidencia Visual OCR S09]'));
+                            const tieneVisualRow = Boolean(t.imagen_url || tieneOcrRow || t.tiene_vision);
+                            if (tieneVisualRow) { 
+                          %>
+                            <span class="badge bg-light text-secondary border" style="font-size: 0.72rem;">
+                              Evidencia Visual
+                            </span>
+                          <% } %>
+                        </div>
+                        <% if (t.imagen_url) { %>
+                          <a href="<%= t.imagen_url %>" target="_blank" class="small text-decoration-none text-muted d-inline-flex align-items-center gap-1 mt-1">
+                            <i class="bi bi-box-arrow-up-right"></i> Ver imagen adjunta
+                          </a>
+                        <% } %>
+                      </td>
+                      <td>
+                        <% if (t.estado === 'Resuelto') { %>
+                          <span class="badge bg-success-subtle text-success border">Resuelto</span>
+                        <% } else if (t.estado === 'En Proceso') { %>
+                          <span class="badge bg-primary-subtle text-primary border">En Proceso</span>
+                        <% } else { %>
+                          <span class="badge bg-secondary-subtle text-secondary border">Abierto</span>
+                        <% } %>
+                      </td>
+                      <td class="small text-muted">
+                        <% if (t.created_at) { %>
+                          <%= new Date(t.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+                        <% } else { %>
+                          -
+                        <% } %>
+                      </td>
+                      <td class="text-end">
+                        <button 
+                          type="button" 
+                          class="btn btn-sm btn-outline-primary btn-editar"
+                          data-id="<%= t.id %>"
+                          data-numero="<%= t.numero_ticket || ('TCK-' + t.id) %>"
+                          data-titulo="<%= (t.titulo || '').replace(/"/g, '&quot;') %>"
+                          data-descripcion="<%= (t.descripcion || '').replace(/"/g, '&quot;') %>"
+                          data-imagen="<%= t.imagen_url || '' %>">
+                          Editar
+                        </button>
+                      </td>
+                    </tr>
+                  <% }); %>
+                  <tr id="portal-tickets-no-results" class="d-none">
+                    <td colspan="5" class="p-4 text-center text-muted">
+                      No se encontraron tickets que coincidan con los filtros aplicados.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  (function() {
+    const form = document.getElementById('form-ticket');
+    const heading = document.getElementById('form-heading');
+    const inputId = document.getElementById('input-ticket-id');
+    const inputTitulo = document.getElementById('input-titulo');
+    const inputDescripcion = document.getElementById('input-descripcion');
+    const inputImagen = document.getElementById('input-imagen');
+    const previewContenedor = document.getElementById('preview-contenedor');
+    const imgPreview = document.getElementById('img-actual-preview');
+    const btnSubmit = document.getElementById('btn-submit');
+    const btnCancelar = document.getElementById('btn-cancelar');
+
+    // Botones de edición en la lista de tickets
+    document.querySelectorAll('.btn-editar').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const numero = this.getAttribute('data-numero');
+        const titulo = this.getAttribute('data-titulo') || '';
+        const descripcion = this.getAttribute('data-descripcion') || '';
+        const imagen = this.getAttribute('data-imagen') || '';
+
+        // Cambiar acción a endpoint de edición
+        form.action = '/portal-usuario/editar/' + id;
+        inputId.value = id;
+        inputTitulo.value = titulo;
+        inputDescripcion.value = descripcion;
+        inputImagen.value = '';
+
+        if (imagen) {
+          imgPreview.src = imagen;
+          previewContenedor.classList.remove('d-none');
+        } else {
+          imgPreview.src = '';
+          previewContenedor.classList.add('d-none');
+        }
+
+        heading.textContent = 'Editar Ticket ' + numero;
+        btnSubmit.textContent = 'Guardar Cambios';
+        btnCancelar.classList.remove('d-none');
+
+        // Scroll suave al formulario
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        inputTitulo.focus();
+      });
+    });
+
+    // Botón cancelar edición
+    btnCancelar.addEventListener('click', function() {
+      form.reset();
+      form.action = '/portal-usuario/enviar';
+      inputId.value = '';
+      previewContenedor.classList.add('d-none');
+      imgPreview.src = '';
+      heading.textContent = 'Nuevo Ticket';
+      btnSubmit.textContent = 'Enviar Ticket';
+      btnCancelar.classList.add('d-none');
+    });
+
+    // ==========================================
+    // Filtros Reactivos de Tickets en Portal
+    // ==========================================
+    const filtroPortalBusqueda = document.getElementById('filtro-portal-busqueda');
+    const btnLimpiarBusquedaPortal = document.getElementById('btn-limpiar-busqueda-portal');
+    const filtroPortalEstado = document.getElementById('filtro-portal-estado');
+    const filtroPortalFecha = document.getElementById('filtro-portal-fecha');
+    const portalCountBadge = document.getElementById('portal-tickets-count-badge');
+    const portalNoResults = document.getElementById('portal-tickets-no-results');
+    const portalTicketRows = document.querySelectorAll('.item-ticket-row');
+    const totalPortalTickets = portalTicketRows.length;
+
+    function cumpleFiltroEstado(estadoStr, filtro) {
+      if (!filtro || filtro === 'todos') return true;
+      const est = (estadoStr || '').toLowerCase().trim();
+      if (filtro === 'abierto') {
+        return est === 'abierto';
+      }
+      if (filtro === 'en_proceso') {
+        return est === 'en proceso' || est === 'en progreso' || est.includes('proceso');
+      }
+      if (filtro === 'cerrado_resuelto') {
+        return est === 'resuelto' || est === 'cerrado' || est.includes('resuelto') || est.includes('cerrad');
+      }
+      return true;
+    }
+
+    function cumpleFiltroFecha(fechaStr, filtro) {
+      if (!filtro || filtro === 'todas') return true;
+      if (!fechaStr) return false;
+
+      const ticketDate = new Date(fechaStr);
+      if (isNaN(ticketDate.getTime())) return false;
+
+      const now = new Date();
+
+      if (filtro === 'hoy') {
+        return ticketDate.getFullYear() === now.getFullYear() &&
+               ticketDate.getMonth() === now.getMonth() &&
+               ticketDate.getDate() === now.getDate();
+      }
+
+      if (filtro === 'esta_semana') {
+        const day = now.getDay();
+        const diffToMonday = (day === 0 ? -6 : 1) - day;
+        const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday, 0, 0, 0, 0);
+        const hace7Dias = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+        return ticketDate >= startOfWeek || ticketDate >= hace7Dias;
+      }
+
+      if (filtro === 'ultimo_mes') {
+        const unMesAtras = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate(), 0, 0, 0, 0);
+        return ticketDate >= unMesAtras;
+      }
+
+      return true;
+    }
+
+    function aplicarFiltrosPortal() {
+      const q = filtroPortalBusqueda ? filtroPortalBusqueda.value.trim().toLowerCase() : '';
+      const est = filtroPortalEstado ? filtroPortalEstado.value : 'todos';
+      const fec = filtroPortalFecha ? filtroPortalFecha.value : 'todas';
+
+      if (btnLimpiarBusquedaPortal) {
+        if (q.length > 0) {
+          btnLimpiarBusquedaPortal.classList.remove('d-none');
+        } else {
+          btnLimpiarBusquedaPortal.classList.add('d-none');
+        }
+      }
+
+      let visibles = 0;
+
+      portalTicketRows.forEach(function(row) {
+        const rowNumero = row.getAttribute('data-numero') || '';
+        const rowTitulo = row.getAttribute('data-titulo') || '';
+        const rowEstado = row.getAttribute('data-estado') || '';
+        const rowFecha = row.getAttribute('data-fecha') || '';
+
+        const coincideTexto = !q || rowNumero.includes(q) || rowTitulo.includes(q);
+        const coincideEstado = cumpleFiltroEstado(rowEstado, est);
+        const coincideFecha = cumpleFiltroFecha(rowFecha, fec);
+
+        if (coincideTexto && coincideEstado && coincideFecha) {
+          row.classList.remove('d-none');
+          visibles++;
+        } else {
+          row.classList.add('d-none');
+        }
+      });
+
+      if (portalCountBadge) {
+        if (visibles === totalPortalTickets) {
+          portalCountBadge.textContent = 'Total: ' + totalPortalTickets;
+        } else {
+          portalCountBadge.textContent = visibles + ' de ' + totalPortalTickets;
+        }
+      }
+
+      if (portalNoResults) {
+        if (visibles === 0 && totalPortalTickets > 0) {
+          portalNoResults.classList.remove('d-none');
+        } else {
+          portalNoResults.classList.add('d-none');
+        }
+      }
+    }
+
+    if (filtroPortalBusqueda) {
+      filtroPortalBusqueda.addEventListener('input', aplicarFiltrosPortal);
+    }
+    if (btnLimpiarBusquedaPortal) {
+      btnLimpiarBusquedaPortal.addEventListener('click', function() {
+        filtroPortalBusqueda.value = '';
+        btnLimpiarBusquedaPortal.classList.add('d-none');
+        aplicarFiltrosPortal();
+        filtroPortalBusqueda.focus();
+      });
+    }
+    if (filtroPortalEstado) {
+      filtroPortalEstado.addEventListener('change', aplicarFiltrosPortal);
+    }
+    if (filtroPortalFecha) {
+      filtroPortalFecha.addEventListener('change', aplicarFiltrosPortal);
+    }
+  })();
+</script>
+
+<%- include('partials/footer') %>

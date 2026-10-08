@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<main class="container-fluid px-3 px-xl-4 py-4">
+  <div class="row justify-content-center py-5">
+    <div class="col-12 col-md-10 col-lg-8">
+      <div class="card sd-card border-0 shadow-sm p-4 p-md-5 text-center">
+        <div class="mb-3">
+          <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill font-monospace small">
+            <%= typeof moduleBadge !== 'undefined' ? moduleBadge : 'Módulo Referenciado' %>
+          </span>
+        </div>
+        <h4 class="fw-bold text-dark mb-2"><%= typeof moduleTitle !== 'undefined' ? moduleTitle : 'Módulo en Arquitectura' %></h4>
+        <p class="text-secondary mx-auto mb-4" style="max-width: 580px;">
+          <%= typeof moduleDesc !== 'undefined' ? moduleDesc : 'Este módulo se encuentra referenciado en la arquitectura del sistema.' %>
+        </p>
+
+        <div class="alert alert-light border text-start small mx-auto mb-4" style="max-width: 560px;">
+          <div class="d-flex align-items-center gap-2 mb-1 fw-semibold text-dark">
+            <i class="bi bi-info-circle text-primary"></i> Estado de la Arquitectura:
+          </div>
+          <p class="text-muted mb-0">
+            La ruta y el controlador en archivo JS han sido creados y conectados al servidor Express según la especificación de desacoplamiento. El desarrollo de los componentes frontend para esta vista se ejecutará en la siguiente fase.
+          </p>
+        </div>
+
+        <div>
+          <a href="/" class="btn btn-outline-primary px-4 py-2 rounded-2">
+            <i class="bi bi-arrow-left me-1"></i> Ir al Gestor de Tickets IA
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

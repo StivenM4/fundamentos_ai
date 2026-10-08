@@ -1,0 +1,996 @@
+<%- include('partials/header') %>
+
+<!-- Main Container Split-View -->
+<main class="container-fluid px-3 px-xl-4 py-4">
+
+  <!-- Header de Contexto y Operación -->
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between pb-3 mb-4 border-bottom gap-2">
+    <div>
+      <h3 class="fw-bold text-dark mb-0">Centro de Monitoreo de Equipos y Telemetría</h3>
+      <p class="text-muted small mb-0">
+        Monitoreo en tiempo real de salud operativa, cumplimiento de SLA y triaje automatizado para estaciones y servidores.
+      </p>
+    </div>
+
+    <!-- Quick Actions Toolbar (Oculto para simplificar cabecera) -->
+    <div class="d-none">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-toolbar-saludable" title="Genera telemetría saludable">
+          Generar Saludable
+        </button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-toolbar-sobrecarga" title="Genera telemetría de sobrecarga">
+          Generar Sobrecarga
+        </button>
+      </div>
+      <button type="button" class="btn btn-sd-primary btn-sm px-3" id="btn-toolbar-evaluar">
+        Evaluar Telemetría
+      </button>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    
+    <!-- ========================================== -->
+    <!-- COLUMNA IZQUIERDA: Ingesta y Controles (4/12) -->
+    <!-- ========================================== -->
+    <section class="col-12 col-lg-5 col-xl-4">
+      <div class="card sd-card border-0 shadow-sm sticky-top" style="top: 85px; z-index: 10;">
+        <div class="sd-card-header d-flex align-items-center justify-content-between">
+          <span class="fw-semibold">Monitorear o Probar Telemetría</span>
+          <button id="btn-reset" type="button" class="btn btn-sm btn-link text-decoration-none text-muted p-0" title="Restablecer valores nominales de línea base">
+            Limpiar
+          </button>
+        </div>
+
+        <div class="card-body p-3 p-xl-4">
+          <!-- Notification Alert Container -->
+          <div id="feedback-alert" class="alert d-none shadow-sm fade show mb-3" role="alert">
+            <div class="d-flex align-items-center justify-content-between">
+              <div id="feedback-alert-content" class="small"></div>
+              <button type="button" class="btn-close btn-close-sm" onclick="document.getElementById('feedback-alert').classList.add('d-none')"></button>
+            </div>
+          </div>
+
+          <form id="form-telemetria" onsubmit="event.preventDefault(); ejecutarEvaluacion();">
+            
+            <!-- Selector de Casos Típicos / Equipos -->
+            <div class="mb-3">
+              <label for="template-select" class="form-label fw-semibold text-secondary small">
+                Casos Típicos Frecuentes
+              </label>
+              <select id="template-select" class="form-select form-select-sm rounded-2">
+                <option value="">-- Seleccionar un caso típico --</option>
+                <option value="PC-DIRECCION-01">PC-DIRECCION-01 (Saludable - SLA Cumplido)</option>
+                <option value="WS-DISENO-CAD-03">WS-DISENO-CAD-03 (Alerta - Sobrecarga Térmica)</option>
+                <option value="SRV-BASE-DATOS-02">SRV-BASE-DATOS-02 (Crítico - Incidente P1 &amp; DFA)</option>
+              </select>
+            </div>
+
+            <!-- Botones discretos de simulación rápida -->
+            <div class="d-flex gap-2 mb-3">
+              <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" id="btn-rnd-saludable">
+                Generar Saludable
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm flex-fill" id="btn-rnd-anomalo">
+                Generar Sobrecarga
+              </button>
+            </div>
+
+            <!-- Campo 1: Nombre de Equipo -->
+            <div class="mb-3">
+              <label for="input-equipo-id" class="form-label fw-semibold text-dark small">
+                Nombre del Equipo / Estación <span class="text-danger">*</span>
+              </label>
+              <input 
+                type="text" 
+                class="form-control form-control-sm rounded-2 font-monospace" 
+                id="input-equipo-id" 
+                value="PC-DIRECCION-01" 
+                placeholder="Ej. PC-DIRECCION-01" 
+                required
+              >
+            </div>
+
+            <!-- Campo 2: Temperatura CPU -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="input-temperatura" class="form-label fw-semibold text-dark small mb-0">
+                  Temperatura CPU (°C) <span class="text-danger">*</span>
+                </label>
+                <span class="badge bg-secondary-subtle text-secondary border font-monospace" id="badge-temp-val">70.0 °C</span>
+              </div>
+              <div class="input-group input-group-sm mb-1">
+                <input 
+                  type="number" 
+                  class="form-control font-monospace" 
+                  id="input-temperatura" 
+                  value="70.0" 
+                  step="0.1" 
+                  min="20" 
+                  max="120" 
+                  required
+                >
+                <span class="input-group-text text-muted">°C</span>
+                <button type="button" class="btn btn-outline-secondary d-none" id="btn-eval-temp" title="Evaluar únicamente umbral térmico">
+                  Evaluar métrica
+                </button>
+              </div>
+              <div class="progress mb-1" style="height: 4px;">
+                <div id="prog-temp" class="progress-bar bg-success" style="width: 62%;"></div>
+              </div>
+              <div class="d-flex justify-content-between text-muted" style="font-size: 0.7rem;">
+                <span>Línea base: 70.0 °C</span>
+                <span>Alerta: &ge; 71.0 °C</span>
+              </div>
+              <div id="res-ind-temp" class="small mt-1 d-none"></div>
+            </div>
+
+            <!-- Campo 3: Carga Servidor -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="input-carga" class="form-label fw-semibold text-dark small mb-0">
+                  Carga Servidor (%) <span class="text-danger">*</span>
+                </label>
+                <span class="badge bg-secondary-subtle text-secondary border font-monospace" id="badge-carga-val">80.0%</span>
+              </div>
+              <div class="input-group input-group-sm mb-1">
+                <input 
+                  type="number" 
+                  class="form-control font-monospace" 
+                  id="input-carga" 
+                  value="80.0" 
+                  step="0.1" 
+                  min="0" 
+                  max="100" 
+                  required
+                >
+                <span class="input-group-text text-muted">%</span>
+                <button type="button" class="btn btn-outline-secondary d-none" id="btn-eval-carga" title="Evaluar únicamente umbral de carga">
+                  Evaluar métrica
+                </button>
+              </div>
+              <div class="progress mb-1" style="height: 4px;">
+                <div id="prog-carga" class="progress-bar bg-success" style="width: 80%;"></div>
+              </div>
+              <div class="d-flex justify-content-between text-muted" style="font-size: 0.7rem;">
+                <span>Línea base: 80.0%</span>
+                <span>Alerta: &ge; 82.0%</span>
+              </div>
+              <div id="res-ind-carga" class="small mt-1 d-none"></div>
+            </div>
+
+            <!-- Campo 4: Tasa de Errores -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="input-errores" class="form-label fw-semibold text-dark small mb-0">
+                  Tasa de Errores (err/min) <span class="text-danger">*</span>
+                </label>
+                <span class="badge bg-secondary-subtle text-secondary border font-monospace" id="badge-err-val">2.0 err/m</span>
+              </div>
+              <div class="input-group input-group-sm mb-1">
+                <input 
+                  type="number" 
+                  class="form-control font-monospace" 
+                  id="input-errores" 
+                  value="2.0" 
+                  step="0.1" 
+                  min="0" 
+                  max="100" 
+                  required
+                >
+                <span class="input-group-text text-muted">err/m</span>
+                <button type="button" class="btn btn-outline-secondary d-none" id="btn-eval-errores" title="Evaluar únicamente umbral de errores">
+                  Evaluar métrica
+                </button>
+              </div>
+              <div class="progress mb-1" style="height: 4px;">
+                <div id="prog-errores" class="progress-bar bg-success" style="width: 25%;"></div>
+              </div>
+              <div class="d-flex justify-content-between text-muted" style="font-size: 0.7rem;">
+                <span>Línea base: 2.0 err/m</span>
+                <span>Alerta: &ge; 2.5 err/m</span>
+              </div>
+              <div id="res-ind-errores" class="small mt-1 d-none"></div>
+            </div>
+
+            <!-- Campo 5: Secuencia de Logs (DFA) -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="input-secuencia" class="form-label fw-semibold text-dark small mb-0">
+                  Secuencia de Logs (DFA '01') <span class="text-danger">*</span>
+                </label>
+                <span class="badge bg-secondary-subtle text-secondary border font-monospace" id="badge-dfa-state">Estado: q0</span>
+              </div>
+              <div class="input-group input-group-sm mb-1">
+                <input 
+                  type="text" 
+                  class="form-control font-monospace" 
+                  id="input-secuencia" 
+                  value="1100" 
+                  pattern="[01]+" 
+                  placeholder="Ej: 1100, 1101, 0001" 
+                  required
+                >
+                <span class="input-group-text text-muted font-monospace">{0,1}*</span>
+                <button type="button" class="btn btn-outline-secondary d-none" id="btn-eval-dfa" title="Evaluar secuencia en autómata DFA">
+                  Evaluar métrica
+                </button>
+              </div>
+              <!-- Mini Grafo de Estados DFA -->
+              <div class="p-1 bg-light rounded border text-center font-monospace mb-1" style="font-size: 0.72rem;">
+                <span id="dfa-q0" class="badge bg-primary text-white border px-1">q0</span> &rarr;
+                <span id="dfa-q1" class="badge bg-secondary-subtle text-secondary border px-1">q1</span> &rarr;
+                <span id="dfa-q2" class="badge bg-secondary-subtle text-secondary border px-1">q2 [Alerta 01]</span>
+              </div>
+              <div class="d-flex justify-content-between text-muted" style="font-size: 0.7rem;">
+                <span>Patrón seguro: sin '01' terminal</span>
+                <span class="text-danger">Alerta: concluye en '01'</span>
+              </div>
+              <div id="res-ind-dfa" class="small mt-1 d-none"></div>
+            </div>
+
+            <!-- Botón principal de evaluación -->
+            <div class="mt-4">
+              <button type="submit" id="btn-submit-eval" class="btn btn-sd-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                <span id="btn-text">Evaluar Telemetría del Equipo</span>
+                <div class="spinner-border spinner-border-sm d-none" id="btn-spinner" role="status">
+                  <span class="visually-hidden">Evaluando...</span>
+                </div>
+              </button>
+              <p class="text-center text-muted mt-2 mb-0" style="font-size: 0.75rem;">
+                Evaluación integral de SLA, inferencia simbólica y reconocimiento DFA
+              </p>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- COLUMNA DERECHA: Dashboard de Resultados (8/12) -->
+    <!-- ========================================== -->
+    <section class="col-12 col-lg-7 col-xl-8">
+
+      <!-- HEADER DE ESTADO Y DIAGNÓSTICO INTEGRAL -->
+      <div class="card sd-card border-0 shadow-sm mb-3">
+        <div class="card-body py-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-dark text-white fw-bold px-3 py-2 rounded-2 font-monospace fs-6" id="display-equipo-id">
+              PC-DIRECCION-01
+            </span>
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fw-bold text-uppercase" id="badge-estado-salud">
+                  SALUDABLE
+                </span>
+                <h6 class="mb-0 fw-bold text-dark fs-6" id="display-diagnostico-titulo">
+                  Operación Nominal (SLA Cumplido)
+                </h6>
+              </div>
+              <small class="text-muted" id="display-timestamp">
+                Evaluado en tiempo real | Monitoreo APM &amp; SLA
+              </small>
+            </div>
+          </div>
+
+          <!-- Botón de derivación hacia Soporte TI (visible sólo si NO SALUDABLE) -->
+          <div id="wrapper-btn-soporte" class="d-none">
+            <a id="btn-enlace-soporte" href="/soporte-ti" class="btn btn-danger btn-sm px-3 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
+              <span>Tomar y Resolver en Soporte TI</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILA DE 4 KPIS CORPORATIVOS (.sd-kpi-card) -->
+      <div class="row g-3 mb-3">
+        
+        <!-- KPI 1: Estado / Prioridad -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="sd-kpi-card kpi-low shadow-sm" id="kpi-card-priority">
+            <div>
+              <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Estado / Prioridad</small>
+              <h6 class="fw-bold mb-0 fs-5 text-dark" id="kpi-val-priority">
+                SALUDABLE
+              </h6>
+              <small class="text-muted" id="kpi-sub-sla" style="font-size: 0.75rem;">
+                SLA en rango
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 2: Distancia SLA (L2) -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="sd-kpi-card shadow-sm" id="kpi-card-distancia">
+            <div>
+              <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Distancia SLA (L2)</small>
+              <h6 class="fw-bold mb-0 fs-5 font-monospace text-dark" id="kpi-val-distancia">
+                0.000
+              </h6>
+              <small class="text-muted" style="font-size: 0.75rem;">
+                Umbral normativo: 1.5
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3: Diagnóstico Inferido -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="sd-kpi-card shadow-sm" id="kpi-card-diagnostico">
+            <div>
+              <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Diagnóstico Inferido</small>
+              <h6 class="fw-bold mb-0 fs-6 text-dark text-truncate" id="kpi-val-diagnostico" title="Operación Nominal">
+                Operación Nominal
+              </h6>
+              <small class="text-muted" style="font-size: 0.75rem;">
+                Motor Simbólico TI
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 4: Tiempo Estimado -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="sd-kpi-card shadow-sm" id="kpi-card-eta">
+            <div>
+              <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Tiempo Estimado</small>
+              <h6 class="fw-bold mb-0 fs-5 text-dark" id="kpi-val-eta">
+                Nominal
+              </h6>
+              <small class="text-muted" style="font-size: 0.75rem;">
+                Resolución guiada
+              </small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CHIPS DE HECHOS Y CONCEPTOS DETECTADOS -->
+      <div class="card sd-card border-0 shadow-sm mb-3">
+        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-light text-secondary border">
+              Hechos y eventos
+            </span>
+            <span class="text-muted small">Métricas discretizadas y estado DFA:</span>
+          </div>
+          <div class="d-flex flex-wrap gap-1" id="hechos-chips-container">
+            <span class="sd-tag-chip"><span class="sd-tag-dot"></span>temperatura_nominal</span>
+            <span class="sd-tag-chip"><span class="sd-tag-dot"></span>carga_nominal</span>
+            <span class="sd-tag-chip"><span class="sd-tag-dot"></span>sin_errores_criticos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD: PASOS RECOMENDADOS PARA RESOLVER EL CASO (STEPPER A*) -->
+      <div class="card sd-card border-0 shadow-sm mb-3">
+        <div class="sd-card-header d-flex align-items-center justify-content-between">
+          <span class="fw-semibold">Pasos recomendados para resolver el caso</span>
+          <small class="text-muted d-none d-sm-inline" id="astar-efficiency-note">
+            Secuencia optimizada de derivación
+          </small>
+        </div>
+        <div class="card-body p-4">
+
+          <!-- Stepper Corporativo de Resolución -->
+          <div class="sd-stepper-container" id="astar-stepper-container">
+            <!-- Renderizado dinámico vía JavaScript -->
+          </div>
+
+          <!-- Colapsable discreto para métricas técnicas de optimización -->
+          <div class="mt-3 pt-3 border-top">
+            <button type="button" class="sd-tech-toggle-btn" data-bs-toggle="collapse" data-bs-target="#tech-math-details" aria-expanded="false" aria-controls="tech-math-details">
+              <span>Ver detalles técnicos y métricas de optimización</span>
+              <i class="bi bi-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+            </button>
+            <div class="collapse mt-2" id="tech-math-details">
+              <div class="sd-tech-details-container">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                  <span><strong>Optimización Heurística A*:</strong> Función <code>f(n) = g(n) + h(n)</code></span>
+                  <span class="badge bg-secondary font-monospace" id="astar-total-cost">
+                    Costo Total: 3
+                  </span>
+                </div>
+                <p class="text-muted mb-2 small" id="astar-efficiency-badge">
+                  3 Pasos Preventivos Verificados (SLA Cumplido 100%)
+                </p>
+                <div class="small text-muted" id="astar-step-costs-list">
+                  <div>• Paso 1: Muestreo continuo de telemetría (g=0, h=2, f=2)</div>
+                  <div>• Paso 2: Verificación de umbrales SLA (g=1, h=1, f=2)</div>
+                  <div>• Paso 3: Certificación de salud y cierre (g=2, h=0, f=2)</div>
+                </div>
+                <div class="mt-2 pt-2 border-top small text-muted">
+                  <strong>Persistencia y base de conocimiento:</strong> Base de datos relacional <strong>PostgreSQL 18</strong> (<code>SoporteAIBD</code>).
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CARD: GUÍA DE SOLUCIÓN RECOMENDADA (RUNBOOK) -->
+      <div class="card sd-card border-0 shadow-sm mb-3">
+        <div class="sd-card-header d-flex align-items-center justify-content-between">
+          <span class="fw-semibold">Guía de solución recomendada (Runbook)</span>
+          <span class="badge bg-light text-secondary border" id="rag-badge">
+            Manual Oficial Verificado
+          </span>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <h6 class="mb-0 fw-bold text-dark" id="sop-title">
+              Runbook Preventivo RB-MON-01: Operación Nominal y SLA (PC-DIRECCION-01)
+            </h6>
+            <small class="text-muted" id="sop-source">
+              Fuente: Base de Conocimiento PostgreSQL 18 (servicedesk.articulos_sop_runbooks)
+            </small>
+          </div>
+
+          <!-- Alerta de Precaución Operativa -->
+          <div class="alert alert-warning border-warning-subtle py-2 px-3 mb-3" role="alert">
+            <div>
+              <strong class="d-block text-dark small">Precaución importante:</strong>
+              <span class="small text-dark" id="sop-precautions">
+                Mantener despejadas las vías de disipación térmica y preservar la recolección periódica del agente APM.
+              </span>
+            </div>
+          </div>
+
+          <!-- Checklist Interactivo con Barra de Progreso y Contador -->
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <h6 class="fw-semibold text-secondary small mb-0 text-uppercase">Checklist de resolución interactivo:</h6>
+            <span class="small fw-semibold text-primary" id="checklist-progress-counter">0 de 4 tareas completadas (0%)</span>
+          </div>
+          <div class="sd-checklist-progress-wrapper mb-3">
+            <div class="sd-checklist-progress-bar" id="checklist-progress-bar" style="width: 0%;"></div>
+          </div>
+
+          <div class="d-flex flex-column gap-2" id="sop-checklist-container">
+            <!-- Check items dinámicos -->
+          </div>
+
+          <!-- Botón de acción al pie si es NO SALUDABLE -->
+          <div id="footer-action-soporte" class="mt-4 pt-3 border-top d-none">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2">
+              <span class="small text-muted">
+                Se ha generado un ticket automático en la consola técnica de soporte.
+              </span>
+              <a id="btn-footer-soporte" href="/soporte-ti" class="btn btn-danger btn-sm px-3 py-2 fw-semibold">
+                Tomar y Resolver en Soporte TI
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+</main>
+
+<!-- Script Reactivo del Cliente para Monitoreo de Equipos -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // Elementos de formulario
+  const templateSelect = document.getElementById('template-select');
+  const inputEquipo = document.getElementById('input-equipo-id');
+  const inputTemp = document.getElementById('input-temperatura');
+  const inputCarga = document.getElementById('input-carga');
+  const inputErrores = document.getElementById('input-errores');
+  const inputSecuencia = document.getElementById('input-secuencia');
+
+  // Badges y barras reactivas de métricas
+  const badgeTempVal = document.getElementById('badge-temp-val');
+  const badgeCargaVal = document.getElementById('badge-carga-val');
+  const badgeErrVal = document.getElementById('badge-err-val');
+  const badgeDfaState = document.getElementById('badge-dfa-state');
+
+  const progTemp = document.getElementById('prog-temp');
+  const progCarga = document.getElementById('prog-carga');
+  const progErrores = document.getElementById('prog-errores');
+
+  // Mini DFA estados
+  const dfaQ0 = document.getElementById('dfa-q0');
+  const dfaQ1 = document.getElementById('dfa-q1');
+  const dfaQ2 = document.getElementById('dfa-q2');
+
+  // Botones principales
+  const btnSubmit = document.getElementById('btn-submit-eval');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const btnText = document.getElementById('btn-text');
+  const btnReset = document.getElementById('btn-reset');
+  const btnToolbarEvaluar = document.getElementById('btn-toolbar-evaluar');
+  const btnToolbarSaludable = document.getElementById('btn-toolbar-saludable');
+  const btnToolbarSobrecarga = document.getElementById('btn-toolbar-sobrecarga');
+  const btnRndSaludable = document.getElementById('btn-rnd-saludable');
+  const btnRndAnomalo = document.getElementById('btn-rnd-anomalo');
+
+  // Botones de evaluación individual
+  const btnEvalTemp = document.getElementById('btn-eval-temp');
+  const btnEvalCarga = document.getElementById('btn-eval-carga');
+  const btnEvalErrores = document.getElementById('btn-eval-errores');
+  const btnEvalDfa = document.getElementById('btn-eval-dfa');
+
+  // Mensajes de resultados individuales
+  const resIndTemp = document.getElementById('res-ind-temp');
+  const resIndCarga = document.getElementById('res-ind-carga');
+  const resIndErrores = document.getElementById('res-ind-errores');
+  const resIndDfa = document.getElementById('res-ind-dfa');
+
+  // Elementos de la columna derecha
+  const displayEquipoId = document.getElementById('display-equipo-id');
+  const badgeEstadoSalud = document.getElementById('badge-estado-salud');
+  const displayDiagnosticoTitulo = document.getElementById('display-diagnostico-titulo');
+  const displayTimestamp = document.getElementById('display-timestamp');
+  const wrapperBtnSoporte = document.getElementById('wrapper-btn-soporte');
+  const btnEnlaceSoporte = document.getElementById('btn-enlace-soporte');
+  const footerActionSoporte = document.getElementById('footer-action-soporte');
+  const btnFooterSoporte = document.getElementById('btn-footer-soporte');
+
+  // KPIs
+  const kpiCardPriority = document.getElementById('kpi-card-priority');
+  const kpiValPriority = document.getElementById('kpi-val-priority');
+  const kpiSubSla = document.getElementById('kpi-sub-sla');
+  const kpiValDistancia = document.getElementById('kpi-val-distancia');
+  const kpiValDiagnostico = document.getElementById('kpi-val-diagnostico');
+  const kpiValEta = document.getElementById('kpi-val-eta');
+
+  // Hechos Chips
+  const hechosChipsContainer = document.getElementById('hechos-chips-container');
+
+  // Stepper A*
+  const astarStepperContainer = document.getElementById('astar-stepper-container');
+  const astarEfficiencyNote = document.getElementById('astar-efficiency-note');
+  const astarTotalCost = document.getElementById('astar-total-cost');
+  const astarEfficiencyBadge = document.getElementById('astar-efficiency-badge');
+  const astarStepCostsList = document.getElementById('astar-step-costs-list');
+
+  // Runbook
+  const sopTitle = document.getElementById('sop-title');
+  const sopSource = document.getElementById('sop-source');
+  const sopPrecautions = document.getElementById('sop-precautions');
+  const checklistProgressCounter = document.getElementById('checklist-progress-counter');
+  const checklistProgressBar = document.getElementById('checklist-progress-bar');
+  const sopChecklistContainer = document.getElementById('sop-checklist-container');
+
+  // Feedback Alert
+  const feedbackAlert = document.getElementById('feedback-alert');
+  const feedbackAlertContent = document.getElementById('feedback-alert-content');
+
+  // Casos típicos predefinidos
+  const CASOS_TIPICOS = {
+    'PC-DIRECCION-01': {
+      equipo: 'PC-DIRECCION-01',
+      temp: 69.5,
+      carga: 78.0,
+      errores: 1.8,
+      secuencia: '1100'
+    },
+    'WS-DISENO-CAD-03': {
+      equipo: 'WS-DISENO-CAD-03',
+      temp: 74.5,
+      carga: 85.0,
+      errores: 1.2,
+      secuencia: '1100'
+    },
+    'SRV-BASE-DATOS-02': {
+      equipo: 'SRV-BASE-DATOS-02',
+      temp: 78.5,
+      carga: 89.0,
+      errores: 3.5,
+      secuencia: '1101'
+    }
+  };
+
+  // Actualización visual reactiva de inputs
+  function actualizarVisualInputs() {
+    const t = parseFloat(inputTemp.value) || 0;
+    const c = parseFloat(inputCarga.value) || 0;
+    const e = parseFloat(inputErrores.value) || 0;
+    const s = (inputSecuencia.value || '').trim();
+
+    badgeTempVal.textContent = t.toFixed(1) + ' °C';
+    badgeCargaVal.textContent = c.toFixed(1) + '%';
+    badgeErrVal.textContent = e.toFixed(1) + ' err/m';
+
+    // Temp bar
+    const pctT = Math.min(100, Math.max(0, ((t - 20) / 80) * 100));
+    progTemp.style.width = pctT + '%';
+    progTemp.className = 'progress-bar ' + (t >= 71.0 ? 'bg-danger' : 'bg-success');
+
+    // Carga bar
+    progCarga.style.width = Math.min(100, Math.max(0, c)) + '%';
+    progCarga.className = 'progress-bar ' + (c >= 82.0 ? 'bg-danger' : (c >= 70.0 ? 'bg-warning' : 'bg-success'));
+
+    // Errores bar
+    const pctE = Math.min(100, Math.max(0, (e / 6.0) * 100));
+    progErrores.style.width = pctE + '%';
+    progErrores.className = 'progress-bar ' + (e >= 2.5 ? 'bg-danger' : 'bg-success');
+
+    // DFA simulación
+    actualizarIluminacionDfa(s);
+  }
+
+  function actualizarIluminacionDfa(secuencia) {
+    let state = 'q0';
+    for (const ch of secuencia) {
+      if (state === 'q0') state = ch === '0' ? 'q1' : 'q0';
+      else if (state === 'q1') state = ch === '0' ? 'q1' : (ch === '1' ? 'q2' : 'q0');
+      else if (state === 'q2') state = ch === '0' ? 'q1' : 'q0';
+    }
+
+    badgeDfaState.textContent = 'Estado: ' + state;
+
+    dfaQ0.className = 'badge border px-1 ' + (state === 'q0' ? 'bg-primary text-white' : 'bg-secondary-subtle text-secondary');
+    dfaQ1.className = 'badge border px-1 ' + (state === 'q1' ? 'bg-primary text-white' : 'bg-secondary-subtle text-secondary');
+    dfaQ2.className = 'badge border px-1 ' + (state === 'q2' ? 'bg-danger text-white' : 'bg-secondary-subtle text-secondary');
+  }
+
+  inputTemp.addEventListener('input', actualizarVisualInputs);
+  inputCarga.addEventListener('input', actualizarVisualInputs);
+  inputErrores.addEventListener('input', actualizarVisualInputs);
+  inputSecuencia.addEventListener('input', actualizarVisualInputs);
+
+  // Selector de casos típicos
+  templateSelect.addEventListener('change', function() {
+    const val = this.value;
+    if (val && CASOS_TIPICOS[val]) {
+      const caso = CASOS_TIPICOS[val];
+      inputEquipo.value = caso.equipo;
+      inputTemp.value = caso.temp;
+      inputCarga.value = caso.carga;
+      inputErrores.value = caso.errores;
+      inputSecuencia.value = caso.secuencia;
+      actualizarVisualInputs();
+      ocultarMensajesIndividuales();
+      ejecutarEvaluacion();
+    }
+  });
+
+  function ocultarMensajesIndividuales() {
+    resIndTemp.classList.add('d-none');
+    resIndCarga.classList.add('d-none');
+    resIndErrores.classList.add('d-none');
+    resIndDfa.classList.add('d-none');
+  }
+
+  function mostrarFeedback(mensaje, tipo) {
+    feedbackAlert.className = 'alert alert-' + (tipo || 'info') + ' shadow-sm fade show mb-3';
+    feedbackAlertContent.innerHTML = mensaje;
+    feedbackAlert.classList.remove('d-none');
+  }
+
+  // Generador aleatorio vía API
+  async function generarTelemetria(tipo) {
+    try {
+      const resp = await fetch('/monitoreo/api/random?tipo=' + (tipo || 'anomalo'));
+      const data = await resp.json();
+      if (data.success) {
+        inputEquipo.value = data.equipo_id;
+        inputTemp.value = data.temperatura_cpu_c;
+        inputCarga.value = data.carga_servidor_pct;
+        inputErrores.value = data.tasa_errores_min;
+        inputSecuencia.value = data.secuencia_logs;
+        actualizarVisualInputs();
+        ocultarMensajesIndividuales();
+        // Disparar evaluación inmediata para actualización en tiempo real
+        ejecutarEvaluacion();
+      }
+    } catch (err) {
+      console.error('Error generando telemetría aleatoria:', err);
+    }
+  }
+
+  btnRndSaludable.addEventListener('click', () => generarTelemetria('saludable'));
+  btnRndAnomalo.addEventListener('click', () => generarTelemetria('anomalo'));
+  btnToolbarSaludable.addEventListener('click', () => generarTelemetria('saludable'));
+  btnToolbarSobrecarga.addEventListener('click', () => generarTelemetria('anomalo'));
+
+  // Botón Limpiar / Restablecer
+  btnReset.addEventListener('click', () => {
+    inputEquipo.value = 'PC-DIRECCION-01';
+    inputTemp.value = 70.0;
+    inputCarga.value = 80.0;
+    inputErrores.value = 2.0;
+    inputSecuencia.value = '1100';
+    templateSelect.value = '';
+    actualizarVisualInputs();
+    ocultarMensajesIndividuales();
+    ejecutarEvaluacion();
+  });
+
+  // Evaluaciones individuales discretas
+  btnEvalTemp.addEventListener('click', async () => {
+    const val = parseFloat(inputTemp.value);
+    try {
+      const res = await fetch('/monitoreo/api/evaluar-metrica', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metrica: 'temperatura', valor: val })
+      });
+      const data = await res.json();
+      resIndTemp.className = 'small mt-1 p-2 rounded border ' + (data.alerta ? 'bg-danger-subtle text-danger border-danger' : 'bg-success-subtle text-success border-success');
+      resIndTemp.textContent = data.detalle;
+      resIndTemp.classList.remove('d-none');
+    } catch (e) { console.error(e); }
+  });
+
+  btnEvalCarga.addEventListener('click', async () => {
+    const val = parseFloat(inputCarga.value);
+    try {
+      const res = await fetch('/monitoreo/api/evaluar-metrica', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metrica: 'carga', valor: val })
+      });
+      const data = await res.json();
+      resIndCarga.className = 'small mt-1 p-2 rounded border ' + (data.alerta ? 'bg-warning-subtle text-dark border-warning' : 'bg-success-subtle text-success border-success');
+      resIndCarga.textContent = data.detalle;
+      resIndCarga.classList.remove('d-none');
+    } catch (e) { console.error(e); }
+  });
+
+  btnEvalErrores.addEventListener('click', async () => {
+    const val = parseFloat(inputErrores.value);
+    try {
+      const res = await fetch('/monitoreo/api/evaluar-metrica', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metrica: 'errores', valor: val })
+      });
+      const data = await res.json();
+      resIndErrores.className = 'small mt-1 p-2 rounded border ' + (data.alerta ? 'bg-danger-subtle text-danger border-danger' : 'bg-success-subtle text-success border-success');
+      resIndErrores.textContent = data.detalle;
+      resIndErrores.classList.remove('d-none');
+    } catch (e) { console.error(e); }
+  });
+
+  btnEvalDfa.addEventListener('click', async () => {
+    const val = inputSecuencia.value;
+    try {
+      const res = await fetch('/monitoreo/api/evaluar-metrica', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metrica: 'automata', valor: val })
+      });
+      const data = await res.json();
+      resIndDfa.className = 'small mt-1 p-2 rounded border ' + (data.alerta ? 'bg-danger-subtle text-danger border-danger' : 'bg-success-subtle text-success border-success');
+      resIndDfa.textContent = data.detalle;
+      resIndDfa.classList.remove('d-none');
+    } catch (e) { console.error(e); }
+  });
+
+  // EVALUACIÓN COMPLETA
+  async function ejecutarEvaluacion() {
+    const equipo = inputEquipo.value.trim() || 'PC-DIRECCION-01';
+    const temp = parseFloat(inputTemp.value);
+    const carga = parseFloat(inputCarga.value);
+    const errores = parseFloat(inputErrores.value);
+    const secuencia = inputSecuencia.value.trim() || '1100';
+
+    btnSubmit.disabled = true;
+    btnSpinner.classList.remove('d-none');
+    btnText.textContent = 'Evaluando Telemetría...';
+    btnToolbarEvaluar.disabled = true;
+
+    try {
+      const resp = await fetch('/monitoreo/api/evaluar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          equipo_id: equipo,
+          temperatura_cpu_c: temp,
+          carga_servidor_pct: carga,
+          tasa_errores_min: errores,
+          secuencia_logs: secuencia
+        })
+      });
+
+      const data = await resp.json();
+      if (data.success && data.resultado) {
+        renderizarResultado(data.resultado, data.from_backend);
+      } else {
+        mostrarFeedback('No se pudo procesar la respuesta del motor de telemetría.', 'danger');
+      }
+    } catch (err) {
+      console.error('Error al evaluar telemetría:', err);
+      mostrarFeedback('Error de conexión al evaluar la telemetría.', 'danger');
+    } finally {
+      btnSubmit.disabled = false;
+      btnSpinner.classList.add('d-none');
+      btnText.textContent = 'Evaluar Telemetría del Equipo';
+      btnToolbarEvaluar.disabled = false;
+    }
+  }
+
+  btnToolbarEvaluar.addEventListener('click', ejecutarEvaluacion);
+
+  // RENDERIZADO DINÁMICO DE RESULTADOS
+  function renderizarResultado(res, fromBackend) {
+    const estaSano = Boolean(res.esta_sano);
+    const dist = parseFloat(res.distancia_sla || 0);
+    const eq = res.equipo_id || inputEquipo.value;
+    const diag = res.diagnostico_principal || (estaSano ? 'Operación Nominal (SLA Cumplido)' : 'Anomalía de Telemetría');
+    const prio = (res.prioridad || (estaSano ? 'SALUDABLE' : 'ALTA')).toUpperCase();
+    const eta = res.tiempo_estimado || (estaSano ? 'Nominal' : '~20 min');
+
+    // 1. Header de Estado
+    displayEquipoId.textContent = (res.ticket && res.ticket.id) ? `${eq} [${res.ticket.id}]` : eq;
+    displayDiagnosticoTitulo.textContent = diag;
+    displayTimestamp.textContent = `Evaluado ${new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} | ${fromBackend ? 'FastAPI Backend' : 'Motor Simbólico TI'}`;
+
+    if (estaSano) {
+      badgeEstadoSalud.className = 'badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fw-bold text-uppercase';
+      badgeEstadoSalud.textContent = 'SALUDABLE';
+      wrapperBtnSoporte.classList.add('d-none');
+      footerActionSoporte.classList.add('d-none');
+    } else {
+      badgeEstadoSalud.className = 'badge bg-danger text-white px-2 py-1 fw-bold text-uppercase';
+      badgeEstadoSalud.textContent = 'NO SALUDABLE';
+
+      // Configurar enlace hacia soporte-ti
+      const ticketId = (res.ticket && (res.ticket.id || res.ticket.numero_ticket)) ? (res.ticket.id || res.ticket.numero_ticket) : 'TCK-MON';
+      const urlSoporte = '/soporte-ti?id=' + encodeURIComponent(ticketId);
+      btnEnlaceSoporte.href = urlSoporte;
+      btnFooterSoporte.href = urlSoporte;
+      wrapperBtnSoporte.classList.remove('d-none');
+      footerActionSoporte.classList.remove('d-none');
+    }
+
+    // 2. Fila de KPIs
+    kpiValPriority.textContent = prio;
+    kpiSubSla.textContent = estaSano ? 'SLA en rango' : 'SLA Violado';
+
+    let cardPrioClass = 'kpi-low';
+    if (prio === 'CRÍTICA' || prio === 'CRITICA') cardPrioClass = 'kpi-critical';
+    else if (prio === 'ALTA') cardPrioClass = 'kpi-high';
+    else if (prio === 'MEDIA') cardPrioClass = 'kpi-medium';
+    kpiCardPriority.className = `sd-kpi-card ${cardPrioClass} shadow-sm`;
+
+    kpiValDistancia.textContent = dist.toFixed(3);
+    kpiValDistancia.className = 'fw-bold mb-0 fs-5 font-monospace ' + (dist > 1.5 ? 'text-danger' : 'text-success');
+
+    kpiValDiagnostico.textContent = diag;
+    kpiValDiagnostico.title = diag;
+
+    kpiValEta.textContent = eta;
+
+    // 3. Chips de Hechos Discretizados
+    hechosChipsContainer.innerHTML = '';
+    const hechos = res.hechos_discretizados || [];
+    if (hechos.length === 0) {
+      hechosChipsContainer.innerHTML = '<span class="text-muted small">Sin hechos anómalos detectados</span>';
+    } else {
+      hechos.forEach(h => {
+        const span = document.createElement('span');
+        span.className = 'sd-tag-chip';
+        span.innerHTML = `<span class="sd-tag-dot"></span>${escapeHtml(h)}`;
+        hechosChipsContainer.appendChild(span);
+      });
+    }
+
+    // 4. Stepper Corporativo A*
+    if (res.astar) {
+      astarEfficiencyNote.textContent = res.astar.efficiencyNote || (estaSano ? 'Ruta preventiva nominal verificada' : 'Secuencia optimizada de derivación');
+      astarEfficiencyBadge.textContent = res.astar.efficiencyNote || '';
+      astarTotalCost.textContent = `Costo Total: ${res.astar.totalCost ?? (estaSano ? 3 : 5)}`;
+
+      if (Array.isArray(res.astar.steps)) {
+        astarStepperContainer.innerHTML = '';
+        astarStepCostsList.innerHTML = '';
+
+        res.astar.steps.forEach((st, idx) => {
+          const stepNum = st.step_number ?? (idx + 1);
+          const title = st.title || `Paso ${stepNum}`;
+          const desc = st.description || '';
+          const isGoal = Boolean(st.is_goal);
+
+          const stepDiv = document.createElement('div');
+          stepDiv.className = `sd-step-item ${isGoal ? 'is-goal' : ''}`;
+
+          const nodeContent = isGoal ? '<i class="bi bi-check-lg"></i>' : stepNum;
+
+          stepDiv.innerHTML = `
+            <div class="sd-step-node">${nodeContent}</div>
+            <div class="sd-step-content">
+              <div>
+                <strong class="text-dark">${escapeHtml(title)}</strong>
+                ${desc ? `<div class="text-muted small">${escapeHtml(desc)}</div>` : ''}
+              </div>
+            </div>
+          `;
+          astarStepperContainer.appendChild(stepDiv);
+
+          // Detalles de costos en accordion
+          const costRow = document.createElement('div');
+          costRow.textContent = `• Paso ${stepNum} (${title}): Costo g=${st.g ?? 0}, Heurística h=${st.h ?? 0}, Total f=${st.f ?? ((st.g||0)+(st.h||0))}`;
+          astarStepCostsList.appendChild(costRow);
+        });
+      }
+    }
+
+    // 5. Guía de Solución Runbook
+    if (res.rag) {
+      sopTitle.textContent = res.rag.sop_title || `Runbook: Operación y Telemetría (${eq})`;
+      sopSource.textContent = `Fuente: ${res.rag.source || 'Base de Conocimiento PostgreSQL 18'}`;
+      sopPrecautions.textContent = res.rag.precautions || 'Mantener monitoreo continuo de telemetría y aislamiento preventivo ante anomalías.';
+
+      if (Array.isArray(res.rag.checklist)) {
+        sopChecklistContainer.innerHTML = '';
+        res.rag.checklist.forEach((itemText, idx) => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'sd-sop-check-item';
+          itemDiv.innerHTML = `
+            <input type="checkbox" id="chk-sop-${idx}" class="form-check-input chk-sop-item">
+            <label for="chk-sop-${idx}" class="small mb-0 text-dark">
+              <strong>Paso ${idx + 1}:</strong> ${escapeHtml(itemText)}
+            </label>
+          `;
+          sopChecklistContainer.appendChild(itemDiv);
+        });
+
+        inicializarChecklistInteractivo();
+      }
+    }
+  }
+
+  // Manejo interactivo de Checklist
+  function inicializarChecklistInteractivo() {
+    const checkboxes = document.querySelectorAll('.chk-sop-item');
+    const total = checkboxes.length;
+
+    function recalcularProgreso() {
+      if (total === 0) return;
+      let completados = 0;
+      checkboxes.forEach(chk => {
+        const itemContainer = chk.closest('.sd-sop-check-item');
+        if (chk.checked) {
+          completados++;
+          if (itemContainer) itemContainer.classList.add('is-done');
+        } else {
+          if (itemContainer) itemContainer.classList.remove('is-done');
+        }
+      });
+
+      const pct = Math.round((completados / total) * 100);
+      checklistProgressBar.style.width = pct + '%';
+      checklistProgressCounter.textContent = `${completados} de ${total} tareas completadas (${pct}%)`;
+
+      if (pct === 100) {
+        checklistProgressBar.className = 'sd-checklist-progress-bar bg-success';
+      } else {
+        checklistProgressBar.className = 'sd-checklist-progress-bar';
+      }
+    }
+
+    checkboxes.forEach(chk => {
+      chk.addEventListener('change', recalcularProgreso);
+    });
+
+    recalcularProgreso();
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Inicializar estado visual de inputs y ejecutar evaluación inicial
+  actualizarVisualInputs();
+  ejecutarEvaluacion();
+
+});
+</script>
+
+<%- include('partials/footer') %>

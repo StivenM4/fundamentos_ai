@@ -1,0 +1,127 @@
+<%
+  const activePath = typeof currentPath !== 'undefined' ? currentPath : '/';
+%>
+<aside id="sd-sidebar" class="sd-sidebar">
+  <div class="sd-sidebar-inner d-flex flex-column h-100">
+
+    <!-- Sidebar Navigation -->
+    <div class="sd-sidebar-nav flex-grow-1 py-3 px-2">
+      <!-- Section 1: Mesa de Ayuda TI -->
+      <div class="sd-sidebar-section mb-3">
+        <div class="sd-sidebar-heading px-3 mb-2">
+          <span>MESA DE AYUDA TI</span>
+        </div>
+        <ul class="nav flex-column gap-1">
+          <li class="nav-item">
+            <a href="/" class="sd-sidebar-link <%= activePath === '/' ? 'active' : '' %>">
+              <span class="flex-grow-1">Gestor de Tickets IA</span>
+              <% if (activePath === '/') { %>
+                <span class="sd-sidebar-dot"></span>
+              <% } %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/portal-usuario" class="sd-sidebar-link <%= activePath === '/portal-usuario' ? 'active' : '' %>">
+              <span class="flex-grow-1">Reporte de Usuario</span>
+              <% if (activePath === '/portal-usuario') { %>
+                <span class="sd-sidebar-dot"></span>
+              <% } %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/soporte-ti" class="sd-sidebar-link <%= activePath === '/soporte-ti' ? 'active' : '' %>">
+              <span class="flex-grow-1">Consola Soporte TI</span>
+              <% if (activePath === '/soporte-ti') { %>
+                <span class="sd-sidebar-dot"></span>
+              <% } %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/monitoreo" class="sd-sidebar-link <%= activePath === '/monitoreo' ? 'active' : '' %>">
+              <span class="flex-grow-1">Monitoreo & Telemetría</span>
+              <% if (activePath === '/monitoreo') { %>
+                <span class="sd-sidebar-dot"></span>
+              <% } %>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section 2: Documentación & Módulos -->
+      <div class="sd-sidebar-section mb-3">
+        <div class="sd-sidebar-heading px-3 mb-2">
+          <span>DOCUMENTACIÓN & MÓDULOS</span>
+        </div>
+        <ul class="nav flex-column gap-1">
+          <li class="nav-item">
+            <a href="/semanas/semana02" class="sd-sidebar-link <%= activePath === '/semanas/semana02' ? 'active' : '' %>">
+              <div class="d-flex flex-column text-truncate">
+                <span class="fw-medium text-truncate">Fundamentos ML</span>
+                <small class="text-muted text-truncate" style="font-size: 0.7rem;">Clasificación de Tickets</small>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/semanas/semana03" class="sd-sidebar-link <%= activePath === '/semanas/semana03' ? 'active' : '' %>">
+              <div class="d-flex flex-column text-truncate">
+                <span class="fw-medium text-truncate">Taxonomía Léxica</span>
+                <small class="text-muted text-truncate" style="font-size: 0.7rem;">Reglas Difusas y XAI</small>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/semanas/semana04" class="sd-sidebar-link <%= activePath === '/semanas/semana04' ? 'active' : '' %>">
+              <div class="d-flex flex-column text-truncate">
+                <span class="fw-medium text-truncate">Heurística A*</span>
+                <small class="text-muted text-truncate" style="font-size: 0.7rem;">Rutas Óptimas Soporte</small>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/semanas/semana05" class="sd-sidebar-link <%= activePath === '/semanas/semana05' ? 'active' : '' %>">
+              <div class="d-flex flex-column text-truncate">
+                <span class="fw-medium text-truncate">Sistema RAG</span>
+                <small class="text-muted text-truncate" style="font-size: 0.7rem;">Recuperación Runbooks</small>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/semanas/semana07" class="sd-sidebar-link <%= activePath === '/semanas/semana07' ? 'active' : '' %>">
+              <div class="d-flex flex-column text-truncate">
+                <span class="fw-medium text-truncate">Representación del Conocimiento</span>
+                <small class="text-muted text-truncate" style="font-size: 0.7rem;">Frames y Esquemas</small>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/semanas/semana08" class="sd-sidebar-link <%= activePath === '/semanas/semana08' ? 'active' : '' %>">
+              <div class="d-flex flex-column text-truncate">
+                <span class="fw-medium text-truncate">Redes Neuronales</span>
+                <small class="text-muted text-truncate" style="font-size: 0.7rem;">Ontologías y Clasificadores MLP</small>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/semanas/semana09" class="sd-sidebar-link <%= activePath === '/semanas/semana09' ? 'active' : '' %>">
+              <div class="d-flex flex-column text-truncate">
+                <span class="fw-medium text-truncate">Visión & OCR</span>
+                <small class="text-muted text-truncate" style="font-size: 0.7rem;">Canny, Otsu y Limpieza OCR</small>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Sidebar Bottom Summary -->
+    <div class="sd-sidebar-footer p-3 border-top bg-white">
+      <div class="d-flex flex-column gap-1 text-muted" style="font-size: 0.75rem;">
+        <div class="d-flex align-items-center justify-content-between">
+          <span>Mesa de Ayuda TI</span>
+          <span class="badge bg-light text-secondary border font-monospace">v1.0</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>

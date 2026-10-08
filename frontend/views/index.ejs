@@ -1,0 +1,568 @@
+<%- include('partials/header') %>
+
+<!-- Main Container Split-View -->
+<main class="container-fluid px-3 px-xl-4 py-4">
+
+
+  <div class="row g-4">
+    
+    <!-- ========================================== -->
+    <!-- COLUMNA IZQUIERDA: Ingesta de Ticket (4/12) -->
+    <!-- ========================================== -->
+    <section class="col-12 col-lg-5 col-xl-4">
+      <div class="card sd-card border-0 shadow-sm sticky-top" style="top: 85px; z-index: 10;">
+        <div class="sd-card-header d-flex align-items-center justify-content-between">
+          <span class="fw-semibold">Reportar o Diagnosticar Incidente</span>
+          <button id="btn-reset" type="button" class="btn btn-sm btn-link text-decoration-none text-muted p-0" title="Limpiar formulario">
+            Limpiar
+          </button>
+        </div>
+
+        <div class="card-body p-3 p-xl-4">
+          <!-- Dynamic Alert Container -->
+          <div id="alert-container">
+            <% if (error) { %>
+              <div class="alert alert-danger alert-dismissible fade show border-start border-4 border-danger shadow-sm" role="alert">
+                <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <% } %>
+          </div>
+
+          <form id="ticket-form" action="/analyze" method="POST">
+            <!-- Casos Típicos Dropdown -->
+            <div class="mb-3">
+              <label for="template-select" class="form-label fw-semibold text-secondary small">
+                Casos Típicos Frecuentes
+              </label>
+              <select id="template-select" class="form-select form-select-sm rounded-2">
+                <option value="">-- Seleccionar un caso típico --</option>
+                <option value="db_crash">Caída de Base de Datos</option>
+                <option value="vpn_issue">Problema de VPN</option>
+                <option value="erp_lag">Lentitud en ERP</option>
+                <option value="phishing">Sospecha de Phishing</option>
+                <option value="printer">Servidor de Impresión</option>
+                <option value="access">Cuenta Bloqueada</option>
+                <option value="bsod_screen">Pantalla Rara (Visión IA)</option>
+              </select>
+            </div>
+
+            <!-- Ticket Subject -->
+            <div class="mb-3">
+              <label for="ticket-subject" class="form-label fw-semibold text-dark small">
+                Título o Asunto del Ticket <span class="text-danger">*</span>
+              </label>
+              <input 
+                type="text" 
+                class="form-control form-control-md rounded-2" 
+                id="ticket-subject" 
+                name="subject" 
+                placeholder="Ej. El cluster de base de datos no responde..." 
+                value="<%= ticket ? ticket.subject : '' %>" 
+                required
+              >
+            </div>
+
+            <!-- Ticket Description -->
+            <div class="mb-3">
+              <label for="ticket-description" class="form-label fw-semibold text-dark small d-flex justify-content-between">
+                <span>¿Qué falla o requerimiento presenta el usuario? <span class="text-danger">*</span></span>
+                <span id="char-counter" class="text-muted fw-normal" style="font-size: 0.75rem;">
+                  <%= ticket && ticket.description ? ticket.description.length : 0 %> caracteres
+                </span>
+              </label>
+              <textarea 
+                class="form-control rounded-2" 
+                id="ticket-description" 
+                name="description" 
+                rows="4" 
+                placeholder="Describe qué sucede, mensajes de error observados, usuarios afectados o sistemas con fallas..." 
+                required
+              ><%= ticket ? ticket.description : '' %></textarea>
+            </div>
+
+            <!-- Adjuntar Captura / Imagen de Error (Control Visual) -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-dark small d-flex justify-content-between">
+                <span>Captura o imagen del error <span class="text-muted fw-normal">(Opcional)</span></span>
+                <span class="text-muted fw-normal" style="font-size: 0.75rem;">PNG, JPG, WEBP</span>
+              </label>
+              <div class="sd-upload-zone">
+                <input 
+                  type="file" 
+                  id="ticket-image-input" 
+                  name="image" 
+                  accept="image/*" 
+                  class="d-none"
+                >
+                <button 
+                  type="button" 
+                  id="btn-upload-image" 
+                  class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center py-2 rounded-2 text-secondary"
+                >
+                  <span id="upload-image-label">Adjuntar captura o imagen del error</span>
+                </button>
+                <div id="image-preview-container" class="mt-2 d-none align-items-center justify-content-between p-2 bg-white rounded border">
+                  <div class="d-flex align-items-center gap-2 text-truncate">
+                    <span id="image-filename" class="small text-truncate text-dark fw-medium">captura.png</span>
+                    <span id="image-filesize" class="badge bg-secondary-subtle text-secondary font-monospace" style="font-size: 0.7rem;">-- KB</span>
+                  </div>
+                  <button type="button" id="btn-remove-image" class="btn btn-sm btn-link text-danger p-0 ms-2" title="Quitar imagen">
+                    Quitar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="mt-4">
+              <button type="submit" id="btn-analyze" class="btn btn-sd-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                <span id="btn-text">Diagnosticar Caso y Sugerir Solución</span>
+                <div class="spinner-border spinner-border-sm d-none" id="btn-spinner" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </button>
+              <p class="text-center text-muted mt-2 mb-0" style="font-size: 0.75rem;">
+                Asistencia técnica con manuales y derivación de especialistas
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- COLUMNA DERECHA: Dashboard de Resultados (8/12) -->
+    <!-- ========================================== -->
+    <section class="col-12 col-lg-7 col-xl-8">
+
+      <!-- ESTADO VACÍO (Idle / Waiting) -->
+      <div id="ai-empty-state" class="card sd-card border-0 shadow-sm p-4 p-md-5 text-center <%= result ? 'd-none' : '' %>">
+        <div class="py-4">
+          <h5 class="fw-semibold text-dark mb-2">Centro de Diagnóstico de Incidentes</h5>
+          <p class="text-muted mx-auto mb-0" style="max-width: 480px;">
+            Ingresa los detalles del incidente en el formulario de la izquierda o selecciona un caso típico para comenzar el diagnóstico y recibir el plan de acción paso a paso.
+          </p>
+        </div>
+      </div>
+
+      <!-- PANEL DE RESULTADOS -->
+      <div id="ai-results-panel" class="<%= result ? '' : 'd-none' %>">
+
+        <!-- Header de Estado del Ticket Analizado -->
+        <div class="card sd-card border-0 shadow-sm mb-3">
+          <div class="card-body py-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+              <span class="badge bg-dark text-white fw-bold px-3 py-2 rounded-2 font-monospace" id="ticket-display-id">
+                <%= result ? result.ticket_id : '#INC-2026-9042' %>
+              </span>
+              <div>
+                <h6 class="mb-0 fw-bold text-dark fs-6" id="ticket-display-subject">
+                  <%= result ? result.subject : 'Incidente Registrado' %>
+                </h6>
+                <small class="text-muted" id="ticket-display-timestamp">
+                  Registrado recientemente | Mesa de Ayuda TI
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TARJETA A: Reconocimiento con Red Neuronal                                -->
+        <!-- ========================================================================= -->
+        <% 
+          const visual = (result && (result.visual_analysis || result.evidencia_visual)) ? (result.visual_analysis || result.evidencia_visual) : null;
+          const detectedClass = visual ? (visual.detected_class || '') : '';
+          const knownClasses = ['pantalla_azul_bsod', 'red_desconectada', 'disco_lleno', 'error_aplicacion_crash'];
+          const isKnownClass = knownClasses.includes(detectedClass);
+          
+          let classLabelText = 'Sin patrón visual identificado (Confianza baja)';
+          let classBadgeClass = 'bg-secondary-subtle text-secondary border border-secondary-subtle';
+          let classIcon = 'bi-question-circle';
+          let classExplanation = 'La imagen fue analizada por la Red Neuronal multicapa, pero no coincide con los patrones comunes entrenados.';
+          if (visual && isKnownClass) {
+            if (detectedClass === 'pantalla_azul_bsod') {
+              classLabelText = 'Pantalla Azul BSOD';
+              classBadgeClass = 'bg-danger-subtle text-danger border border-danger-subtle';
+              classIcon = 'bi-display';
+              classExplanation = 'El modelo identificó un volcado de memoria crítico (Kernel Panic / BSOD) compatible con fallo de hardware o controlador.';
+            } else if (detectedClass === 'red_desconectada') {
+              classLabelText = 'Red Desconectada';
+              classBadgeClass = 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+              classIcon = 'bi-wifi-off';
+              classExplanation = 'El modelo detectó una interfaz de red sin enlace activo o desconexión física de cable Ethernet.';
+            } else if (detectedClass === 'disco_lleno') {
+              classLabelText = 'Disco Lleno';
+              classBadgeClass = 'bg-info-subtle text-info-emphasis border border-info-subtle';
+              classIcon = 'bi-hdd-fill';
+              classExplanation = 'El modelo identificó una advertencia de partición de almacenamiento al 100% de su capacidad.';
+            } else if (detectedClass === 'error_aplicacion_crash') {
+              classLabelText = 'Falla de Aplicación (Crash)';
+              classBadgeClass = 'bg-danger-subtle text-danger border border-danger-subtle';
+              classIcon = 'bi-exclamation-triangle';
+              classExplanation = 'El modelo reconoció un cuadro de diálogo de excepción no controlada o cuelgue de ejecutable.';
+            }
+          }
+          const confScore = visual ? (visual.confidence_score ?? 0.984) : 0.984;
+          const confText = visual ? (visual.confidence_pct || (typeof confScore === 'number' && confScore <= 1 ? `${(confScore * 100).toFixed(1)}%` : String(confScore))) : '98.4%';
+          const hasImage = Boolean(visual && (visual.image_url || visual.saved_image_path || visual.filename));
+        %>
+        <div id="card-semana08-vision" class="card sd-card border-0 shadow-sm mb-3 <%= hasImage ? '' : 'd-none' %>">
+          <div class="sd-card-header bg-white py-2 px-3 border-bottom d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+              <span class="fw-bold text-dark">Reconocimiento con Red Neuronal</span>
+            </div>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace" style="font-size: 0.72rem;">
+              MLPClassifier (64, 32)
+            </span>
+          </div>
+          <div class="card-body p-3 p-md-4">
+            <div class="row g-3 align-items-center">
+              <div class="col-12 col-sm-4 col-md-3 text-center">
+                <div class="position-relative d-inline-block rounded-2 overflow-hidden border shadow-sm bg-dark" style="max-height: 160px; max-width: 100%;">
+                  <img id="semana08-preview-img" 
+                       src="<%= (visual && visual.image_url) ? visual.image_url : '/images/sample_bsod.png' %>" 
+                       alt="Captura analizada" 
+                       class="img-fluid rounded-2" 
+                       style="max-height: 150px; width: auto; object-fit: contain;">
+                </div>
+                <div class="small text-muted mt-1 text-truncate" id="semana08-filename">
+                  <%= (visual && visual.filename) ? visual.filename : 'captura.png' %>
+                </div>
+              </div>
+              <div class="col-12 col-sm-8 col-md-9">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                  <span class="badge px-3 py-2 fw-bold font-monospace <%= classBadgeClass %>" id="semana08-error-badge">
+                    <i class="bi <%= classIcon %> me-1"></i><%= classLabelText %>
+                  </span>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 fw-semibold font-monospace" id="semana08-confidence-badge">
+                    <i class="bi bi-bullseye me-1"></i><%= confText %> Certeza
+                  </span>
+                </div>
+                <div class="alert alert-light border py-2 px-3 mb-2 rounded-2">
+                  <span class="small text-dark fw-medium" id="semana08-explanation">
+                    <%= classExplanation %>
+                  </span>
+                </div>
+                <div class="text-muted small" style="font-size: 0.75rem;">
+                  <i class="bi bi-diagram-3 text-primary me-1"></i>Topología: Entrada 1024 atributos &bull; Capas densas (64, 32) ReLU &bull; Softmax
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TARJETA B: Limpieza de Imagen & Extracción de Texto (OCR)                 -->
+        <!-- ========================================================================= -->
+        <%
+          const hasOcr = Boolean(visual && (visual.ocr_text || visual.texto_extraido || visual.ocr_texto));
+          const ocrTextValue = hasOcr ? (visual.ocr_text || visual.texto_extraido || visual.ocr_texto) : '';
+          const otsuRaw = (visual && visual.umbral_otsu !== null && visual.umbral_otsu !== undefined) ? visual.umbral_otsu : 0.5783;
+          const otsuText = typeof otsuRaw === 'number' ? otsuRaw.toFixed(4) : otsuRaw;
+          const regionesVal = (visual && visual.regiones_detectadas !== null && visual.regiones_detectadas !== undefined) ? visual.regiones_detectadas : 344;
+          const showCardS09 = Boolean(visual || hasOcr);
+        %>
+        <div id="card-semana09-vision" class="card sd-card border-0 shadow-sm mb-3 <%= showCardS09 ? '' : 'd-none' %>">
+          <div class="sd-card-header bg-white py-2 px-3 border-bottom d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+              <span class="fw-bold text-dark">Limpieza de Imagen &amp; Extracción de Texto (OCR)</span>
+            </div>
+            <span class="badge bg-success-subtle text-success border border-success-subtle font-monospace" style="font-size: 0.72rem;">
+              Canny + Otsu + Tesseract
+            </span>
+          </div>
+          <div class="card-body p-3 p-md-4">
+            <!-- Métricas de Procesamiento Visual -->
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+              <span class="badge bg-white text-dark border px-2 py-1 font-monospace" id="semana09-otsu-badge">
+                Umbral Otsu: <%= otsuText %>
+              </span>
+              <span class="badge bg-white text-dark border px-2 py-1 font-monospace" id="semana09-regiones-badge">
+                <%= regionesVal %> Regiones Conexas
+              </span>
+              <span class="badge bg-light text-secondary border px-2 py-1 font-monospace" style="font-size: 0.75rem;">
+                Binarización Adaptativa
+              </span>
+            </div>
+
+            <!-- Bloque de Texto OCR -->
+            <div class="mb-0">
+              <label class="form-label small fw-semibold text-dark mb-1 d-flex align-items-center gap-1">
+                <i class="bi bi-file-earmark-text text-success"></i> Texto Técnico Extraído con OCR (Tesseract):
+              </label>
+              <div class="p-3 bg-light rounded-2 border">
+                <pre id="semana09-ocr-text" class="font-monospace text-dark mb-0 small" style="white-space: pre-wrap; word-break: break-word; font-size: 0.8rem; line-height: 1.5;"><%= (hasOcr && ocrTextValue.trim().length > 0) ? ocrTextValue : 'No se identificó texto legible en la captura.' %></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Fila de KPIs / Métricas Clave -->
+        <div class="row g-3 mb-3">
+          <!-- KPI 1: Criticidad / Prioridad -->
+          <%
+            let pClass = 'kpi-medium';
+            if (result && result.priority) {
+              const p = result.priority.toUpperCase();
+              if (p === 'CRÍTICA' || p === 'CRITICA') { pClass = 'kpi-critical'; }
+              else if (p === 'ALTA') { pClass = 'kpi-high'; }
+              else if (p === 'MEDIA') { pClass = 'kpi-medium'; }
+              else if (p === 'BAJA') { pClass = 'kpi-low'; }
+            }
+          %>
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sd-kpi-card <%= pClass %> shadow-sm" id="kpi-card-priority">
+              <div>
+                <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Prioridad Asignada</small>
+                <h6 class="fw-bold mb-0 fs-5 text-dark" id="kpi-val-priority">
+                  <%= result ? result.priority : 'CRÍTICA' %>
+                </h6>
+                <small class="text-muted" id="kpi-sub-sla" style="font-size: 0.75rem;">
+                  SLA Máximo: <%= result ? result.sla_minutes : '60 min' %>
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 2: Área Asignada -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sd-kpi-card shadow-sm" id="kpi-card-category">
+              <div>
+                <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Área Asignada</small>
+                <h6 class="fw-bold mb-0 fs-6 text-dark" id="kpi-val-category">
+                  <%= result ? result.category : 'Infraestructura & BD' %>
+                </h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Mesa Especializada</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 3: Certeza del Diagnóstico -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sd-kpi-card shadow-sm">
+              <div>
+                <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Certeza del Diagnóstico</small>
+                <h6 class="fw-bold mb-0 fs-5 text-dark" id="kpi-val-confidence">
+                  <%= result ? result.confidence_score : '96.4%' %>
+                </h6>
+                <small class="text-muted" style="font-size: 0.75rem;" title="Modelo entrenado con histórico en PostgreSQL 18 SoporteAIBD">
+                  <i class="bi bi-database-check text-primary me-1"></i>PostgreSQL 18 (SoporteAIBD)
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI 4: Tiempo Estimado -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sd-kpi-card shadow-sm">
+              <div>
+                <small class="text-uppercase fw-semibold text-muted" style="font-size: 0.7rem;">Tiempo Estimado</small>
+                <h6 class="fw-bold mb-0 fs-5 text-dark" id="kpi-val-eta">
+                  <%= result ? result.estimated_resolution_time : '~25 min' %>
+                </h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Resolución guiada</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Palabras Clave Detectadas -->
+        <div class="card sd-card border-0 shadow-sm mb-3">
+          <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-light text-secondary border">
+                Palabras clave detectadas
+              </span>
+              <span class="text-muted small">Conceptos identificados en la solicitud:</span>
+            </div>
+            <div class="d-flex flex-wrap gap-1" id="xai-lexical-chips">
+              <% if (result && result.lexical_evidence) { %>
+                <% result.lexical_evidence.forEach(function(item) { %>
+                  <span class="sd-tag-chip"><span class="sd-tag-dot"></span><%= item %></span>
+                <% }); %>
+              <% } else { %>
+                <span class="sd-tag-chip"><span class="sd-tag-dot"></span>base de datos</span>
+                <span class="sd-tag-chip"><span class="sd-tag-dot"></span>producción</span>
+                <span class="sd-tag-chip"><span class="sd-tag-dot"></span>cluster</span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 1: Pasos recomendados para resolver el caso -->
+        <div class="card sd-card border-0 shadow-sm mb-3">
+          <div class="sd-card-header d-flex align-items-center justify-content-between">
+            <span>Pasos recomendados para resolver el caso</span>
+            <small class="text-muted d-none d-sm-inline">Secuencia optimizada de derivación</small>
+          </div>
+          <div class="card-body p-4">
+
+            <!-- Stepper de Resolución -->
+            <div class="sd-stepper-container" id="astar-stepper-container">
+              <% if (result && result.astar && result.astar.steps) { %>
+                <% result.astar.steps.forEach(function(step, idx) { 
+                  const stepNum = step.step_number ?? step.node ?? (idx + 1);
+                  const nodeId = step.node_id || step.name || '';
+                  const title = step.title || nodeId || ('Paso ' + stepNum);
+                  const desc = step.description || step.desc || '';
+                  const isGoal = Boolean(step.is_goal || step.isGoal);
+                %>
+                  <div class="sd-step-item <%= isGoal ? 'is-goal' : '' %>">
+                    <div class="sd-step-node">
+                      <%- isGoal ? '<i class="bi bi-check-lg"></i>' : stepNum %>
+                    </div>
+                    <div class="sd-step-content">
+                      <strong class="text-dark"><%= title %></strong>
+                      <% if (desc) { %>
+                        <div class="text-muted small"><%= desc %></div>
+                      <% } %>
+                    </div>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <!-- Default Step 1 -->
+                <div class="sd-step-item">
+                  <div class="sd-step-node">1</div>
+                  <div class="sd-step-content">
+                    <strong class="text-dark">Triaje y diagnóstico inicial</strong>
+                    <div class="text-muted small">Identificación de falla en base de datos y clasificación de severidad</div>
+                  </div>
+                </div>
+                <!-- Default Step 2 -->
+                <div class="sd-step-item">
+                  <div class="sd-step-node">2</div>
+                  <div class="sd-step-content">
+                    <strong class="text-dark">Consulta de manual operativo</strong>
+                    <div class="text-muted small">Localización de runbook RB-DB-09 para failover de réplica</div>
+                  </div>
+                </div>
+                <!-- Default Step 3 -->
+                <div class="sd-step-item">
+                  <div class="sd-step-node">3</div>
+                  <div class="sd-step-content">
+                    <strong class="text-dark">Intervención de Guardia DBA</strong>
+                    <div class="text-muted small">Notificación y ejecución de switchover hacia nodo standby</div>
+                  </div>
+                </div>
+                <!-- Default Step 4 -->
+                <div class="sd-step-item">
+                  <div class="sd-step-node">4</div>
+                  <div class="sd-step-content">
+                    <strong class="text-dark">Validación operativa y pruebas</strong>
+                    <div class="text-muted small">Prueba sintética de conexión, liberación de pool e integridad</div>
+                  </div>
+                </div>
+                <!-- Default Step 5 (Goal) -->
+                <div class="sd-step-item is-goal">
+                  <div class="sd-step-node"><i class="bi bi-check-lg"></i></div>
+                  <div class="sd-step-content">
+                    <strong class="text-dark">Cierre y confirmación formal</strong>
+                    <div class="text-muted small">Confirmación de operatividad y cierre formal del ticket</div>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+
+            <!-- Colapsable discreto para costos matemáticos y detalles técnicos -->
+            <div class="mt-3 pt-3 border-top">
+              <button type="button" class="sd-tech-toggle-btn" data-bs-toggle="collapse" data-bs-target="#tech-math-details" aria-expanded="false" aria-controls="tech-math-details">
+                <span>Ver detalles técnicos y métricas de optimización</span>
+                <i class="bi bi-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+              </button>
+              <div class="collapse mt-2" id="tech-math-details">
+                <div class="sd-tech-details-container">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <span><strong>Optimización Algorítmica A*:</strong> Función heurística <code>f(n) = g(n) + h(n)</code></span>
+                    <span class="badge bg-secondary font-monospace" id="astar-total-cost">
+                      Costo Total f(goal): <%= (result && result.astar) ? result.astar.totalCost : 7 %> unidades
+                    </span>
+                  </div>
+                  <p class="text-muted mb-2 small" id="astar-efficiency-badge">
+                    <%= (result && result.astar && result.astar.efficiencyNote) ? result.astar.efficiencyNote : '4 Pasos Optimizados vs 18 Búsqueda Ciega (-78% latencia)' %>
+                  </p>
+                  <div class="small text-muted" id="astar-step-costs-list">
+                    <% if (result && result.astar && result.astar.steps) { %>
+                      <% result.astar.steps.forEach(function(st, i) { %>
+                        <div>• Paso <%= st.step_number || (i+1) %> (<%= st.title || st.node_id %>): Costo acumulado g=<%= st.g ?? 0 %>, Heurística h=<%= st.h ?? 0 %>, Total f=<%= st.f ?? ((st.g||0)+(st.h||0)) %></div>
+                      <% }); %>
+                    <% } else { %>
+                      g(n) = costo acumulado de intervención | h(n) = estimación heurística admisible hacia la meta | f(n) = costo total proyectado.
+                    <% } %>
+                  </div>
+                  <div class="mt-2 pt-2 border-top small text-muted">
+                    <i class="bi bi-database-check text-primary me-1"></i><strong>Persistencia y entrenamiento:</strong> Modelos IA y catálogo entrenados sobre la base de datos relacional <strong>PostgreSQL 18</strong> (<code>SoporteAIBD</code>).
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CARD 2: Guía de solución recomendada (Runbook) -->
+        <div class="card sd-card border-0 shadow-sm mb-3">
+          <div class="sd-card-header d-flex align-items-center justify-content-between">
+            <span>Guía de solución recomendada (Runbook)</span>
+            <span class="badge bg-light text-secondary border" id="rag-similarity-badge">
+              Manual Oficial Verificado
+            </span>
+          </div>
+          <div class="card-body p-4">
+            <div class="mb-3">
+              <h6 class="mb-0 fw-bold text-dark" id="sop-title">
+                <%= (result && result.rag) ? result.rag.sop_title : 'Runbook RB-DB-09: Failover y Restauración de Base de Datos Crítica' %>
+              </h6>
+              <small class="text-muted" id="sop-source">Fuente: <%= (result && result.rag && result.rag.source) ? result.rag.source : 'Base de Conocimiento PostgreSQL 18 (SoporteAIBD: servicedesk.articulos_sop_runbooks)' %></small>
+            </div>
+
+            <!-- Alerta de Precaución Operativa -->
+            <div class="alert alert-warning border-warning-subtle py-2 px-3 mb-3" role="alert">
+              <div>
+                <strong class="d-block text-dark small">Precaución importante:</strong>
+                <span class="small text-dark" id="sop-precautions">
+                  <%= (result && result.rag) ? result.rag.precautions : 'No forzar el reinicio térmico del nodo primario sin certificar que los logs de transacciones pendientes están replicados en el standby.' %>
+                </span>
+              </div>
+            </div>
+
+            <!-- Checklist Interactivo con Barra de Progreso y Contador -->
+            <%
+              const chkItems = (result && result.rag && result.rag.checklist) ? result.rag.checklist : [
+                "Verificar conectividad al cluster y puerto 5432 desde la consola administrativa.",
+                "Inspeccionar saturación de pool en PgBouncer y transacciones bloqueantes (PID lock).",
+                "Ejecutar switchover hacia la réplica standby para restablecer el servicio transaccional.",
+                "Validar reanudación de los servicios ERP/Facturación y confirmar cero transacciones corruptas."
+              ];
+            %>
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <h6 class="fw-semibold text-secondary small mb-0 text-uppercase">Checklist de resolución interactivo:</h6>
+              <span class="small fw-semibold text-primary" id="checklist-progress-counter">0 de <%= chkItems.length %> tareas completadas (0%)</span>
+            </div>
+            <div class="sd-checklist-progress-wrapper">
+              <div class="sd-checklist-progress-bar" id="checklist-progress-bar" style="width: 0%;"></div>
+            </div>
+
+            <div class="d-flex flex-column gap-2" id="sop-checklist-container">
+              <% chkItems.forEach(function(itemText, idx) { %>
+                <div class="sd-sop-check-item">
+                  <input type="checkbox" id="chk-sop-<%= idx %>" class="form-check-input chk-sop-item">
+                  <label for="chk-sop-<%= idx %>" class="small mb-0 text-dark">
+                    <strong>Paso <%= idx + 1 %>:</strong> <%= itemText %>
+                  </label>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /#ai-results-panel -->
+
+    </section>
+
+  </div>
+</main>
+
+<%- include('partials/footer') %>
