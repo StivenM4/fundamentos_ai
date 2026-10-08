@@ -88,7 +88,11 @@ with (ARTIFACTS / "modelo_mlp.pkl").open("wb") as file:
 
 
 # 3. Base de datos SQLite para registrar evidencia y metadatos de imágenes
-with sqlite3.connect(ARTIFACTS / "imagenes.db") as con:
+with sqlite3.connect(ARTIFACTS / "imagenes.db", timeout=10.0) as con:
+    con.execute("PRAGMA journal_mode = WAL;")
+    con.execute("PRAGMA foreign_keys = ON;")
+    con.execute("PRAGMA busy_timeout = 10000;")
+    con.execute("PRAGMA synchronous = NORMAL;")
     con.execute(
         """
         CREATE TABLE IF NOT EXISTS imagenes_errores(
