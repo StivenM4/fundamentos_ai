@@ -1,16 +1,5 @@
 # Informe Técnico Semana 09: Reconocimiento de Imágenes, Segmentación y Pipeline OCR de Diagnóstico TI
 
-**Proyecto:** Gestor de Tickets de Soporte TI y Diagnóstico Automatizado con Inteligencia Artificial (`fundamentos_ai`)  
-**Autor:** Escuadrón de Inteligencia Artificial & Visión por Computador (`tech-writer-docs`)  
-**Fecha:** Ciclo Académico 2026 - Semana 09  
-**Módulos del Sistema:**
-- Script de visión: [`src/semana09_vision.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana09_vision.py)
-- Imagen de entrada: [`data/imagen_proyecto.png`](file:///c:/Users/User/Music/fundamentos_ai/data/imagen_proyecto.png)
-- Evidencia visual generada: [`artifacts/semana09_vision.png`](file:///c:/Users/User/Music/fundamentos_ai/artifacts/semana09_vision.png)
-- Integración RAG / Heurística: [`src/semana05_sistema_hibrido.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana05_sistema_hibrido.py) y [`src/semana04_astar.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana04_astar.py)
-
----
-
 ## Resumen Ejecutivo
 
 En el ciclo operativo de un Centro de Servicios de TI (IT Service Desk), un porcentaje significativo de las incidencias reportadas por usuarios finales ingresa mediante capturas de pantalla de cuadros de diálogo, códigos de detención (stop codes) o mensajes de error del sistema operativo. La información en estos artefactos se encuentra en formato no estructurado (matrices de píxeles), lo que impide que los motores tradicionales de clasificación textual y asignación de tickets puedan actuar de forma automatizada sin transcripción manual humana.
@@ -40,7 +29,7 @@ flowchart LR
 Para garantizar absoluta pertinencia de dominio y evitar el uso de imágenes genéricas descontextualizadas (como fotografías de monedas o células), se configuró y procesó el archivo de entrada oficial:
 
 > [!NOTE]
-> **Ruta del artefacto de entrada:** [`data/imagen_proyecto.png`](file:///c:/Users/User/Music/fundamentos_ai/data/imagen_proyecto.png)  
+> **Ruta del artefacto de entrada:** [`data/imagen_proyecto.png`](data/imagen_proyecto.png)  
 > **Dimensiones:** $800 \times 420$ píxeles  
 > **Espacio de color original:** RGB de 24 bits (3 canales $\times$ 8 bits por canal)  
 > **Formato de codificación:** PNG (Portable Network Graphics) con compresión sin pérdidas (*lossless deflater*), preservando la nitidez de bordes tipográficos y evitando artefactos de cuantificación por bloques.
@@ -166,7 +155,7 @@ En la captura de pantalla de un diálogo de sistema operativo (`imagen_proyecto.
 
 El parámetro $\sigma$ (sigma) determina la dispersión espacial del kernel de convolución gaussiano. Dado que el ancho efectivo de soporte del filtro es aproximadamente $6\sigma$, variar este valor modifica de forma radical el ancho de banda espacial de la imagen analizada.
 
-Para caracterizar este comportamiento de forma empírica y cuantitativa, el script [`src/semana09_vision.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana09_vision.py) evaluó tres valores representativos: $\sigma \in \{1.0, 2.0, 3.0\}$.
+Para caracterizar este comportamiento de forma empírica y cuantitativa, el script [`src/semana09_vision.py`](src/semana09_vision.py) evaluó tres valores representativos: $\sigma \in \{1.0, 2.0, 3.0\}$.
 
 ### Datos Experimentales Registrados
 
@@ -347,7 +336,7 @@ flowchart TD
 
 ### Integración Arquitectónica con el Sistema Híbrido y Búsqueda A*
 
-El payload producido por [`src/semana09_vision.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana09_vision.py) se transfiere directamente al motor de inferencia de la solución integral:
+El payload producido por [`src/semana09_vision.py`](src/semana09_vision.py) se transfiere directamente al motor de inferencia de la solución integral:
 
 ```mermaid
 sequenceDiagram
@@ -389,7 +378,7 @@ sequenceDiagram
 }
 ```
 
-Al integrarse con [`src/semana05_sistema_hibrido.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana05_sistema_hibrido.py), la presencia del código `0x80070005` activa una recuperación de alta precisión en la base de conocimiento (`data/base_conocimiento.txt`), superando con amplio margen el guardrail del $20\%$ de similitud coseno ($S_C \ge 0.20$). A continuación, [`src/semana04_astar.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana04_astar.py) planifica las acciones correctivas óptimas (verificación de permisos del adaptador, reinicio de catálogo Winsock y renovación DHCP).
+Al integrarse con [`src/semana05_sistema_hibrido.py`](src/semana05_sistema_hibrido.py), la presencia del código `0x80070005` activa una recuperación de alta precisión en la base de conocimiento (`data/base_conocimiento.txt`), superando con amplio margen el guardrail del $20\%$ de similitud coseno ($S_C \ge 0.20$). A continuación, [`src/semana04_astar.py`](src/semana04_astar.py) planifica las acciones correctivas óptimas (verificación de permisos del adaptador, reinicio de catálogo Winsock y renovación DHCP).
 
 ---
 
@@ -436,20 +425,20 @@ Captura de Pantalla + Texto de Ticket (Ticket Multimodal)
 Los archivos que integran la solución de la Semana 09 se encuentran verificados y disponibles en el repositorio:
 
 1. **Código de procesamiento visual:**  
-   [`src/semana09_vision.py`](file:///c:/Users/User/Music/fundamentos_ai/src/semana09_vision.py)  
+   [`src/semana09_vision.py`](src/semana09_vision.py)  
    *Implementa la carga de imagen, análisis comparativo de $\sigma$, umbralización de Otsu, inversión adaptativa, etiquetado de regiones conexas y generación de la figura en cuatro paneles.*
 2. **Imagen de prueba oficial del proyecto:**  
-   [`data/imagen_proyecto.png`](file:///c:/Users/User/Music/fundamentos_ai/data/imagen_proyecto.png)  
+   [`data/imagen_proyecto.png`](data/imagen_proyecto.png)  
    *Diálogo modal de $800 \times 420$ px representando el error `0x80070005` en el Centro de Soporte TI.*
 3. **Figura comparativa de resultados (Artefacto Oficial):**  
-   [`artifacts/semana09_vision.png`](file:///c:/Users/User/Music/fundamentos_ai/artifacts/semana09_vision.png)  
+   [`artifacts/semana09_vision.png`](artifacts/semana09_vision.png)  
    *Figura en alta resolución ($14 \times 10$ pulgadas @ 160 DPI) conteniendo los 4 paneles de visualización:*
    - **Panel a:** Imagen Original de Error de TI.
    - **Panel b:** Contornos Canny ($\sigma = 2.0$, $15,793$ píxeles de borde).
    - **Panel c:** Máscara Binaria Otsu ($T^* = 0.5783$, inversión adaptativa).
    - **Panel d:** Regiones Conectadas ($695$ componentes con Bounding Boxes rojas de ROI).
 4. **Archivo de dependencias actualizado:**  
-   [`requirements.txt`](file:///c:/Users/User/Music/fundamentos_ai/requirements.txt)  
+   [`requirements.txt`](requirements.txt)  
    *Documenta formalmente las dependencias `scikit-image>=0.26.0` y `matplotlib>=3.11.0`.*
 
 ---
